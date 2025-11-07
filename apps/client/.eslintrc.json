@@ -1,0 +1,4 @@
+{
+  "extends": ["@seye-bamidele/eslint-config/next"],
+  "root": true
+}
