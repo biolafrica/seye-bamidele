@@ -4,7 +4,6 @@ export default function Home() {
       <div>
         <h4>Client</h4>
       </div>
-
     </div>
   );
 }

@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ChevronDownIcon, SunIcon, MoonIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
   const navLinks = [
@@ -22,12 +25,100 @@ export default function Header() {
     return pathname.startsWith(href);
   };
 
+  // Initialize theme on mount
+  useEffect(() => {
+    setMounted(true);
+    // Check initial theme state
+    const isDark = document.documentElement.classList.contains("dark");
+    setIsDarkMode(isDark);
+  }, []);
+
+  // Theme toggle handler
+  const handleThemeToggle = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
+
+  // Prevent hydration mismatch - don't render icon until mounted
+  if (!mounted) {
+    return (
+      <header className="mb-20">
+        <div className="flex items-center justify-between py-4">
+          {/* Logo/Avatar */}
+          <div className="flex items-center">
+            <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
+              <Image
+                src="/seye.png"
+                alt="Profile"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:block">
+            <ul className="flex items-center gap-1 bg-card rounded-full shadow-md px-3 py-2 border border-border">
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      isActive(link.href)
+                        ? "text-accent"
+                        : "text-text hover:text-accent"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Right Side */}
+          <div className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden flex items-center gap-2 bg-card rounded-full shadow-md px-4 py-2 border border-border text-sm font-medium text-text hover:bg-hover transition-colors"
+            >
+              Menu
+              <ChevronDownIcon
+                className={`w-4 h-4 transition-transform ${
+                  isMobileMenuOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Theme Toggle Button - Placeholder during SSR */}
+            <button
+              onClick={handleThemeToggle}
+              className="bg-card rounded-full shadow-md p-3 border border-border hover:bg-hover transition-colors"
+              aria-label="Toggle theme"
+            >
+              <div className="w-5 h-5" /> {/* Placeholder to prevent layout shift */}
+            </button>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <header className="z-50">
-      <div className="flex items-center justify-between py-4 px-4 sm:px-8">
+    <header className="mb-20">
+      <div className="flex items-center justify-between py-4">
         {/* Logo/Avatar */}
-        <Link href="/" className="flex items-center">
-          <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-gray-200">
+        <div className="flex items-center">
+          <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
             <Image
               src="/seye.png"
               alt="Profile"
@@ -35,19 +126,19 @@ export default function Header() {
               className="object-cover"
             />
           </div>
-        </Link>
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:block">
-          <ul className="flex items-center gap-1 bg-white rounded-full shadow-md px-3 py-2 border border-gray-200">
+          <ul className="flex items-center gap-1 bg-card rounded-full shadow-md px-3 py-2 border border-border">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <Link
                   href={link.href}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     isActive(link.href)
-                      ? "text-blue-500"
-                      : "text-gray-700 hover:text-blue-500"
+                      ? "text-accent"
+                      : "text-text hover:text-accent"
                   }`}
                 >
                   {link.name}
@@ -57,81 +148,52 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Right Side - Menu Button (Mobile) / Theme Toggle */}
+        {/* Right Side */}
         <div className="flex items-center gap-3">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex items-center gap-2 bg-white rounded-full shadow-md px-4 py-2 border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="md:hidden flex items-center gap-2 bg-card rounded-full shadow-md px-4 py-2 border border-border text-sm font-medium text-text hover:bg-hover transition-colors"
           >
             Menu
-            <svg
+            <ChevronDownIcon
               className={`w-4 h-4 transition-transform ${
                 isMobileMenuOpen ? "rotate-180" : ""
               }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            />
           </button>
 
           {/* Theme Toggle Button */}
           <button
-            className="bg-white rounded-full shadow-md p-3 border border-gray-200 hover:bg-gray-50 transition-colors"
+            onClick={handleThemeToggle}
+            className="bg-card rounded-full shadow-md p-3 border border-border hover:bg-hover transition-colors"
             aria-label="Toggle theme"
           >
-            <svg
-              className="w-5 h-5 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-              />
-            </svg>
+            {isDarkMode ? (
+              <MoonIcon className="w-5 h-5 text-accent" />
+            ) : (
+              <SunIcon className="w-5 h-5 text-accent" />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-black/50">
-          <div className="absolute top-8 left-8 right-8 bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-200">
-            {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
-              <h2 className="text-xl font-medium text-gray-600">Navigation</h2>
+          <div className="absolute top-8 left-8 right-8 bg-card rounded-3xl shadow-2xl overflow-hidden border border-border">
+            <div className="flex items-center justify-between px-8 py-6 border-b border-separator">
+              <h2 className="text-xl font-medium text-secondary">
+                Navigation
+              </h2>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2.5 rounded-xl border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+                className="p-2.5 rounded-xl border-2 border-accent text-accent hover:bg-hover transition-colors"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <XMarkIcon className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Mobile Menu Links */}
             <nav className="py-4">
               <ul>
                 {navLinks.map((link, index) => (
@@ -140,10 +202,12 @@ export default function Header() {
                       href={link.href}
                       className={`block px-8 py-5 text-2xl font-normal transition-colors ${
                         isActive(link.href)
-                          ? "text-blue-500 bg-blue-50"
-                          : "text-gray-800 hover:bg-gray-50"
+                          ? "text-accent bg-accent/10"
+                          : "text-text hover:bg-hover"
                       } ${
-                        index !== navLinks.length - 1 ? "border-b border-gray-100" : ""
+                        index !== navLinks.length - 1
+                          ? "border-b border-separator"
+                          : ""
                       }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >

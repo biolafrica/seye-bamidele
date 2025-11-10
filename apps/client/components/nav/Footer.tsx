@@ -21,7 +21,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t border-gray-200 mt-32">
+    <footer className="border-t border-separator mt-28">
       <div className="px-4 py-6 sm:px-8 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Navigation Links */}
@@ -33,8 +33,8 @@ export default function Footer() {
                     href={link.href}
                     className={`text-sm transition-colors ${
                       isActive(link.href)
-                        ? "text-blue-500 font-medium"
-                        : "text-gray-600 hover:text-gray-900"
+                        ? "text-accent font-medium"
+                        : "text-secondary hover:text-text"
                     }`}
                   >
                     {link.name}
@@ -46,8 +46,8 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="order-1 sm:order-2">
-            <p className="text-sm text-gray-400">
-              © {currentYear} Spencer Sharp. All rights reserved.
+            <p className="text-sm text-disabled">
+              © {currentYear} Seye Bamidele. All rights reserved.
             </p>
           </div>
         </div>

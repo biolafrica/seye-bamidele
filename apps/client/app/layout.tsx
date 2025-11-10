@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/nav/Header";
-import Footer from "@/components/nav/Footer";
+import ClientLayout from "@/components/common/clientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,16 +24,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en-GB" suppressHydrationWarning>
+      <head>
+        {/* Blocking script to prevent flash of incorrect theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var shouldBeDark = theme === 'dark' || (!theme && prefersDark);
+                  
+                  if (shouldBeDark) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 sm:px-8 lg:px-16 xl:px-32`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-layout sm:px-8 lg:px-16 xl:px-32`}
       >
-        <div className="bg-white border-x border-gray-100 px-4 py-6 lg:px-16 sm:px-8 sm:py-8 min-h-screen">
-          <Header />
-          {children}
-          <Footer />
-        </div>
-
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
