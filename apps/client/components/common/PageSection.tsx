@@ -30,7 +30,7 @@ export default function PageSection({ items, variant }: PageSectionProps) {
           {/* Left Column */}
           <div className="md:border-l md:border-separator w-full py-0 md:pl-6 md:w-1/4 md:py-5">
             {variant === "articles" && (
-              <time className="text-sm text-disabled">{item.date}</time>
+              <time className="text-sm text-secondary">{item.date}</time>
             )}
 
             {(variant === "contact" || variant === "speaking") && item.category && (
@@ -43,7 +43,7 @@ export default function PageSection({ items, variant }: PageSectionProps) {
           {/* Right Column */}
           <div className="rounded-lg mt-3 w-full mb-9 md:hover:bg-hover md:cursor-pointer md:p-5 md:3/4 md:mt-0">
             {variant === "speaking" && item.event && (
-              <h2 className="text-sm text-disabled border-l border-separator pl-2">
+              <h2 className="text-sm text-secondary border-l border-border pl-2">
                 {item.event}
               </h2>
             )}

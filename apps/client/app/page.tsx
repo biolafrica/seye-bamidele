@@ -1,9 +1,13 @@
+import HomeBody from "@/components/sections/HomeBody";
+import HomeHero from "@/components/sections/HomeHero";
+
 export default function Home() {
+
   return (
-    <div>
-      <div>
-        <h4>Client</h4>
-      </div>
-    </div>
+    <>
+      <HomeHero />
+      <HomeBody />
+    </>
+   
   );
 }

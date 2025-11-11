@@ -56,7 +56,7 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/" className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
               <Image
-                src="/seye.png"
+                src="/logos/seye-logo.svg"
                 alt="Profile"
                 fill
                 className="object-cover"
@@ -120,7 +120,7 @@ export default function Header() {
         <div className="flex items-center">
           <Link href="/" className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
             <Image
-              src="/seye.png"
+              src="/logos/seye-logo.svg"
               alt="Profile"
               fill
               className="object-cover"

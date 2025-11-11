@@ -14,21 +14,21 @@ const projects: Project[] = [
     description:
       "Simplifies people operations for African businesses while empowering workers with accessible financial solutions",
     link: "paidhr.com",
-    logo: "/paidHr.svg",
+    logo: "/logos/paidHr.svg",
   },
   {
     name: "Showlove",
     description:
       "Co-founded Showlove, a startup reinventing gifting in Africa; later pivoted to B2B before closing in 2021.",
     link: "github.com/showlove",
-    logo: "/paidHr.svg",
+    logo: "/logos/paidHr.svg",
   },
   {
     name: "Better Group",
     description:
       "Better Group empowers African film and music creators with visibility, support, and quality production opportunities.",
     link: "youtube.com/@bettersoundstudios",
-    logo: "/bettersound.svg",
+    logo: "/logos/bettersound.svg",
   },
 
 ];
@@ -36,7 +36,7 @@ const projects: Project[] = [
 export default function ProjectsPage() {
   return (
     <main className="min-h-screen">
-      <div className="max-w-6xl">
+      <div className="max-w-6xl space-y-14">
 
         <div className="max-w-2xl">
           <PageHeader
