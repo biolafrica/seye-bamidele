@@ -37,7 +37,9 @@ const speakingEvents = [
   },
 ];
 
-export default function Speaking() {
+export default async function Speaking() {
+
+
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl space-y-14">

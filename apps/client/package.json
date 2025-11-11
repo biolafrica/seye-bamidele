@@ -14,6 +14,8 @@
     "@seye-bamidele/shared-types": "workspace:*",
     "@seye-bamidele/ui": "workspace:*",
     "@seye-bamidele/utils": "workspace:*",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.81.1",
     "next": "15.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
