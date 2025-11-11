@@ -1,41 +1,16 @@
+import { transformArticles } from "@/app/utils/common/transformArticle";
+import { getArticles } from "@/app/utils/database/getTasks";
 import { workHistory } from "@/data/workExperience";
 import { ChevronRightIcon, EnvelopeIcon, BriefcaseIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Article {
-  date: string;
-  title: string;
-  excerpt: string;
-  slug: string;
-}
 
-const articles: Article[] = [
-  {
-    date: "September 5, 2022",
-    title: "Crafting a design system for a multiplanetary future",
-    excerpt:
-      "Most companies try to stay ahead of the curve when it comes to visual design, but for Planetaria we needed to create a brand that would still inspire us 100 years from now when humanity has spread across our entire solar system.",
-    slug: "crafting-design-system",
-  },
-  {
-    date: "September 2, 2022",
-    title: "Introducing Animaginary: High performance web animations",
-    excerpt:
-      "When you're building a website for a company as ambitious as Planetaria, you need to make an impression. I wanted people to visit our website and see animations that looked more realistic than reality itself.",
-    slug: "introducing-animaginary",
-  },
-  {
-    date: "July 14, 2022",
-    title: "Rewriting the cosmOS kernel in Rust",
-    excerpt:
-      "When we released the first version of cosmOS last year, it was written in Go. Go is a wonderful programming language, but it's been a while since I've seen an article on the front page of Hacker News about rewriting some important tool in Go and I see articles on there about rewriting things in Rust every single week.",
-    slug: "rewriting-cosmos-kernel",
-  },
-];
+export default async function HomeBody() {
+  const dbArticles = await getArticles();
+  const allArticles = transformArticles(dbArticles);
+  const articles = allArticles.slice(0, 3);
 
-
-export default function HomeBody() {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto">

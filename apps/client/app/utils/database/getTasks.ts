@@ -1,27 +1,9 @@
+import { DbEvent } from "@/types/event";
 import { createClient } from "../supabase/server";
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { DBArticle } from "@/types/article";
 
-// Define types for your database tables
-type Article = {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  // Add other fields as needed
-};
 
-type Events = {
-  id: string;
-  category: string;
-  event: string;
-  title: string;
-  created_at: string;
-  description: string;
-  link: string;
-  type: string;
-};
-
-// Generic reusable fetch function
 async function fetchFromTable<T>(
   tableName: string,
   selectQuery: string = "*"
@@ -40,11 +22,10 @@ async function fetchFromTable<T>(
   return data as T[];
 }
 
-// Specific functions built from the reusable function
-export async function getArticles(): Promise<Article[]> {
-  return fetchFromTable<Article>("Articles");
+export async function getArticles(): Promise<DBArticle[]> {
+  return fetchFromTable<DBArticle>("Articles");
 }
 
-export async function getEvents(): Promise<Events[]> {
-  return fetchFromTable<Events>("Events");
+export async function getEvents(): Promise<DbEvent[]> {
+  return fetchFromTable<DbEvent>("Events");
 }
