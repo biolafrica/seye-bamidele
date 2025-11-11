@@ -1,3 +1,4 @@
+import PageHeader from "@/components/common/PageHeader";
 import { LinkIcon } from "@heroicons/react/24/outline";
 
 interface Project {
@@ -36,18 +37,16 @@ export default function ProjectsPage() {
   return (
     <main className="min-h-screen">
       <div className="max-w-6xl">
-        {/* Header */}
-        <header className="mb-16 max-w-2xl">
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight text-heading">
-            Things I've made trying to put my dent in the universe.
-          </h1>
-          <p className="mt-6 text-secondary text-base">
-            I've worked on tons of little projects over the years but these are
+
+        <div className="max-w-2xl">
+          <PageHeader
+            title="Things I've made trying to put my dent in the universe."
+            description="I've worked on tons of little projects over the years but these are
             the ones that I'm most proud of. Many of them are open-source, so if
             you see something that piques your interest, check out the code and
-            contribute if you have ideas for how it can be improved.
-          </p>
-        </header>
+            contribute if you have ideas for how it can be improved."
+          />
+        </div>
 
         {/* Projects Grid */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,18 +1,7 @@
-import {ChevronRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import PageHeader from "@/components/common/PageHeader";
+import PageSection from "@/components/common/PageSection";
 
-interface SpeakingEvent {
-  category: string;
-  event: string;
-  title: string;
-  description: string;
-  link: {
-    text: string;
-    url: string;
-  };
-}
-
-const speakingEvents: SpeakingEvent[] = [
+const speakingEvents = [
   {
     category: "Shows",
     event: "Founders Connect with Peace Itimi",
@@ -50,60 +39,15 @@ const speakingEvents: SpeakingEvent[] = [
 
 export default function Speaking() {
   return (
-    <main className="min-h-screen ">
+    <main className="min-h-screen">
       <div className="max-w-3xl">
-        {/* Header */}
-        <header className="mb-16">
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight text-heading">
-            I've spoken at events all around the world and been interviewed for many podcasts.
-          </h1>
-          <p className="mt-4 text-secondary text-base">
-            One of my favorite ways to share my ideas is live on stage, where there's so much more
-            communication bandwidth than there is in writing, and I love podcast interviews because
-            they give me the opportunity to answer questions instead of just present my opinions.
-          </p>
-        </header>
-
-        {/* Articles */}
-        <section className="space-y-12 md:space-y-0">
-          {speakingEvents.map((event, idx) => (
-            <article
-              key={idx}
-              className="md:flex gap-3  rounded-lg md:rounded-none md:p-0 "
-            >
-              <div className="md:border-l md:border-separator w-full py-0 md:pl-6 md:w-1/4 md:py-5 ">
-                <div className="text-base font-semibold text-heading" >
-                  {event.category}
-                </div>
-              </div>
-
-              <div className="rounded-lg mt-3 w-full mb-9 md:hover:bg-hover md:cursor-pointer md:p-5 md:3/4 md:mt-0 ">
-
-                <h2 className="text-sm text-disabled border-l border-separator pl-2">
-                  {event.event}
-                </h2>
-
-                <h2 className="text-base font-semibold text-heading mt-3">
-                  {event.title}
-                </h2>
-
-                <p className="mt-2 text-secondary text-sm leading-relaxed">
-                  {event.description}
-                </p>
-
-                <Link
-                  href={event.link.url}
-                  className="mt-3 inline-flex items-center text-accent hover:text-accent-hover font-medium transition-colors group text-sm"
-                >
-                  {event.link.text}
-                  <ChevronRightIcon className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
-
-            </article>
-          ))}
-        </section>
+        <PageHeader
+          title="I've spoken at events all around the world and been interviewed for many podcasts."
+          description="One of my favorite ways to share my ideas is live on stage, where there's so much more communication bandwidth than there is in writing, and I love podcast interviews because they give me the opportunity to answer questions instead of just present my opinions."
+        />
+        <PageSection items={speakingEvents} variant="speaking" />
       </div>
     </main>
   );
 }
+

@@ -54,14 +54,14 @@ export default function Header() {
         <div className="flex items-center justify-between py-4">
           {/* Logo/Avatar */}
           <div className="flex items-center">
-            <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
+            <Link href="/" className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
               <Image
                 src="/seye.png"
                 alt="Profile"
                 fill
                 className="object-cover"
               />
-            </div>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -118,14 +118,14 @@ export default function Header() {
       <div className="flex items-center justify-between py-4">
         {/* Logo/Avatar */}
         <div className="flex items-center">
-          <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
+          <Link href="/" className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
             <Image
               src="/seye.png"
               alt="Profile"
               fill
               className="object-cover"
             />
-          </div>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
