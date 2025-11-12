@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDownIcon, SunIcon, MoonIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { navLinks } from "./links";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -12,20 +13,12 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
-  const navLinks = [
-    { name: "About", href: "/about" },
-    { name: "Articles", href: "/articles" },
-    { name: "Projects", href: "/projects" },
-    { name: "Speaking", href: "/speaking" },
-    { name: "Contact", href: "/contact" },
-  ];
-
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
 
-  // Initialize theme on mount
+
   useEffect(() => {
     setMounted(true);
     // Check initial theme state
@@ -33,7 +26,7 @@ export default function Header() {
     setIsDarkMode(isDark);
   }, []);
 
-  // Theme toggle handler
+
   const handleThemeToggle = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
@@ -116,7 +109,6 @@ export default function Header() {
   return (
     <header className="mb-20">
       <div className="flex items-center justify-between py-4">
-        {/* Logo/Avatar */}
         <div className="flex items-center">
           <Link href="/" className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
             <Image
@@ -128,7 +120,6 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:block">
           <ul className="flex items-center gap-1 bg-card rounded-full shadow-md px-3 py-2 border border-border">
             {navLinks.map((link) => (
@@ -150,7 +141,6 @@ export default function Header() {
 
         {/* Right Side */}
         <div className="flex items-center gap-3">
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden flex items-center gap-2 bg-card rounded-full shadow-md px-4 py-2 border border-border text-sm font-medium text-text hover:bg-hover transition-colors"
@@ -162,8 +152,7 @@ export default function Header() {
               }`}
             />
           </button>
-
-          {/* Theme Toggle Button */}
+          
           <button
             onClick={handleThemeToggle}
             className="bg-card rounded-full shadow-md p-3 border border-border hover:bg-hover transition-colors"
