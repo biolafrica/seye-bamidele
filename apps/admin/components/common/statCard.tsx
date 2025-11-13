@@ -39,7 +39,7 @@ const StatCard = ({ icon, label, value, link}: StatCardProps) => {
 
 export default function StatsCards() {
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 ">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
       <StatCard
         icon={<UserGroupIcon className="h-6 w-6" />}
         label="Total Subscribers"
