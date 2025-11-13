@@ -33,6 +33,50 @@ const config: Config = {
           DEFAULT: 'var(--accent-primary)',
           hover: 'var(--accent-hover)',
         },
+
+        // Button specific colors
+        btn: {
+          primary: {
+            DEFAULT: 'var(--btn-primary-bg)',
+            hover: 'var(--btn-primary-hover)',
+            active: 'var(--btn-primary-active)',
+            text: 'var(--btn-primary-text)',
+          },
+          secondary: {
+            DEFAULT: 'var(--btn-secondary-bg)',
+            hover: 'var(--btn-secondary-hover)',
+            active: 'var(--btn-secondary-active)',
+            text: 'var(--btn-secondary-text)',
+          },
+          outline: {
+            border: 'var(--btn-outline-border)',
+            hover: 'var(--btn-outline-hover-bg)',
+            active: 'var(--btn-outline-active-bg)',
+            text: 'var(--btn-outline-text)',
+          },
+          text: {
+            DEFAULT: 'var(--btn-text-color)',
+            hover: 'var(--btn-text-hover-bg)',
+            active: 'var(--btn-text-active-bg)',
+          },
+          danger: {
+            DEFAULT: 'var(--btn-danger-bg)',
+            hover: 'var(--btn-danger-hover)',
+            active: 'var(--btn-danger-active)',
+            text: 'var(--btn-danger-text)',
+          },
+          disabled: {
+            bg: 'var(--btn-disabled-bg)',
+            text: 'var(--btn-disabled-text)',
+            border: 'var(--btn-disabled-border)',
+          },
+        },
+
+        focus: {
+          ring: 'var(--focus-ring)',
+          offset: 'var(--focus-ring-offset)',
+        },
+
       },
       backgroundColor: {
         layout: 'var(--layout-bg)',
@@ -45,6 +89,12 @@ const config: Config = {
       borderColor: {
         DEFAULT: 'var(--default-border)',
         separator: 'var(--separator)',
+      },
+      ringColor: {
+        DEFAULT: 'var(--focus-ring)',
+      },
+      ringOffsetColor: {
+        DEFAULT: 'var(--focus-ring-offset)',
       },
     },
   },
