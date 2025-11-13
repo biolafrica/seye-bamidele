@@ -1,7 +1,7 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsSider from "@/components/layout/settingsSider";
 
-export default function SettingsPage() {    
+export default function PasswordPage() {    
   return (
     <main className="">
       <PageHeader
@@ -12,13 +12,13 @@ export default function SettingsPage() {
 
       <div className="flex gap-5 px-4 sm:px-6 lg:px-8">
 
-        <div className="min-w-[270px] w-full lg:w-1/4 ">
+        <div className="min-w-[270px] w-1/4 hidden lg:block">
           <SettingsSider/>
         </div>
 
-        <div className="w-3/4 hidden lg:block">
+        <div className="w-full lg:w-3/4">
          <div className="border">
-            content
+            Password Settings Content
          </div>
         </div>
 
