@@ -1,4 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
+import StatsCards from "@/components/common/statCard";
 
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
         subHeading="Welocome back seye Bamdele"
         showButton={false}
       />
+      <StatsCards/>
     </main>
   );
 }
