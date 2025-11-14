@@ -2,8 +2,9 @@
 
 import DataTable, { TableColumn } from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
-import ModifyEvents from "@/components/pages/events/modifyEvents";
-import { useState } from "react";
+import SidePanel from "@/components/common/SidePanel";
+import { useCrudHandlers } from "@/hooks/useCrudHandler";
+import { useSidePanel } from "@/hooks/useSidePanel";
 
 interface Event {
   id: number;
@@ -25,38 +26,8 @@ const EventData: Event[] = [
 ];
 
 export default function EventsPage() {
-  const [sideScreenOpen, setSideScreenOpen] = useState<boolean>(false);
-  const [editSideScreenOpen, setEditSideScreenOpen] = useState<boolean>(false);
-  const [addSideScreenOpen, setAddSideScreenOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<Event | null>(null);
-  
-  const handleCreateEvent = () => {
-    setSideScreenOpen(true);
-    setEditSideScreenOpen(false);
-    setAddSideScreenOpen(true);
-  };
-  
-  const handleEdit = (Event: Event) => {
-    console.log('Edit Event:', Event);
-    setSelectedItem(Event); 
-    setSideScreenOpen(true);
-    setEditSideScreenOpen(true);
-    setAddSideScreenOpen(false);
-
-  };
-
-  const handleDelete = (Event: Event) => {
-    console.log('Delete Event:', Event);
-    if (confirm(`Are you sure you want to delete ${Event.title}?`)) {
-      alert(`Deleted: ${Event.title}`);
-    }
-  };
-
-  const closeAll = (): void => {
-    setSideScreenOpen(false);
-    setEditSideScreenOpen(false);
-    setAddSideScreenOpen(false);
-  };
+  const sidePanel = useSidePanel<Event>();
+  const { handleDelete } = useCrudHandlers<Event>();
 
   const columns: TableColumn<Event>[] = [
     {
@@ -71,42 +42,37 @@ export default function EventsPage() {
     }
   ];
 
-  return(
+  return (
     <>
-      {sideScreenOpen && (
-        <div className="fixed inset-0 z-60 flex">
-          <div
-            className="absolute inset-0 bg-black opacity-50"
-            onClick={closeAll}
-          />
-          <div className="relative z-65">
-            {addSideScreenOpen && <ModifyEvents onClose={closeAll} />}
-            {editSideScreenOpen && (
-              <ModifyEvents onClose={closeAll} row={selectedItem} />
-            )}
-          </div>
-        </div>
-      )}
+      <SidePanel
+        isOpen={sidePanel.isOpen}
+        onClose={sidePanel.close}
+        title={sidePanel.mode === 'edit' ? "Edit Event" : "Create Event"}
+      >
+        {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
+          <p className="text-gray-700">Editing: {sidePanel.selectedItem.title}</p>
+        ) : (
+          <p className="text-gray-700">Create a new event</p>
+        )}
+      </SidePanel>
       
       <PageHeader
         heading="Events"
         subHeading="Manage and track your events"
         buttonText="Create Event"
-        onButtonClick={handleCreateEvent}
+        onButtonClick={sidePanel.openAdd}
       />
 
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
           data={EventData}
-          onEdit={(Event) => handleEdit(Event)}
-          onDelete={(Event) => handleDelete(Event)}
+          onEdit={sidePanel.openEdit}
+          onDelete={handleDelete}
           defaultItemsPerPage={10}
           showPagination={false}
         />
       </div>
     </>
-
-
   )
 }
