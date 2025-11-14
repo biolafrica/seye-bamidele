@@ -2,6 +2,8 @@
 
 import DataTable, { TableColumn } from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
+import ModifySubscribers from "@/components/pages/subscribers/modifySubscribers";
+import { useState } from "react";
 
 interface Newsletter {
   id: number;
@@ -22,15 +24,26 @@ const NewsletterData: Newsletter[] = [
   },
 ];
 
-export default function SubscribersPage() {   
+export default function SubscribersPage() {  
+  const [sideScreenOpen, setSideScreenOpen] = useState<boolean>(false);
+  const [editSideScreenOpen, setEditSideScreenOpen] = useState<boolean>(false);
+  const [addSideScreenOpen, setAddSideScreenOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<Newsletter | null>(null);
+  
   const handleCreateNewsletter = () => {
-    console.log("Creating newsletter...");
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(true);
   };
   
   const handleEdit = (Newsletter: Newsletter) => {
     console.log('Edit Newsletter:', Newsletter);
+    setSelectedItem(Newsletter);
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(true);
+    setAddSideScreenOpen(false);
 
-    alert(`Edit: ${Newsletter.title}`);
+   
   };
 
   const handleDelete = (Newsletter: Newsletter) => {
@@ -38,6 +51,12 @@ export default function SubscribersPage() {
     if (confirm(`Are you sure you want to delete ${Newsletter.title}?`)) {
       alert(`Deleted: ${Newsletter.title}`);
     }
+  };
+
+  const closeAll = (): void => {
+    setSideScreenOpen(false);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(false);
   };
 
   const columns: TableColumn<Newsletter>[] = [
@@ -52,10 +71,24 @@ export default function SubscribersPage() {
       sortable: true,
     }
   ];
-  return(
- 
 
+  return(
     <>
+      {sideScreenOpen && (
+        <div className="fixed inset-0 z-60 flex">
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={closeAll}
+          />
+          <div className="relative z-65">
+            {addSideScreenOpen && <ModifySubscribers onClose={closeAll} />}
+            {editSideScreenOpen && (
+              <ModifySubscribers onClose={closeAll} row={selectedItem} />
+            )}
+          </div>
+        </div>
+      )}
+      
       <PageHeader
         heading="Subscribers"
         subHeading="Manage your newsletter subscribers"

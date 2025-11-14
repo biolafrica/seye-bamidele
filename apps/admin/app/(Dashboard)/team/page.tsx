@@ -2,6 +2,8 @@
 
 import DataTable, { TableColumn } from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
+import ModifyTeam from "@/components/pages/team/modifyTeam";
+import { useState } from "react";
 
 interface Team {
   id: number;
@@ -26,15 +28,24 @@ const TeamData: Team[] = [
  
 ];
 
-export default function TeamPage() {   
+export default function TeamPage() {  
+  const [sideScreenOpen, setSideScreenOpen] = useState<boolean>(false);
+  const [editSideScreenOpen, setEditSideScreenOpen] = useState<boolean>(false);
+  const [addSideScreenOpen, setAddSideScreenOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<Team | null>(null);
+
   const handleAddMember = () => {
-    console.log("Adding team member...");
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(true);
   }; 
 
   const handleEdit = (Team: Team) => {
     console.log('Edit Team:', Team);
-
-    alert(`Edit: ${Team.name}`);
+    setSelectedItem(Team);
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(true);
+    setAddSideScreenOpen(false);
   };
 
   const handleDelete = (Team: Team) => {
@@ -62,10 +73,30 @@ export default function TeamPage() {
     },
 
   ];
-  return (
-  
 
+  const closeAll = (): void => {
+    setSideScreenOpen(false);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(false);
+  };
+
+  return (
     <>
+
+      {sideScreenOpen && (
+        <div className="fixed inset-0 z-60 flex">
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={closeAll}
+          />
+          <div className="relative z-65">
+            {addSideScreenOpen && <ModifyTeam onClose={closeAll} />}
+            {editSideScreenOpen && (
+              <ModifyTeam onClose={closeAll} row={selectedItem} />
+            )}
+          </div>
+        </div>
+      )}
 
       <PageHeader
         heading="Team"

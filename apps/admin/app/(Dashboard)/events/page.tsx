@@ -2,6 +2,8 @@
 
 import DataTable, { TableColumn } from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
+import ModifyEvents from "@/components/pages/events/modifyEvents";
+import { useState } from "react";
 
 interface Event {
   id: number;
@@ -22,15 +24,25 @@ const EventData: Event[] = [
   },
 ];
 
-export default function EventsPage() {  
+export default function EventsPage() {
+  const [sideScreenOpen, setSideScreenOpen] = useState<boolean>(false);
+  const [editSideScreenOpen, setEditSideScreenOpen] = useState<boolean>(false);
+  const [addSideScreenOpen, setAddSideScreenOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<Event | null>(null);
+  
   const handleCreateEvent = () => {
-    console.log("Creating event...");
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(true);
   };
   
   const handleEdit = (Event: Event) => {
     console.log('Edit Event:', Event);
+    setSelectedItem(Event); 
+    setSideScreenOpen(true);
+    setEditSideScreenOpen(true);
+    setAddSideScreenOpen(false);
 
-    alert(`Edit: ${Event.title}`);
   };
 
   const handleDelete = (Event: Event) => {
@@ -38,6 +50,12 @@ export default function EventsPage() {
     if (confirm(`Are you sure you want to delete ${Event.title}?`)) {
       alert(`Deleted: ${Event.title}`);
     }
+  };
+
+  const closeAll = (): void => {
+    setSideScreenOpen(false);
+    setEditSideScreenOpen(false);
+    setAddSideScreenOpen(false);
   };
 
   const columns: TableColumn<Event>[] = [
@@ -55,6 +73,21 @@ export default function EventsPage() {
 
   return(
     <>
+      {sideScreenOpen && (
+        <div className="fixed inset-0 z-60 flex">
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={closeAll}
+          />
+          <div className="relative z-65">
+            {addSideScreenOpen && <ModifyEvents onClose={closeAll} />}
+            {editSideScreenOpen && (
+              <ModifyEvents onClose={closeAll} row={selectedItem} />
+            )}
+          </div>
+        </div>
+      )}
+      
       <PageHeader
         heading="Events"
         subHeading="Manage and track your events"
