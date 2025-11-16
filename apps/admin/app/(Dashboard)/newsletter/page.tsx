@@ -1,31 +1,17 @@
 "use client"
 
-import DataTable, { TableColumn } from "@/components/common/DataTable";
+import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
+import { columns } from "@/data/articles";
+import { NewsletterData } from "@/data/newsletter";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
-
-
-interface Newsletter {
-  id: number;
-  date: string;
-  title: string;
-}
-
-const NewsletterData: Newsletter[] = [
-  { id: 1, title: 'the best way to learn React', date: '26-05-2025' },
-  { id: 2, title: 'understanding TypeScript basics', date: '23-05-2025' },
-];
+import { Newsletter } from "@/types/newsletter";
 
 export default function NewsletterPage() {  
   const sidePanel = useSidePanel<Newsletter>();
   const { handleDelete } = useCrudHandlers<Newsletter>();
-
-  const columns: TableColumn<Newsletter>[] = [
-    { key: 'date', header: 'Date', sortable: false },
-    { key: 'title', header: 'Title', sortable: true }
-  ];
 
   return (
     <>

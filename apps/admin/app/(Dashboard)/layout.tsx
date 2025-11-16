@@ -2,11 +2,8 @@
 
 import Header from "@/components/layout/header";
 import Sider from "@/components/layout/sider";
-import { ReactNode, useState } from "react";
-
-interface DashboardLayoutProps {
-  children: ReactNode;
-}
+import { DashboardLayoutProps } from "@/types/layout";
+import {useState } from "react";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

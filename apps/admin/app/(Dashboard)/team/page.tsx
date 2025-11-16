@@ -1,33 +1,18 @@
 "use client"
 
-import DataTable, { TableColumn } from "@/components/common/DataTable";
+import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
 import TeamForm from "@/components/pages/TeamForm";
+import { TeamData, columns } from "@/data/team";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
+import { Team } from "@/types/team";
 
-interface Team {
-  id: number;
-  name: string;
-  email: string;
-  dateRegistered: string;
-}
-
-const TeamData: Team[] = [
-  { id: 1, name: 'Seye Bamidele', email: 'seye@paidHr.com', dateRegistered: '26-05-2025' },
-  { id: 2, name: 'Abiodun Biobaku', email: 'biolafrica@gmail.com', dateRegistered: '06-06-2025' },
-];
 
 export default function TeamPage() {  
   const sidePanel = useSidePanel<Team>();
   const { handleDelete } = useCrudHandlers<Team>();
-
-  const columns: TableColumn<Team>[] = [
-    { key: 'name', header: 'Name', sortable: true },
-    { key: 'email', header: 'Email', sortable: true },
-    { key: 'dateRegistered', header: 'Date Registered', sortable: false },
-  ];
 
   return (
     <>

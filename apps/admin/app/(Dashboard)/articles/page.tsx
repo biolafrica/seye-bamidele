@@ -1,32 +1,18 @@
 "use client";
 
-import DataTable, { TableColumn } from "@/components/common/DataTable";
+import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
 import ArticleForm from "@/components/pages/ArticleForm";
+import { ArticleData, columns } from "@/data/articles";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
-import { title } from "process";
+import { Article } from "@/types/articles";
 
-interface Article {
-  id: number;
-  date: string;
-  title: string;
-}
-
-const ArticleData: Article[] = [
-  {id: 1,title: "The best way to learn React", date: "26-05-2025"},
-  { id: 2,title: "Understanding TypeScript basics", date: "23-05-2025"},
-];
 
 export default function ArticlesPage() {
   const sidePanel = useSidePanel<Article>();
   const { handleDelete } = useCrudHandlers<Article>();
-
-  const columns: TableColumn<Article>[] = [
-    { key: "date", header: "Date", sortable: false},
-    { key: "title", header: "Title", sortable: true},
-  ];
 
   return (
     <>

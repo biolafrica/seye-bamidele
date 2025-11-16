@@ -1,11 +1,8 @@
+import { HeaderProps } from "@/types/layout";
 import * as outline from "@heroicons/react/24/outline";
 import * as solid from "@heroicons/react/24/solid";
 import Link from "next/link";
 
-interface HeaderProps {
-  onMenuClick: () => void;
-  currentModule?: string;
-}
 
 export default function Header({ onMenuClick, currentModule = "Dashboard" }: HeaderProps) {
   return (

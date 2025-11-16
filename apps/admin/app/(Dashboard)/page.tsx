@@ -1,34 +1,10 @@
 "use client"
 
-import DataTable, { TableColumn } from "@/components/common/DataTable";
+import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import StatsCards from "@/components/common/statCard";
-
-interface Article {
-  id: number;
-  date: string;
-  title: string;
-}
-
-const ArticleData: Article[] = [
-  {
-    id: 1,
-    title: 'the best way to learn React',
-    date: '26-05-2025',
-  },
-  {
-    id: 2,
-    title: 'understanding TypeScript basics',
-    date: '23-05-2025',
-  },
-  {
-    id: 3,
-    title: 'understanding TypeScript basics',
-    date: '21-05-2025',
-  },
-];
-  
-
+import { ArticleData, columns } from "@/data/articles";
+import { Article } from "@/types/articles";
 
 
 export default function Home() {
@@ -44,19 +20,6 @@ export default function Home() {
       alert(`Deleted: ${Article.title}`);
     }
   };
-
-  const columns: TableColumn<Article>[] = [
-    {
-      key: 'date',
-      header: 'Date',
-      sortable: false,
-    },
-    {
-      key: 'title',
-      header: 'Title',
-      sortable: true,
-    }
-  ];
 
   return (
     <main className="">

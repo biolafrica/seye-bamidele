@@ -1,34 +1,12 @@
 'use client';
 
-import Form, { FormField } from "../common/Form";
-
-type Role = 'admin' | 'editor' | 'viewer'| '';
-
-interface ProfileFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: Role;
-}
+import { TeamFormData } from "@/types/team";
+import Form from "../common/Form";
+import { profileFields } from "@/data/team";
 
 export default function ProfileForm() {
-
-  const profileFields: FormField[] = [
-    { name: 'firstName', label: 'First Name', type: 'text', placeholder: 'enter your first name', required: true},
-    { name: 'lastName', label: 'Last Name', type: 'text', placeholder: 'enter your last name', required: true },
-    { name: 'email', label: 'Email Address', type: 'email', placeholder: 'you@example.com', required: true},
-    { name: 'role', label: 'Role', type: 'select',required: true,
-      options: [
-        { label: 'Select role', value: '' },
-        { label: 'Admin', value: 'admin' },
-        { label: 'Editor', value: 'editor' },
-        { label: 'Viewer', value: 'viewer' },
-      ],
-    },
-  ];
-
-  const validateProfile = (values: ProfileFormData) => {
-    const errors: Partial<Record<keyof ProfileFormData, string>> = {};
+  const validateProfile = (values: TeamFormData) => {
+    const errors: Partial<Record<keyof TeamFormData, string>> = {};
     
     if (!values.email) {
       errors.email = 'Email is required';
@@ -47,7 +25,7 @@ export default function ProfileForm() {
     return errors;
   };
 
-  const handleProfileSubmit = async (values: ProfileFormData) => {
+  const handleProfileSubmit = async (values: TeamFormData) => {
     console.log('Login submitted:', values);
   };
 

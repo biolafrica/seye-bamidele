@@ -1,42 +1,11 @@
 "use client";
 
+import { defaultItems } from "@/data/settingsLayout";
+import {SettingsNavProps } from "@/types/settingsLayout";
 import * as outline from "@heroicons/react/24/outline";
-import * as solid from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-
-type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
-
-interface NavItem {
-  key: string;
-  label: string;
-  href: string;
-  outlineIcon: IconType;
-  solidIcon: IconType;
-}
-
-interface SettingsNavProps {
-  items?: NavItem[];
-  defaultActiveKey?: string;
-}
-
-const defaultItems: NavItem[] = [
-  {
-    key: "Profile",
-    label: "Profile Settings",
-    href: "/settings/profile",
-    outlineIcon: outline.UserIcon,
-    solidIcon: solid.UserIcon,
-  },
-  {
-    key: "Password",
-    label: "Password",
-    href: "/settings/password",
-    outlineIcon: outline.LockClosedIcon,
-    solidIcon: solid.LockClosedIcon,
-  },
-];
 
 export default function SettingsNav({
   items = defaultItems,

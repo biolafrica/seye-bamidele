@@ -1,33 +1,19 @@
 "use client"
 
-import DataTable, { TableColumn } from "@/components/common/DataTable";
+import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
 import EventForm from "@/components/pages/EventForm";
+import { columns } from "@/data/articles";
+import { EventData } from "@/data/event";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
+import { Event } from "@/types/events";
 
-interface Event {
-  id: number;
-  date: string;
-  title: string;
-  category?: string;
-}
-
-const EventData: Event[] = [
-  { id: 1, title: 'the best way to learn React', date: '26-05-2025', category: 'conference' },
-  { id: 2, title: 'understanding TypeScript basics', date: '23-05-2025', category: 'podcast' },
-];
 
 export default function EventsPage() {
   const sidePanel = useSidePanel<Event>();
   const { handleDelete } = useCrudHandlers<Event>();
-
-  const columns: TableColumn<Event>[] = [
-    { key: 'date', header: 'Date', sortable: false},
-    { key: 'title', header: 'Title', sortable: true},
-    { key: 'category', header: 'Category', sortable: false},
-  ];
 
   return (
     <>

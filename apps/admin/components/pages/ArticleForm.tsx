@@ -1,22 +1,14 @@
-import Form, { FormField } from "../common/Form";
+import { ArticleFormData } from "@/types/articles";
+import Form from "../common/Form";
+import { articleFields } from "@/data/articles";
 
-interface ArticleFormData {
-  title: string;
-  content: string;
-  excerpt: string;
-}
 
 
 export default function ArticleForm({initialValues, edit }: {
   initialValues: ArticleFormData;
   edit: boolean;
 }) {
-  const articleFields:FormField[] = [
-    { name: 'title', label: 'Title', type: 'text', placeholder: 'Enter article title', required: true },
-    { name: 'content', label: 'Content', type: 'textarea', placeholder: 'Enter article content', required: true },
-    { name: 'excerpt', label: 'Excerpt', type: 'textarea', placeholder: 'Enter article excerpt', required: false },
-  ]
-
+ 
   const validateArticle = (values: ArticleFormData ) => {
     const errors: Partial<Record<keyof ArticleFormData, string>> = {};
     
@@ -30,11 +22,12 @@ export default function ArticleForm({initialValues, edit }: {
 
     return errors;
   }
+
   const handleArticleSubmit = async (values: ArticleFormData) => {
     edit ? console.log('Article updated:', values) : console.log('Article created:', values);
   };
 
-  // Article form implementation goes here
+
   return (
     <div>
       <Form
