@@ -18,7 +18,7 @@ const NewsletterData: Newsletter[] = [
   { id: 2, title: 'understanding TypeScript basics', date: '23-05-2025' },
 ];
 
-export default function SubscribersPage() {  
+export default function NewsletterPage() {  
   const sidePanel = useSidePanel<Newsletter>();
   const { handleDelete } = useCrudHandlers<Newsletter>();
 
@@ -42,8 +42,8 @@ export default function SubscribersPage() {
       </SidePanel>
       
       <PageHeader
-        heading="Subscribers"
-        subHeading="Manage your newsletter subscribers"
+        heading="Newsletters"
+        subHeading="Manage your newsletter publications"
         buttonText="Create Newsletter"
         onButtonClick={sidePanel.openAdd}
       />

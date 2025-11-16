@@ -3,8 +3,10 @@
 import DataTable, { TableColumn } from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
+import ArticleForm from "@/components/pages/ArticleForm";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
+import { title } from "process";
 
 interface Article {
   id: number;
@@ -34,9 +36,9 @@ export default function ArticlesPage() {
         title={sidePanel.mode === 'edit' ? "Edit Article" : "Add Article"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <p className="text-gray-700">Editing: {sidePanel.selectedItem.title}</p>
+          <ArticleForm initialValues={{title: sidePanel.selectedItem.title, excerpt: "", content: ""}} edit={true} />
         ) : (
-          <p className="text-gray-700">Create a new article</p>
+          <ArticleForm initialValues={{title:"", excerpt: "", content: ""}} edit={false}/>
         )}
       </SidePanel>
 

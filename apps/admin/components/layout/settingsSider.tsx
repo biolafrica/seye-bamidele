@@ -31,7 +31,7 @@ const defaultItems: NavItem[] = [
   },
   {
     key: "Password",
-    label: "Password & Terminals",
+    label: "Password",
     href: "/settings/password",
     outlineIcon: outline.LockClosedIcon,
     solidIcon: solid.LockClosedIcon,
@@ -40,7 +40,7 @@ const defaultItems: NavItem[] = [
 
 export default function SettingsNav({
   items = defaultItems,
-  defaultActiveKey = "general",
+  defaultActiveKey = "Profile",
 }: SettingsNavProps) {
   const pathname = usePathname();
 

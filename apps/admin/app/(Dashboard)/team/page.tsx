@@ -3,6 +3,7 @@
 import DataTable, { TableColumn } from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
+import TeamForm from "@/components/pages/TeamForm";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
 
@@ -36,9 +37,9 @@ export default function TeamPage() {
         title={sidePanel.mode === 'edit' ? "Edit Team Member" : "Add New Team Member"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <p className="text-gray-700">Editing: {sidePanel.selectedItem.name}</p>
+          <TeamForm initialValues={{firstName: sidePanel.selectedItem.name.split(' ')[0], lastName: sidePanel.selectedItem.name.split(' ')[1] || "", email: sidePanel.selectedItem.email, role:""}} edit={true} />
         ) : (
-          <p className="text-gray-700">Create a new team member</p>
+          <TeamForm initialValues={{firstName: "", lastName:"", email: "", role:""}} edit={false} />
         )}
       </SidePanel>
 

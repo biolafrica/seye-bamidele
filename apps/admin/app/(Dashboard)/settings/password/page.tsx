@@ -1,5 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsSider from "@/components/layout/settingsSider";
+import ChangePasswordPage from "@/components/pages/changePassword";
 
 export default function PasswordPage() {    
   return (
@@ -18,7 +19,7 @@ export default function PasswordPage() {
 
         <div className="w-full lg:w-3/4">
          <div className="border">
-            Password Settings Content
+            <ChangePasswordPage/>
          </div>
         </div>
 

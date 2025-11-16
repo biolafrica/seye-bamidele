@@ -49,9 +49,9 @@ const SECTIONS: Section[] = [
         activeIcon: solid.UsersIcon,
       },
       {
-        key: "subscribers",
-        label: "Subscribers",
-        href: "/subscribers",
+        key: "  newsletter",
+        label: "Newsletters",
+        href: "/newsletter",
         icon: outline.UserGroupIcon,
         activeIcon: solid.UserGroupIcon,
       },

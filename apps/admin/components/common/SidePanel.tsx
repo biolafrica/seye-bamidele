@@ -13,12 +13,13 @@ export default function SidePanel({ isOpen, onClose, title, children }: SidePane
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-60 flex">
+    <div className="fixed inset-0 z-50 flex">
       <div
         className="absolute inset-0 bg-black opacity-50"
         onClick={onClose}
       />
       <div className="relative z-65 w-screen lg:w-1/2 right-0 top-0 h-screen bg-white overflow-y-auto shadow-lg border-l border-gray-200">
+        
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button

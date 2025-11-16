@@ -1,7 +1,9 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsSider from "@/components/layout/settingsSider";
+import ProfileForm from "@/components/pages/ProfileForm";
 
-export default function SettingsPage() {    
+
+export default function SettingsPage() {   
   return (
     <main className="">
       <PageHeader
@@ -16,10 +18,9 @@ export default function SettingsPage() {
           <SettingsSider/>
         </div>
 
-        <div className="w-3/4 hidden lg:block">
-         <div className="border">
-            content
-         </div>
+        <div className="w-3/4 hidden lg:block bg-card p-6 rounded-lg border border-border">
+          <h2 className="text-xl font-semibold text-heading mb-6">Profile Form</h2>
+          <ProfileForm/>
         </div>
 
       </div>
