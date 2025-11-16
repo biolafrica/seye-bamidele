@@ -20,6 +20,10 @@ export default function ArticleForm({initialValues, edit }: {
       errors.excerpt = 'Excerpt must be less than 300 characters';
     }
 
+    if (!values.image) {
+      errors.image = 'image is required';
+    }
+
     return errors;
   }
 

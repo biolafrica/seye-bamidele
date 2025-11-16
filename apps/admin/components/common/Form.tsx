@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-
 import { Button } from './Button';
+import ImageField from './ImageField';
 import { useForm } from '@/hooks/useForm';
 
 export type FieldType = 
@@ -18,7 +18,9 @@ export type FieldType =
   | 'select' 
   | 'textarea' 
   | 'checkbox' 
-  | 'radio';
+  | 'radio'
+  | 'image'
+  | 'file'; 
 
 export interface SelectOption {
   value: string | number;
@@ -41,6 +43,11 @@ export interface FormField {
   autoComplete?: string;
   disabled?: boolean;
   helperText?: string;
+  // Image field specific props
+  accept?: string;
+  maxSize?: number; // in MB
+  preview?: boolean;
+  aspectRatio?: '1:1' | '16:9' | '4:3' | '3:2' | 'free';
 }
 
 export interface FormProps<T extends Record<string, any>> {
@@ -79,6 +86,8 @@ function Form<T extends Record<string, any>>({
     handleChange,
     handleSubmit,
     setGlobalError,
+    setFieldValue,
+    setFieldTouched,
     isValid,
   } = useForm<T>({ 
     initialValues, 
@@ -91,6 +100,9 @@ function Form<T extends Record<string, any>>({
     .filter(f => f.required)
     .every(f => {
       const val = values[f.name];
+      if (f.type === 'image' || f.type === 'file') {
+        return val instanceof File || (val && typeof val === 'string');
+      }
       return val !== undefined && val !== null && val.toString().trim() !== '';
     });
 
@@ -133,10 +145,82 @@ function Form<T extends Record<string, any>>({
       autoComplete,
       disabled,
       helperText,
+      accept,
+      maxSize,
+      preview,
+      aspectRatio,
     } = field;
     
     const showError = touched[name] && errors[name];
     const fieldId = `field-${name}`;
+
+    // Handle image field
+    if (type === 'image') {
+      return (
+        <ImageField
+          name={name}
+          label={label}
+          value={values[name]}
+          onChange={(file) => {
+            setFieldValue(name as keyof T, file as any);
+            setFieldTouched(name as keyof T, true);
+          }}
+          onBlur={() => setFieldTouched(name as keyof T, true)}
+          accept={accept || 'image/*'}
+          maxSize={maxSize}
+          required={required}
+          disabled={disabled}
+          error={showError ? errors[name] : undefined}
+          helperText={helperText}
+          preview={preview !== false}
+          aspectRatio={aspectRatio}
+        />
+      );
+    }
+
+    // Handle file field (non-image)
+    if (type === 'file') {
+      return (
+        <div>
+          <label 
+            htmlFor={fieldId} 
+            className="block text-sm font-medium text-heading mb-1"
+          >
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+          <input
+            id={fieldId}
+            name={name}
+            type="file"
+            accept={accept}
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setFieldValue(name as keyof T, file as any);
+              setFieldTouched(name as keyof T, true);
+            }}
+            disabled={disabled}
+            className={`
+              block w-full text-sm text-text
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-lg file:border-0
+              file:text-sm file:font-semibold
+              file:bg-accent file:text-white
+              hover:file:bg-accent-hover
+              file:cursor-pointer
+              ${showError ? 'text-red-500' : ''}
+            `}
+            aria-invalid={!!showError}
+            aria-describedby={showError ? `${fieldId}-error` : undefined}
+          />
+          {values[name] && values[name] instanceof File && (
+            <p className="mt-1 text-xs text-secondary">
+              Selected: {(values[name] as File).name}
+            </p>
+          )}
+        </div>
+      );
+    }
 
     switch (type) {
       case 'select':
@@ -266,15 +350,23 @@ function Form<T extends Record<string, any>>({
         const showError = touched[field.name] && errors[field.name];
         const fieldId = `field-${field.name}`;
 
+        if (field.type === 'image') {
+          return (
+            <div key={field.name}>
+              {renderField(field)}
+            </div>
+          );
+        }
+
         if (field.type === 'checkbox') {
           return (
             <div key={field.name}>
               {renderField(field)}
               {field.helperText && (
-                <p className="mt-1 text-xs text-secondary">{field.helperText}</p>
+                <p className="mt-1 text-xs text-secondary ml-6">{field.helperText}</p>
               )}
               {showError && (
-                <p id={`${fieldId}-error`} className="mt-1 text-sm text-red-600 dark:text-red-400">
+                <p id={`${fieldId}-error`} className="mt-1 text-sm text-red-600 dark:text-red-400 ml-6">
                   {errors[field.name]}
                 </p>
               )}
@@ -284,13 +376,15 @@ function Form<T extends Record<string, any>>({
 
         return (
           <div key={field.name}>
-            <label 
-              htmlFor={fieldId} 
-              className="block text-sm font-medium text-heading"
-            >
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </label>
+            {field.type !== 'file' && (
+              <label 
+                htmlFor={fieldId} 
+                className="block text-sm font-medium text-heading"
+              >
+                {field.label}
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+              </label>
+            )}
             {renderField(field)}
             {field.helperText && !showError && (
               <p className="mt-1 text-xs text-secondary">{field.helperText}</p>

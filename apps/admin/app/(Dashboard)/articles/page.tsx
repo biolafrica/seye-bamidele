@@ -22,9 +22,9 @@ export default function ArticlesPage() {
         title={sidePanel.mode === 'edit' ? "Edit Article" : "Add Article"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <ArticleForm initialValues={{title: sidePanel.selectedItem.title, excerpt: "", content: ""}} edit={true} />
+          <ArticleForm initialValues={{title: sidePanel.selectedItem.title, excerpt: "", content: "", image:null, image1:null, image2:null}} edit={true} />
         ) : (
-          <ArticleForm initialValues={{title:"", excerpt: "", content: ""}} edit={false}/>
+          <ArticleForm initialValues={{title:"", excerpt: "", content: "",image:null, image1:null, image2:null}} edit={false}/>
         )}
       </SidePanel>
 
