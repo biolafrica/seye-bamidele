@@ -28,7 +28,7 @@ const ImageField: React.FC<ImageFieldProps> = ({
   onChange,
   onBlur,
   accept = 'image/*',
-  maxSize = 5, // 5MB default
+  maxSize = 5,
   required = false,
   disabled = false,
   error,
@@ -43,8 +43,6 @@ const ImageField: React.FC<ImageFieldProps> = ({
   const [uploadError, setUploadError] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Generate preview URL when value changes
-// Replace the existing useEffect with this:
   useEffect(() => {
     if (value instanceof File) {
       const url = URL.createObjectURL(value);

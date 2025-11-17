@@ -11,8 +11,14 @@ export interface EventFormData {
 }
 
 export interface Event {
-  id: number;
-  date: string;
+  id?: number;
+  date?: string;
   title: string;
-  category?: string;
+  category?: Category;
+  description?: string;
+  link?: string;
+  type?: Type;
+  created_at?: string;
+  event?: string;
+
 }

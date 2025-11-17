@@ -1,8 +1,14 @@
 
 export interface Article {
-  id: number;
+  id?: number;
   date: string;
   title: string;
+  excerpt: string;
+  image?: string;
+  image1?: string;
+  image2?: string;
+  created_at?: string;
+  content?: string;
 }
 
 export interface ArticleFormData {
