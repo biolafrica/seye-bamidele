@@ -1,24 +1,22 @@
-type Category = 'conference' | 'show' | 'podcast' | '';
-type Type = 'audio' | 'video' | 'article' | '';
-
 export interface EventFormData {
   event: string;
   title: string;
   description: string;
   link: string;
-  category: Category;
-  type: Type;
+  category: string;
+  type: string;
 }
 
 export interface Event {
-  id?: number;
+  id?: any;
   date?: string;
   title: string;
-  category?: Category;
+  category?: string;
   description?: string;
   link?: string;
-  type?: Type;
+  type?: string;
   created_at?: string;
   event?: string;
+  updated_at?: string;
 
 }

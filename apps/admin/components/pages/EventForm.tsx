@@ -1,11 +1,14 @@
 import { EventFormData } from "@/types/events";
 import Form from "../common/Form";
 import { eventFields } from "@/data/event";
+import { useEvents } from "@/hooks/useApi";
 
-export default function EventForm({initialValues, edit }: {
+export default function EventForm({initialValues, edit, id = "" }: {
   initialValues: EventFormData;
   edit: boolean;
+  id?: string ;
 }) {
+  const {create, update} = useEvents();
 
   const validateEvent = (values: EventFormData ) => {
     const errors: Partial<Record<keyof EventFormData, string>> = {};
@@ -24,8 +27,18 @@ export default function EventForm({initialValues, edit }: {
   };
 
   const handleEventSubmit = async (values: EventFormData) => {
-    edit ? console.log('Event updated:', values) :
-    console.log('Event created:', values);
+    try {
+      if(edit){
+        await update(id, values)
+      }else{
+        await create(values);
+      }
+      window.location.reload();
+
+    } catch (error) {
+      console.error("Error submitting event form:", error);
+    }
+      
   };
   
   return (

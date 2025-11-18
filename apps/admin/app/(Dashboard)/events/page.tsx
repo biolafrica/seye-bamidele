@@ -4,16 +4,23 @@ import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
 import EventForm from "@/components/pages/EventForm";
-import { columns } from "@/data/articles";
-import { EventData } from "@/data/event";
-import { useCrudHandlers } from "@/hooks/useCrudHandler";
+import { columns } from "@/data/event";
+import { useEvents } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Event } from "@/types/events";
+import { useEffect } from "react";
 
 
 export default function EventsPage() {
   const sidePanel = useSidePanel<Event>();
-  const { handleDelete } = useCrudHandlers<Event>();
+
+  const {data, getAll, remove} = useEvents();
+
+  useEffect(() => {getAll()}, []);
+
+  const handleDelete = async (row:any) => {
+    await remove(row.id);
+  }
 
   return (
     <>
@@ -24,13 +31,13 @@ export default function EventsPage() {
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
           <EventForm initialValues={{ 
-            event: 'event 1',
-            title: sidePanel.selectedItem.title, 
-            description: '', 
-            link: '', 
-            category: '', 
-            type: '' 
-          }} edit={true} />
+            event: `${sidePanel.selectedItem.event}`,
+            title: `${sidePanel.selectedItem.title}`, 
+            description:`${sidePanel.selectedItem.description}`,   
+            link:`${sidePanel.selectedItem.link}`, 
+            category:`${sidePanel.selectedItem.category}`, 
+            type:`${sidePanel.selectedItem.type}`, 
+          }} edit={true} id={sidePanel.selectedItem.id} />
         ) : (
           <EventForm
             initialValues={{ event: '', title: '', description: '', link: '', category: '', type: '' }}
@@ -49,7 +56,7 @@ export default function EventsPage() {
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
-          data={EventData}
+          data={data|| []}
           onEdit={sidePanel.openEdit}
           onDelete={handleDelete}
           defaultItemsPerPage={10}

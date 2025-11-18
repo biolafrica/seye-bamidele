@@ -1,3 +1,4 @@
+import { formatDate } from "@/app/utils/common/formatDate";
 import { TableColumn } from "@/components/common/DataTable";
 import { FormField } from "@/components/common/Form";
 import { Event } from "@/types/events";
@@ -25,13 +26,9 @@ export const eventFields:FormField[] = [
   },
 ];
 
-export const EventData: Event[] = [
-  { id: 1, title: 'the best way to learn React', date: '26-05-2025', category: 'conference' },
-  { id: 2, title: 'understanding TypeScript basics', date: '23-05-2025', category: 'podcast' },
-];
-
 export const columns: TableColumn<Event>[] = [
-  { key: 'date', header: 'Date', sortable: false},
+  { key: 'created_at', header: 'Date', sortable: false, accessor:(row)=>formatDate(row.created_at ) },
+  { key: 'event', header: 'Event Name', sortable: true},
   { key: 'title', header: 'Title', sortable: true},
   { key: 'category', header: 'Category', sortable: false},
 ];

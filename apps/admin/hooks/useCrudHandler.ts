@@ -1,4 +1,4 @@
-export function useCrudHandlers<T extends { id: number; title?: string; name?: string }>() {
+export function useCrudHandlers<T extends { id?: number; title?: string; name?: string }>() {
   const handleDelete = (item: T, onDeleteSuccess?: (item: T) => void) => {
     const itemName = 'title' in item ? item.title : 'name' in item ? item.name : 'this item';
     
