@@ -1,14 +1,11 @@
+import { formatDate } from "@/app/utils/common/formatDate";
 import { TableColumn } from "@/components/common/DataTable";
 import { FormField } from "@/components/common/Form";
-import { Article } from "@/types/articles";
+import { Article} from "@/types/articles";
 
-export const ArticleData: Article[] = [
-  {id: 1,title: "The best way to learn React", date: "26-05-2025"},
-  { id: 2,title: "Understanding TypeScript basics", date: "23-05-2025"},
-];
 
 export const columns: TableColumn<Article>[] = [
-  { key: "date", header: "Date", sortable: false},
+  { key: "created_at", header: "Date", sortable: false, accessor:(row)=>formatDate(row.created_at )},
   { key: "title", header: "Title", sortable: true},
 ];
 
@@ -21,3 +18,5 @@ export const articleFields:FormField[] = [
   { name: 'image1', label: 'Image 1', type: 'file', required: false, accept:'image/jpeg,image/png', aspectRatio: '4:3',helperText: 'Recommended size: 800x600px' },
   { name: 'image2', label: 'Image 2', type: 'file', required: false, accept:'image/jpeg,image/png', aspectRatio: '4:3',helperText: 'Recommended size: 800x600px' },
 ]
+
+

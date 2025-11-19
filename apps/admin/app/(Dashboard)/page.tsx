@@ -1,9 +1,9 @@
 "use client"
 
-import DataTable from "@/components/common/DataTable";
+//import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import StatsCards from "@/components/common/statCard";
-import { ArticleData, columns } from "@/data/articles";
+//import { ArticleData, columns } from "@/data/articles";
 import { Article } from "@/types/articles";
 
 
@@ -33,14 +33,14 @@ export default function Home() {
 
         <h4 className="mb-3 text-secondary">Recent Articles</h4>
 
-        <DataTable
+        {/*<DataTable
           columns={columns}
           data={ArticleData}
           onEdit={(Article) => handleEdit(Article)}
           onDelete={(Article) => handleDelete(Article)}
           defaultItemsPerPage={10}
           showPagination={false}
-        />
+        />*/}
         
       </div>
     </main>

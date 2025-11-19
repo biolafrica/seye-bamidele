@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/app/utils/supabase/client";
 import { handleError, successResponse, validateRequired } from "@/app/utils/common/serverResponse";
+import { supabaseAdmin } from "../supabase/supabaseAdmin";
 
 export function createCRUDHandlers<T>({
   table,

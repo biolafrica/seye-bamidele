@@ -20,7 +20,6 @@ async function apiFetch(url: string, options?: RequestInit) {
   return response.json()
 }
 
-
 export function useCrud<T>(endpoint: string) {
   const [data, setData] = useState<T[]>([])
   const [loading, setLoading] = useState(false)
@@ -126,7 +125,7 @@ export function useCrud<T>(endpoint: string) {
 }
 
 export function useArticles() {
-  return useCrud<Article>('articles')
+  return useCrud<Article>('article')
 }
 export function useEvents() {
   return useCrud<Event>('event')

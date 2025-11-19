@@ -14,7 +14,13 @@ export default function EventForm({initialValues, edit, id = "" }: {
     const errors: Partial<Record<keyof EventFormData, string>> = {};
     
     if (values.description && values.description.length > 200) {
-      errors.description = 'Bio must be less than 500 characters';
+      errors.description = 'description must be less than 200 characters';
+    }
+    if (!values.title && values.title.length > 60) {
+      errors.title = 'Title must be less than 60 characters';
+    }
+    if (!values.event && values.event.length > 50) {
+      errors.event = 'Event name must be less than 50 characters';
     }
 
     if (!values.link) {
