@@ -3,8 +3,7 @@
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
-import { columns } from "@/data/articles";
-import { NewsletterData } from "@/data/newsletter";
+import { NewsletterData, columns } from "@/data/newsletter";
 import { useCrudHandlers } from "@/hooks/useCrudHandler";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Newsletter } from "@/types/newsletter";

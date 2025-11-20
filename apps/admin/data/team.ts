@@ -3,14 +3,14 @@ import { FormField } from "@/components/common/Form";
 import { Team } from "@/types/team";
 
 export const TeamData: Team[] = [
-  { id: 1, name: 'Seye Bamidele', email: 'seye@paidHr.com', dateRegistered: '26-05-2025' },
-  { id: 2, name: 'Abiodun Biobaku', email: 'biolafrica@gmail.com', dateRegistered: '06-06-2025' },
+  { id: 1, name: 'Seye Bamidele', email: 'seye@paidHr.com',created_at: '26-05-2025' },
+  { id: 2, name: 'Abiodun Biobaku', email: 'biolafrica@gmail.com', created_at: '06-06-2025' },
 ];
 
 export const columns: TableColumn<Team>[] = [
   { key: 'name', header: 'Name', sortable: true },
   { key: 'email', header: 'Email', sortable: true },
-  { key: 'dateRegistered', header: 'Date Registered', sortable: false },
+  { key: 'created_at', header: 'Date Registered', sortable: false },
 ];
 
 export const profileFields: FormField[] = [

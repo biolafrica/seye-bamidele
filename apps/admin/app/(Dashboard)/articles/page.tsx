@@ -7,7 +7,6 @@ import ArticleForm from "@/components/pages/ArticleForm";
 import { columns } from "@/data/articles";
 import { useArticles } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
-import {  BackendArticle } from "@/types/articles";
 import { useEffect } from "react";
 
 

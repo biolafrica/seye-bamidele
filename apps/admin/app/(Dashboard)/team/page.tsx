@@ -22,7 +22,13 @@ export default function TeamPage() {
         title={sidePanel.mode === 'edit' ? "Edit Team Member" : "Add New Team Member"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <TeamForm initialValues={{firstName: sidePanel.selectedItem.name.split(' ')[0], lastName: sidePanel.selectedItem.name.split(' ')[1] || "", email: sidePanel.selectedItem.email, role:""}} edit={true} />
+          <TeamForm initialValues={{
+            firstName: sidePanel.selectedItem.name.split(' ')[0], 
+            lastName: sidePanel.selectedItem.name.split(' ')[1] || "", 
+            email: sidePanel.selectedItem.email, 
+            role:""}} 
+            edit={true} 
+          />
         ) : (
           <TeamForm initialValues={{firstName: "", lastName:"", email: "", role:""}} edit={false} />
         )}

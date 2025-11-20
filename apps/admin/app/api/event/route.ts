@@ -1,7 +1,7 @@
 import { createCRUDHandlers } from "@/app/utils/common/crudFactory";
-import { Article } from "@/types/articles";
+import { Event } from "@/types/events";
 
-const { GET, POST, PUT, DELETE } = createCRUDHandlers<Article>({
+const { GET, POST, PUT, DELETE } = createCRUDHandlers<Event>({
   table: "Events",
   requiredFields: ["title", "event", "description", "link", "category", "type"],
 });

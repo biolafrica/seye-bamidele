@@ -1,3 +1,5 @@
+"use  client";
+
 import { ArticleFormData, BackendArticle, MainArticle } from "@/types/articles";
 import Form from "../common/Form";
 import { articleFields } from "@/data/articles";
