@@ -1,9 +1,16 @@
 import { createCRUDHandlers } from "@/app/utils/common/crudFactory";
-import { Team, TeamFormData } from "@/types/team";
+import { supabaseAdmin } from "@/app/utils/supabase/supabaseAdmin";
+import { TeamFormData } from "@/types/team";
+import { NextRequest } from "next/server";
 
-const { GET, POST, PUT, DELETE } = createCRUDHandlers<TeamFormData>({
+const { GET, PUT, DELETE } = createCRUDHandlers<TeamFormData>({
   table: "users",
   requiredFields: ["first_name", "last_name", "email", "role",],
 });
 
-export { GET, POST, PUT, DELETE };
+
+export { GET, PUT, DELETE };
+
+export async function POST(request: NextRequest){}
+
+

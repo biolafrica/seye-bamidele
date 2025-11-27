@@ -39,7 +39,6 @@ export function createCRUDHandlers<T>({
       try {
         const body: T = await request.json();
 
-        // Validate required fields
         if (requiredFields.length > 0) {
           const validation = validateRequired(body, requiredFields);
           if (!validation.isValid) {
@@ -121,5 +120,6 @@ export function createCRUDHandlers<T>({
         return handleError(error);
       }
     },
+    
   };
 }
