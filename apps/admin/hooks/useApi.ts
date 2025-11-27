@@ -1,5 +1,6 @@
 import { Article } from '@/types/articles'
 import { Event } from '@/types/events'
+import { TeamFormData } from '@/types/team'
 import { useState} from 'react'
 
 
@@ -127,6 +128,11 @@ export function useCrud<T>(endpoint: string) {
 export function useArticles() {
   return useCrud<Article>('article')
 }
+
 export function useEvents() {
   return useCrud<Event>('event')
+}
+
+export function useTeam() {
+  return useCrud<TeamFormData>('team')
 }

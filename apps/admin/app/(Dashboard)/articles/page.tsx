@@ -40,16 +40,34 @@ export default function ArticlesPage() {
         title={sidePanel.mode === 'edit' ? "Edit Article" : "Add Article"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <ArticleForm initialValues={{
-            title: sidePanel.selectedItem.title,
-            excerpt: sidePanel.selectedItem.excerpt, 
-            content: sidePanel.selectedItem.content, 
-            image: sidePanel.selectedItem.image, 
-            image1: sidePanel.selectedItem.images[1],
-            image2: sidePanel.selectedItem.images[2],
-          }} edit={true} article={sidePanel.selectedItem} onSuccess={handleSuccess} />
+          <ArticleForm 
+            initialValues={{
+              title: sidePanel.selectedItem.title,
+              excerpt: sidePanel.selectedItem.excerpt, 
+              content: sidePanel.selectedItem.content, 
+              image: sidePanel.selectedItem.image, 
+              image1: sidePanel.selectedItem.images[1],
+              image2: sidePanel.selectedItem.images[2],
+            }} 
+            edit={true} 
+            article={sidePanel.selectedItem} 
+            onSuccess={handleSuccess} 
+          />
         ) : (
-          <ArticleForm initialValues={{title:"", excerpt: "", content: "",image:'', image1:'', image2:''}} edit={false} article={null} onSuccess={handleSuccess}/>
+          <ArticleForm 
+            initialValues={{
+              title:"", 
+              excerpt: "", 
+              content: "",
+              image:'', 
+              image1:'', 
+              image2:''
+            }} 
+            edit={false} 
+            article={null} 
+            onSuccess={handleSuccess}
+          />
+          
         )}
       </SidePanel>
 

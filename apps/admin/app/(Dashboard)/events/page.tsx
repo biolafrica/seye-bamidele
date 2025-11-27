@@ -22,6 +22,11 @@ export default function EventsPage() {
     await remove(row.id);
   }
 
+  const handleSuccess = async () => {
+    await getAll(); 
+    sidePanel.close();
+  };
+
   return (
     <>
       <SidePanel
@@ -30,18 +35,31 @@ export default function EventsPage() {
         title={sidePanel.mode === 'edit' ? "Edit Event" : "Create Event"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <EventForm initialValues={{ 
-            event: `${sidePanel.selectedItem.event}`,
-            title: `${sidePanel.selectedItem.title}`, 
-            description:`${sidePanel.selectedItem.description}`,   
-            link:`${sidePanel.selectedItem.link}`, 
-            category:`${sidePanel.selectedItem.category}`, 
-            type:`${sidePanel.selectedItem.type}`, 
-          }} edit={true} id={sidePanel.selectedItem.id} />
+          <EventForm 
+            initialValues={{ 
+              event: `${sidePanel.selectedItem.event}`,
+              title: `${sidePanel.selectedItem.title}`, 
+              description:`${sidePanel.selectedItem.description}`,   
+              link:`${sidePanel.selectedItem.link}`, 
+              category:`${sidePanel.selectedItem.category}`, 
+              type:`${sidePanel.selectedItem.type}`, 
+            }} 
+            edit={true} 
+            id={sidePanel.selectedItem.id} 
+            onSuccess={handleSuccess} 
+          />
         ) : (
           <EventForm
-            initialValues={{ event: '', title: '', description: '', link: '', category: '', type: '' }}
+            initialValues={{ 
+              event: '', 
+              title: '', 
+              description: '', 
+              link: '', 
+              category: '', 
+              type: '' 
+            }}
             edit={false}
+            onSuccess={handleSuccess}
           />
         )}
       </SidePanel>

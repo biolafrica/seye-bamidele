@@ -3,10 +3,11 @@ import Form from "../common/Form";
 import { eventFields } from "@/data/event";
 import { useEvents } from "@/hooks/useApi";
 
-export default function EventForm({initialValues, edit, id = "" }: {
+export default function EventForm({initialValues, edit, id = "", onSuccess }: {
   initialValues: EventFormData;
   edit: boolean;
   id?: string ;
+  onSuccess?: () => void;
 }) {
   const {create, update} = useEvents();
 
@@ -39,7 +40,7 @@ export default function EventForm({initialValues, edit, id = "" }: {
       }else{
         await create(values);
       }
-      window.location.reload();
+      onSuccess?.();
 
     } catch (error) {
       console.error("Error submitting event form:", error);

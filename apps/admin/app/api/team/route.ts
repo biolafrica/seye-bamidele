@@ -11,6 +11,7 @@ export const { GET, POST, PUT, DELETE } = createCRUDHandlers({
   hooks: {
     beforeCreate: async (body:BackendUserData) => {
       const tempPassword = generateTempPassword();
+      console.log("temporary paswword", tempPassword)
 
       const { data, error } = await supabaseAdmin.auth.admin.createUser({
         email: body.email,
@@ -30,7 +31,8 @@ export const { GET, POST, PUT, DELETE } = createCRUDHandlers({
       return { tempPassword, email: body.email };
     },
 
-    afterCreate: async (createdUser, ctx:any) => {
+    afterCreate: async (createdUser, body, ctx:any) => {
+      console.log("ctx", ctx)
       await sendEmail({
         to: createdUser.email,
         subject: "Your new account credentials",

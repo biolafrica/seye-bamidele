@@ -1,8 +1,10 @@
 export interface Team {
-  id: number;
-  name: string;
+  id?: string ; 
+  first_name: string;
+  last_name: string;
   email: string;
-  created_at: string;
+  role: string;
+  created_at?: string;
 }
 
 export interface TeamFormData {
@@ -11,6 +13,7 @@ export interface TeamFormData {
   email: string;
   role: string;
 }
+
 export interface BackendUserData {
   first_name: string;
   last_name: string;

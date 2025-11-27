@@ -4,15 +4,27 @@ import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
 import TeamForm from "@/components/pages/TeamForm";
-import { TeamData, columns } from "@/data/team";
-import { useCrudHandlers } from "@/hooks/useCrudHandler";
+import {columns } from "@/data/team";
+import { useTeam } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Team } from "@/types/team";
+import { useEffect } from "react";
 
 
 export default function TeamPage() {  
   const sidePanel = useSidePanel<Team>();
-  const { handleDelete } = useCrudHandlers<Team>();
+  const {data, getAll, remove} = useTeam();
+
+  useEffect(() => {getAll()}, []);
+
+  const handleDelete = async (row:any) => {
+    await remove(row.id);
+  }
+
+  const handleSuccess = async () => {
+    await getAll(); 
+    sidePanel.close();
+  };
 
   return (
     <>
@@ -23,15 +35,26 @@ export default function TeamPage() {
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
           <TeamForm initialValues={{
-            firstName: sidePanel.selectedItem.name.split(' ')[0], 
-            lastName: sidePanel.selectedItem.name.split(' ')[1] || "", 
+            first_name: sidePanel.selectedItem.last_name, 
+            last_name: sidePanel.selectedItem.first_name, 
             email: sidePanel.selectedItem.email, 
-            role:""}} 
+            role: sidePanel.selectedItem.role}} 
             edit={true} 
+            id={sidePanel.selectedItem.id}
+            onSuccess={handleSuccess}
           />
         ) : (
-          <TeamForm initialValues={{firstName: "", lastName:"", email: "", role:""}} edit={false} />
+
+          <TeamForm initialValues={{
+              first_name: "", 
+              last_name:"", email: "", 
+              role:""
+            }} 
+            edit={false} 
+            onSuccess={handleSuccess} 
+          />
         )}
+        
       </SidePanel>
 
       <PageHeader
@@ -44,7 +67,7 @@ export default function TeamPage() {
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
-          data={TeamData}
+          data={data|| []}
           onEdit={sidePanel.openEdit}
           onDelete={handleDelete}
           defaultItemsPerPage={10}

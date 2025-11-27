@@ -1,12 +1,16 @@
 import { TeamFormData } from "@/types/team";
 import Form from "../common/Form";
 import { teamFields } from "@/data/team";
+import { useTeam } from "@/hooks/useApi";
 
-export default function TeamForm({edit, initialValues}:{
+export default function TeamForm({edit, initialValues, id = "", onSuccess}:{
   edit: boolean;
   initialValues: TeamFormData;
+  id?: string ;
+  onSuccess?: () => void;
 }) {
 
+  const {create, update} = useTeam();
 
   const validateProfile = (values: TeamFormData) => {
     const errors: Partial<Record<keyof TeamFormData, string>> = {};
@@ -17,20 +21,30 @@ export default function TeamForm({edit, initialValues}:{
       errors.email = 'Email is invalid';
     }
     
-    if (!values.firstName) {
-      errors.firstName = 'First name is required';
+    if (!values.first_name) {
+      errors.first_name= 'First name is required';
     }
 
-    if (!values.lastName) {
-      errors.lastName = 'Last name is required';
+    if (!values.last_name) {
+      errors.last_name = 'Last name is required';
     }
     
     return errors;
   };
 
   const handleEventSubmit = async (values: TeamFormData) => {
-    edit ? console.log('Event updated:', values) :
-    console.log('Event created:', values);
+    try {
+      if(edit){
+        await update(id, values)
+      }else{
+        await create(values);
+      }
+      onSuccess?.();
+
+    } catch (error) {
+      console.error("Error submitting event form:", error);
+    }
+   
   };
 
   return (
