@@ -5,10 +5,20 @@ import { supabaseAdmin } from "../supabase/supabaseAdmin";
 export function createCRUDHandlers<T>({
   table,
   requiredFields = [],
+  hooks = {}
 }: {
   table: string;
   requiredFields?: string[];
+  hooks?: {
+    beforeCreate?: (body: T) => Promise<any>;
+    afterCreate?: (created: any, body: T, ctx?: any) => Promise<any>;
+    beforeUpdate?: (id: string, body: Partial<T>) => Promise<any>;
+    afterUpdate?: (updated: any, body: Partial<T>) => Promise<any>;
+    beforeDelete?: (id: string) => Promise<any>;
+    afterDelete?: (id: string) => Promise<any>;
+  };
 }) {
+  
   return {
 
     GET: async (request: NextRequest) => {
@@ -39,6 +49,8 @@ export function createCRUDHandlers<T>({
       try {
         const body: T = await request.json();
 
+        const ctx = hooks.beforeCreate ? await hooks.beforeCreate(body) : null;
+
         if (requiredFields.length > 0) {
           const validation = validateRequired(body, requiredFields);
           if (!validation.isValid) {
@@ -50,12 +62,17 @@ export function createCRUDHandlers<T>({
         }
 
         const { data, error } = await supabaseAdmin
-          .from(table)
-          .insert([body])
-          .select()
-          .single();
+        .from(table)
+        .insert([body])
+        .select()
+        .single();
 
         if (error) throw error;
+
+        if (hooks.afterCreate) {
+          await hooks.afterCreate(data, body, ctx);
+        }
+
         return successResponse(data, 201);
       } catch (error) {
         return handleError(error);
@@ -76,6 +93,10 @@ export function createCRUDHandlers<T>({
 
         const body: Partial<T> = await request.json();
 
+        if (hooks.beforeUpdate) {
+          await hooks.beforeUpdate(id, body);
+        }
+
         const updateData = {
           ...body,
           updated_at: new Date().toISOString(),
@@ -89,6 +110,10 @@ export function createCRUDHandlers<T>({
           .single();
 
         if (error) throw error;
+
+        if (hooks.afterUpdate) {
+          await hooks.afterUpdate(data, body);
+        }
 
         return successResponse(data);
       } catch (error) {
@@ -108,12 +133,20 @@ export function createCRUDHandlers<T>({
           );
         }
 
+        if (hooks.beforeDelete) {
+          await hooks.beforeDelete(id);
+        }
+
         const { error } = await supabaseAdmin
           .from(table)
           .delete()
           .eq("id", id);
 
         if (error) throw error;
+
+        if (hooks.afterDelete) {
+          await hooks.afterDelete(id);
+        }
 
         return successResponse({ message: `Deleted successfully` });
       } catch (error) {
@@ -123,3 +156,4 @@ export function createCRUDHandlers<T>({
     
   };
 }
+

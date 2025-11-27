@@ -6,8 +6,16 @@ export interface Team {
 }
 
 export interface TeamFormData {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   role: string;
+}
+export interface BackendUserData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  id : string;
+  temp_password?: string;
 }
