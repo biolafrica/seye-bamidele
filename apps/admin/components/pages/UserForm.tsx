@@ -4,9 +4,11 @@ import { loginFields } from "@/data/user";
 import Form from "../common/Form";
 import { User } from "@/types/user";
 import { createClient } from "@/app/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginForm() {
+  const router = useRouter();
 
   const validateEvent = (values: User) => {
     const errors: Partial<Record<keyof User, string>> = {};
@@ -34,6 +36,8 @@ export default function LoginForm() {
       if (error) {
         throw error;
       }
+
+      router.push('/')
       
     } catch (error) {
       console.error("Error submitting login form:", error);
