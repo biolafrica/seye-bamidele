@@ -12,7 +12,7 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
   initialValues: ArticleFormData;
   edit: boolean;
   article: BackendArticle | null;
-  onSuccess?: () => void;
+  onSuccess?: (action: "created" | "updated") => void;
 }) {
   const [errorMsg,   setErrorMsg]   = useState("");
 
@@ -79,10 +79,11 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
       } else {
         await create(formData);
       }
-      onSuccess?.();
+      const action = edit ? "updated" : "created";
+      onSuccess?.(action);
 
     } catch (error) {
-      setErrorMsg("Error submitting, please try again.");
+      setErrorMsg(error instanceof Error ? error.message : "Error submitting, please try again.");
       console.error("Error submitting articles form:", error);
     }
   };

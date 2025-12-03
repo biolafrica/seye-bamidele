@@ -1,37 +1,26 @@
 "use client"
 
-import Alert from "@/components/common/alert";
-import ConfirmBanner from "@/components/common/confirmBanner";
-import { useEffect, useState } from "react";
+import { createClient } from "@/app/utils/supabase/client"
+import {useEffect } from "react"
 
-export default function AuthPage() {    
-  const [showDialog, setShowDialog] = useState(false);
-  const handleDelete=()=>{
-    console.log("taye")
-  }
-
-  useEffect(()=>{
-    setShowDialog(true)
-  }, [])
+export default function AuthPage() {
+  const supabase = createClient();
+  
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (user) {
+        console.log("user authenticated", user)
+      }else{
+        console.log("no user", error)
+      }
+    }
+    checkAuth()
+  } , [])
 
   return(
     <>
-      <Alert 
-        type="error"
-        heading="User created successfully"
-        subheading="An email has been sent with login credentials"
-        duration={5000}
-        onClose={() => console.log('Alert closed')}
-      />
-
-      <ConfirmBanner
-        open={showDialog}
-        title="Delete Item"
-        message="Are you sure you want to delete this item? This action cannot be undone."
-        variant="danger"
-        onConfirm={handleDelete}
-        onCancel={() => setShowDialog(false)}
-      />
+      <h4>Hello</h4>
 
     </>
   )

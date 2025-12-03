@@ -3,32 +3,96 @@
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
+import Alert from "@/components/common/alert";
+import ConfirmBanner from "@/components/common/confirmBanner";
 import EventForm from "@/components/pages/EventForm";
 import { columns } from "@/data/event";
 import { useEvents } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Event } from "@/types/events";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function EventsPage() {
-  const sidePanel = useSidePanel<Event>();
+  const [showSuccess, setShowSuccess] = useState("")
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<any>(null);
 
+  const sidePanel = useSidePanel<Event>();
   const {data, getAll, remove} = useEvents();
 
   useEffect(() => {getAll()}, []);
 
-  const handleDelete = async (row:any) => {
-    await remove(row.id);
+  const handleDeleteClick = (row: any) => {
+    setItemToDelete(row);
+    setShowDialog(true);
   }
 
-  const handleSuccess = async () => {
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
+    
+    try {
+      await remove(itemToDelete.id);
+      setShowSuccess("The event has been deleted.")
+      setShowDialog(false);
+      setItemToDelete(null);
+      setTimeout(() => {
+        setShowSuccess("")
+      }, 1500)
+    } catch (error) {
+      setErrorMsg("Failed to delete event.");
+      console.error("Error deleting event:", error);
+      setShowDialog(false);
+      setItemToDelete(null);
+    }
+  }
+
+  const handleCancelDelete = () => {
+    setShowDialog(false);
+    setItemToDelete(null);
+  }
+
+  const handleSuccess = async (action: "created" | "updated") => {
     await getAll(); 
     sidePanel.close();
+    setShowSuccess(`The event has been ${action}.`);
+    setTimeout(() => {
+      setShowSuccess("")
+    }, 1500)
   };
 
   return (
     <>
+      {showSuccess && (
+        <Alert
+          type="success"
+          heading="successfully"
+          subheading={showSuccess}
+          duration={2000}
+          onClose={() => setShowSuccess("")}
+        />
+      )}
+
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading='Error'
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg("")}
+        />
+      )}
+
+      <ConfirmBanner
+        open={showDialog}
+        title="Delete Article"
+        message={`Are you sure you want to delete "${itemToDelete?.title || 'this event'}"? This action cannot be undone.`}
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
+
       <SidePanel
         isOpen={sidePanel.isOpen}
         onClose={sidePanel.close}
@@ -76,7 +140,7 @@ export default function EventsPage() {
           columns={columns}
           data={data|| []}
           onEdit={sidePanel.openEdit}
-          onDelete={handleDelete}
+          onDelete={handleDeleteClick}
           defaultItemsPerPage={10}
           showPagination={false}
         />

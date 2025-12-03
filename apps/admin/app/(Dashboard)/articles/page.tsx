@@ -52,15 +52,14 @@ export default function ArticlesPage() {
     setItemToDelete(null);
   }
 
-  const handleSuccess = async () => {
+  const handleSuccess = async (action: "created" | "updated") => {
     await getAll(); 
     sidePanel.close();
-    setShowSuccess("The user has been deleted.");
+    setShowSuccess(`The user has been ${action}.`);
     setTimeout(() => {
       setShowSuccess("")
     }, 1500)
   };
-
 
   return (
     <>

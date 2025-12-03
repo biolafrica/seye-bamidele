@@ -2,13 +2,17 @@ import { TeamFormData } from "@/types/team";
 import Form from "../common/Form";
 import { teamFields } from "@/data/team";
 import { useTeam } from "@/hooks/useApi";
+import Alert from "../common/alert";
+import { useState } from "react";
+import { canUserPerform } from "@/app/utils/supabase/auth-utils";
 
 export default function TeamForm({edit, initialValues, id = "", onSuccess}:{
   edit: boolean;
   initialValues: TeamFormData;
   id?: string ;
-  onSuccess?: () => void;
+  onSuccess?: (action: "created" | "updated") => void;
 }) {
+  const [errorMsg,   setErrorMsg]   = useState("");
 
   const {create, update} = useTeam();
 
@@ -33,29 +37,51 @@ export default function TeamForm({edit, initialValues, id = "", onSuccess}:{
   };
 
   const handleEventSubmit = async (values: TeamFormData) => {
+
+    const canEdit = await canUserPerform('edit_user');
+    if (!canEdit) {
+      setErrorMsg('You do not have permission')
+      return
+    }
+
     try {
       if(edit){
         await update(id, values)
       }else{
         await create(values);
       }
-      onSuccess?.();
+      const action = edit ? "updated" : "created";
+      onSuccess?.(action);
 
     } catch (error) {
+      setErrorMsg(error instanceof Error ? error.message : "Error submitting, please try again.");
       console.error("Error submitting event form:", error);
     }
    
   };
 
   return (
-    <div>
-      <Form
-        fields={teamFields}
-        initialValues={initialValues}
-        validate={validateProfile}
-        onSubmit={handleEventSubmit}
-        submitLabel={edit ? 'Update Member' : 'Add Member'}
-      />
-    </div>
+    <>
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading='Error'
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg("")}
+        />
+      )}
+  
+      <div>
+        <Form
+          fields={teamFields}
+          initialValues={initialValues}
+          validate={validateProfile}
+          onSubmit={handleEventSubmit}
+          submitLabel={edit ? 'Update Member' : 'Add Member'}
+        />
+      </div>
+
+    </>
   );
 }

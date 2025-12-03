@@ -2,13 +2,17 @@ import { EventFormData } from "@/types/events";
 import Form from "../common/Form";
 import { eventFields } from "@/data/event";
 import { useEvents } from "@/hooks/useApi";
+import Alert from "../common/alert";
+import { useState } from "react";
 
 export default function EventForm({initialValues, edit, id = "", onSuccess }: {
   initialValues: EventFormData;
   edit: boolean;
   id?: string ;
-  onSuccess?: () => void;
+  onSuccess?: (action: "created" | "updated") => void;
 }) {
+  const [errorMsg,   setErrorMsg]  = useState("");
+
   const {create, update} = useEvents();
 
   const validateEvent = (values: EventFormData ) => {
@@ -40,24 +44,39 @@ export default function EventForm({initialValues, edit, id = "", onSuccess }: {
       }else{
         await create(values);
       }
-      onSuccess?.();
+      const action = edit ? "updated" : "created";
+      onSuccess?.(action);
 
     } catch (error) {
+      setErrorMsg(error instanceof Error ? error.message : "Error submitting, please try again.");
       console.error("Error submitting event form:", error);
     }
       
   };
   
   return (
-    <div>
-      <Form
-        fields={eventFields}
-        initialValues={initialValues}
-        validate={validateEvent}
-        onSubmit={handleEventSubmit}
-        submitLabel={edit ? "Update Event" : "Create Event"}
-      /> 
-    </div>
+    <>
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading='Error'
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg("")}
+        />
+      )}
+    
+      <div>
+        <Form
+          fields={eventFields}
+          initialValues={initialValues}
+          validate={validateEvent}
+          onSubmit={handleEventSubmit}
+          submitLabel={edit ? "Update Event" : "Create Event"}
+        /> 
+      </div>
+
+    </>
 
   )
 }
