@@ -1,7 +1,6 @@
 import { createClient } from "../supabase/client";
 
-
-const uploadSingleImage = async (file: File | null) => {
+const uploadSingleImage = async (file: File | null | undefined) => {
   const supabase = createClient();
 
   if (!file) return null;
@@ -26,14 +25,14 @@ const uploadSingleImage = async (file: File | null) => {
 }
 
 export const handleMultipleImagesUpload = async (
-  imageFile1: File | null, 
-  imageFile2: File | null, 
-  imageFile3: File | null
+  imageFile1: File | null | undefined, 
+  imageFile2: File | null | undefined, 
+  imageFile3: File | null | undefined
 ) => {
   const uploadedUrls: string[] = [];
   const errors: string[] = [];
   
-  const uploadWithErrorHandling = async (file: File | null, index: number) => {
+  const uploadWithErrorHandling = async (file: File | null | undefined, index: number) => {
     if (!file) return;
     
     try {

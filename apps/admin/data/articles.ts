@@ -16,7 +16,7 @@ export const articleFields:FormField[] = [
   { name: 'excerpt', label: 'Excerpt', type: 'textarea', placeholder: 'Enter article excerpt', required: false },
   { name: 'image', label: 'Main Image', type: 'file', required: true, accept:'image/jpeg,image/png', aspectRatio: '4:3', helperText: 'Recommended size: 800x600px' },
   { name: 'image1', label: 'Image 1', type: 'file', required: false, accept:'image/jpeg,image/png', aspectRatio: '4:3',helperText: 'Recommended size: 800x600px' },
-  { name: 'image2', label: 'Image 2', type: 'file', required: false, accept:'image/jpeg,image/png', aspectRatio: '4:3',helperText: 'Recommended size: 800x600px' },
+  { name: 'image2', label: 'Image 2', type: 'file', required: false, accept:'image/jpeg,image/png', aspectRatio: '4:3',helperText: 'Recommended size: 800x600px', },
 ]
 
 

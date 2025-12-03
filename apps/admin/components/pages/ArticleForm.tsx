@@ -5,6 +5,8 @@ import Form from "../common/Form";
 import { articleFields } from "@/data/articles";
 import { useArticles } from "@/hooks/useApi";
 import { handleMultipleImagesUpload } from "@/app/utils/common/imageUpload";
+import { useState } from "react";
+import Alert from "../common/alert";
 
 export default function ArticleForm({initialValues, edit, article , onSuccess }: {
   initialValues: ArticleFormData;
@@ -12,6 +14,7 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
   article: BackendArticle | null;
   onSuccess?: () => void;
 }) {
+  const [errorMsg,   setErrorMsg]   = useState("");
 
   const {create,update} = useArticles();
 
@@ -34,6 +37,8 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
   }
 
   const handleArticleSubmit = async (values: ArticleFormData) => {
+    console.log("Submitting article with values:", values);
+    
     let formData: Partial<MainArticle> = {
       title: values.title,
       content: values.content,
@@ -41,11 +46,16 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
     };
 
     try {
-      if (values.image || values.image1 || values.image2) {
+      const hasNewImages = 
+        (values.image instanceof File) || 
+        (values.image1 instanceof File) || 
+        (values.image2 instanceof File);
+
+      if (hasNewImages) {
         const uploadedImageUrls = await handleMultipleImagesUpload(
-          values.image, 
-          values.image1, 
-          values.image2
+          values.image instanceof File ? values.image : null, 
+          values.image1 instanceof File ? values.image1 : null, 
+          values.image2 instanceof File ? values.image2 : null
         );
 
         if (uploadedImageUrls.length > 0) {
@@ -58,7 +68,6 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
           formData.images = paddedImages;
           formData.image = uploadedImageUrls[0];
         }
-
       } else if (edit && article?.images) {
         formData.images = article.images;
         formData.image = article.image;
@@ -71,21 +80,36 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
         await create(formData);
       }
       onSuccess?.();
+
     } catch (error) {
+      setErrorMsg("Error submitting, please try again.");
       console.error("Error submitting articles form:", error);
     }
   };
 
 
   return (
-    <div>
-      <Form
-        fields={articleFields}
-        initialValues={initialValues}
-        validate={(values) => validateArticle(values, edit)} 
-        onSubmit={handleArticleSubmit}
-        submitLabel={edit ? 'Update Article' : 'Create Article'}
-      />
-    </div>
+    <>
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading='Error'
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg("")}
+        />
+      )}
+
+      <div>
+        <Form
+          fields={articleFields}
+          initialValues={initialValues}
+          validate={(values) => validateArticle(values, edit)} 
+          onSubmit={handleArticleSubmit}
+          submitLabel={edit ? 'Update Article' : 'Create Article'}
+        />
+      </div>
+
+    </>
   );
 }

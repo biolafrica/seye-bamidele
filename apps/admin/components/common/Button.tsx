@@ -5,7 +5,6 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/app/utils/Utils';
 
 const buttonVariants = cva(
-  // Base styles for all buttons
   'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]',
   {
     variants: {
@@ -137,7 +136,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const isDisabled = disabled || loading;
 
-    // Loading spinner component
     const LoadingSpinner = () => (
       <svg
         className="animate-spin h-4 w-4"

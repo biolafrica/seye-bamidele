@@ -95,16 +95,15 @@ function Form<T extends Record<string, any>>({
     onSubmit 
   });
 
-  // Check if form is valid including required fields
   const isFormValid = isValid && fields
-    .filter(f => f.required)
-    .every(f => {
-      const val = values[f.name];
-      if (f.type === 'image' || f.type === 'file') {
-        return val instanceof File || (val && typeof val === 'string');
-      }
-      return val !== undefined && val !== null && val.toString().trim() !== '';
-    });
+  .filter(f => f.required)
+  .every(f => {
+    const val = values[f.name];
+    if (f.type === 'image' || f.type === 'file') {
+      return val instanceof File || (val && typeof val === 'string');
+    }
+    return val !== undefined && val !== null && val.toString().trim() !== '';
+  });
 
   const getInputClassName = (showError: boolean, isCheckbox = false) => {
     if (isCheckbox) {
@@ -154,7 +153,6 @@ function Form<T extends Record<string, any>>({
     const showError = touched[name] && errors[name];
     const fieldId = `field-${name}`;
 
-    // Handle image field
     if (type === 'image') {
       return (
         <ImageField
@@ -178,7 +176,7 @@ function Form<T extends Record<string, any>>({
       );
     }
 
-    // Handle file field (non-image)
+
     if (type === 'file') {
       return (
         <div>
@@ -213,11 +211,15 @@ function Form<T extends Record<string, any>>({
             aria-invalid={!!showError}
             aria-describedby={showError ? `${fieldId}-error` : undefined}
           />
-          {values[name] && values[name] instanceof File && (
+          {values[name] && values[name] instanceof File ? (
             <p className="mt-1 text-xs text-secondary">
               Selected: {(values[name] as File).name}
             </p>
-          )}
+          ): values[name] && typeof values[name] === 'string' ? (
+            <p className="mt-1 text-xs text-secondary">
+              Current File: {values[name]}
+            </p>
+          ) : null}
         </div>
       );
     }
@@ -315,7 +317,6 @@ function Form<T extends Record<string, any>>({
 
   return (
     <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
-      {/* Global Error Message */}
       {globalError && (
         <div className="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-800 text-red-800 dark:text-red-200 p-3 rounded-lg flex items-start gap-2">
           <svg 
@@ -333,6 +334,7 @@ function Form<T extends Record<string, any>>({
             <p className="font-medium">Error</p>
             <p className="text-sm mt-1">{globalError}</p>
           </div>
+          
           <button
             type="button"
             onClick={() => setGlobalError('')}
@@ -342,10 +344,10 @@ function Form<T extends Record<string, any>>({
               <path d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+
         </div>
       )}
 
-      {/* Form Fields */}
       {fields.map(field => {
         const showError = touched[field.name] && errors[field.name];
         const fieldId = `field-${field.name}`;
