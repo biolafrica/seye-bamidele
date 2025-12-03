@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react";
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
@@ -10,7 +11,6 @@ import { columns } from "@/data/event";
 import { useEvents } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Event } from "@/types/events";
-import { useEffect, useState } from "react";
 
 
 export default function EventsPage() {

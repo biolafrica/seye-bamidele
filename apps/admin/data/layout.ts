@@ -28,7 +28,7 @@ export const SECTIONS: Section[] = [
         activeIcon: solid.UsersIcon,
       },
       {
-        key: "  newsletter",
+        key: "newsletter",
         label: "Newsletters",
         href: "/newsletter",
         icon: outline.UserGroupIcon,
