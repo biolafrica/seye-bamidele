@@ -4,7 +4,7 @@ import ChangePasswordPage from "@/components/pages/changePassword";
 
 export default function PasswordPage() {    
   return (
-    <main className="">
+    <main>
       <PageHeader
         heading="Settings"
         subHeading="Manage your account settings"
@@ -18,7 +18,7 @@ export default function PasswordPage() {
         </div>
 
         <div className="w-full lg:w-3/4">
-         <div className="border">
+         <div>
             <ChangePasswordPage/>
          </div>
         </div>

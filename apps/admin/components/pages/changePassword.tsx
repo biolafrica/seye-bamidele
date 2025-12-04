@@ -1,6 +1,9 @@
 'use client'
 
+import { createClient } from "@/app/utils/supabase/client";
 import Form, { FormField } from "../common/Form";
+import { useState } from "react";
+import Alert from "../common/alert";
 
 interface ChangePasswordFormData {
   currentPassword: string;
@@ -9,6 +12,9 @@ interface ChangePasswordFormData {
 }
 
 export default function ChangePasswordPage() {
+
+  const [showSuccess, setShowSuccess] = useState("")
+  const [errorMsg, setErrorMsg] = useState("");
 
   const changePasswordFields:FormField[] = [
     {
@@ -43,7 +49,7 @@ export default function ChangePasswordPage() {
     
     if (!values.currentPassword) {
       errors.currentPassword = 'Password is required';
-    } else if (values.confirmPassword.length < 8) {
+    } else if (values.currentPassword.length < 8) {
       errors.currentPassword = 'Password must be at least 8 characters';
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(values.currentPassword)) {
       errors.currentPassword = 'Password must contain uppercase, lowercase, and numbers';
@@ -65,20 +71,76 @@ export default function ChangePasswordPage() {
   };
 
   const handleChangePasswordSubmit = async (values: ChangePasswordFormData) => {
-    console.log('New password submitted:', values);
+    const supabase = createClient();
+
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user?.email) {
+        return setErrorMsg("Unable to retrieve user information.");
+      }
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: values.currentPassword,
+
+      });
+
+      if (signInError) {
+        return  setErrorMsg("Current password is incorrect");
+      }
+
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: values.newPassword
+      });
+
+      if (updateError) {
+        return setErrorMsg(updateError instanceof Error ? updateError.message : "Error updating, please try again.")
+      }
+
+      setShowSuccess("Password changed successfully.")
+      
+    } catch (error) {
+      console.error("Unexpected error changing password:", error);
+      setErrorMsg(error instanceof Error ? error.message : "Unexpected error changing password.")
+    }
+    
   };
 
+
   return (
-    <main className="bg-card p-6 rounded-lg border border-border">
-      <h1 className="text-xl font-semibold text-heading mb-6">Change Password</h1>
-       <Form
-          fields={changePasswordFields}
-          initialValues={{ currentPassword: '', newPassword: '', confirmPassword: '' }}
-          validate={validateChangePassword}
-          onSubmit={handleChangePasswordSubmit}
-          submitLabel= "Change Password"
-          className="xl:w-3/5"
+    <>
+      {showSuccess && (
+        <Alert
+          type="success"
+          heading="successfully"
+          subheading={showSuccess}
+          duration={2000}
+          onClose={() => setShowSuccess("")}
         />
-    </main>
+      )}
+
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading='Error'
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg("")}
+        />
+      )}
+
+      <main className="bg-card p-6 rounded-lg border border-border">
+        <h1 className="text-xl font-semibold text-heading mb-6">Change Password</h1>
+        <Form
+            fields={changePasswordFields}
+            initialValues={{ currentPassword: '', newPassword: '', confirmPassword: '' }}
+            validate={validateChangePassword}
+            onSubmit={handleChangePasswordSubmit}
+            submitLabel= "Change Password"
+            className="xl:w-3/5"
+          />
+      </main>
+    </>
   )
 }
