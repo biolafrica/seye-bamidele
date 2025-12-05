@@ -24,7 +24,6 @@ export default function EventsPage() {
   const sidePanel = useSidePanel<Event>();
   const { data, pagination, loading, getAll, remove } = useEvents();
 
-
   useEffect(() => {
     fetchData();
   }, []);

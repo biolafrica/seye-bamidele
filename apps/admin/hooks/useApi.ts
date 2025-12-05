@@ -1,5 +1,6 @@
 import { Article } from '@/types/articles'
 import { Event } from '@/types/events'
+import { NewsletterFormData } from '@/types/newsletter';
 import { TeamFormData } from '@/types/team'
 import { useState } from 'react'
 
@@ -52,13 +53,11 @@ export function useCrud<T>(endpoint: string) {
         : ''
       const result = await apiFetch(`/api/${endpoint}${queryString}`)
       
-      // Check if response has pagination structure
       if (result.data && result.pagination) {
         setData(result.data)
         setPagination(result.pagination)
         return result
       } else {
-        // Fallback for non-paginated responses
         setData(result)
         return { data: result }
       }
@@ -92,7 +91,6 @@ export function useCrud<T>(endpoint: string) {
         method: 'POST',
         body: JSON.stringify(data),
       })
-      // Refetch to update pagination
       await getAll({ 
         page: pagination.page.toString(), 
         limit: pagination.limit.toString() 
@@ -114,7 +112,6 @@ export function useCrud<T>(endpoint: string) {
         method: 'PUT',
         body: JSON.stringify(data),
       })
-      // Refetch to update data
       await getAll({ 
         page: pagination.page.toString(), 
         limit: pagination.limit.toString() 
@@ -136,7 +133,6 @@ export function useCrud<T>(endpoint: string) {
       await apiFetch(`/api/${endpoint}?id=${id}${permanentParam}`, {
         method: 'DELETE',
       })
-      // Refetch to update pagination
       await getAll({ 
         page: pagination.page.toString(), 
         limit: pagination.limit.toString() 
@@ -172,4 +168,8 @@ export function useEvents() {
 
 export function useTeam() {
   return useCrud<TeamFormData>('team')
+}
+
+export function useNewsletter() {
+  return useCrud<NewsletterFormData>('newsletters')
 }

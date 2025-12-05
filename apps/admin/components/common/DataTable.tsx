@@ -7,6 +7,7 @@ import {
   ChevronUpDownIcon,
   ChevronUpIcon,
   ChevronDownIcon,
+  DocumentArrowUpIcon,
 } from '@heroicons/react/24/outline';
 import TableSkeleton from './tableSkeleton';
 
@@ -40,6 +41,7 @@ export interface DataTableProps<T> {
 
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
+  onMore?: (item: T) => void;
   showActions?: boolean;
   stickyFirstColumn?: boolean;
   itemsPerPageOptions?: number[];
@@ -62,6 +64,7 @@ function DataTable<T extends { id?: string | number }>({
   onSort,
   onEdit,
   onDelete,
+  onMore,
   showActions = true,
   stickyFirstColumn = true,
   itemsPerPageOptions = [10, 20, 50, 100],
@@ -222,6 +225,7 @@ function DataTable<T extends { id?: string | number }>({
                     {showActions && (
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
+
                           {onEdit && (
                             <button
                               onClick={() => onEdit(row)}
@@ -231,6 +235,7 @@ function DataTable<T extends { id?: string | number }>({
                               <PencilIcon className="h-4 w-4 text-secondary group-hover:text-accent" />
                             </button>
                           )}
+
                           {onDelete && (
                             <button
                               onClick={() => onDelete(row)}
@@ -240,6 +245,17 @@ function DataTable<T extends { id?: string | number }>({
                               <TrashIcon className="h-4 w-4 text-secondary group-hover:text-[var(--btn-danger-bg)]" />
                             </button>
                           )}
+
+                          {onMore && (
+                            <button
+                              onClick={() => onMore(row)}
+                              className="p-2 hover:bg-hover rounded-lg transition-colors group"
+                              title="More"
+                            >
+                              <DocumentArrowUpIcon className="h-4 w-4 text-secondary group-hover:text-green-600" />
+                            </button>
+                          )}
+
                         </div>
                       </td>
                     )}

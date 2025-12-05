@@ -1,10 +1,10 @@
 "use client"
 
-import { useArticles, useEvents } from "@/hooks/useApi"
+import { useNewsletter } from "@/hooks/useApi"
 import { useEffect } from "react";
 
 export default function AuthPage() {
-  const {data, getAll,} = useArticles();
+  const {data, getAll,} = useNewsletter();
   useEffect(() => {getAll()}, []);
   console.log(data)
 
