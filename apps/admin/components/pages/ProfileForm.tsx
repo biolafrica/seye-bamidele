@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getUserWithRole } from "@/app/utils/supabase/auth-utils";
 
-interface UserData {
+export interface UserData {
   isAuthenticated: boolean;
   user: any;
   role: string | null;

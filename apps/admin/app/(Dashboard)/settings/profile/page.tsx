@@ -20,7 +20,6 @@ export default function ProfilePage() {
         <div className="w-full lg:w-3/4 bg-card p-9 rounded-lg border border-border">
           <h2 className="text-xl font-semibold text-heading mb-6">Profile Form</h2>
           <ProfileForm/>
-         
         </div>
 
       </div>

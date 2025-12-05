@@ -1,10 +1,31 @@
+import { getUserWithRole } from "@/app/utils/supabase/auth-utils";
 import { HeaderProps } from "@/types/layout";
 import * as outline from "@heroicons/react/24/outline";
 import * as solid from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { UserData } from "../pages/ProfileForm";
 
 
 export default function Header({ onMenuClick, currentModule = "Dashboard" }: HeaderProps) {
+  const [user, setUser] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const userData = await getUserWithRole();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchUser();
+  }, []);
+
+
   return (
     <header className="border-b border-separator fixed top-0 inset-x-0 z-60 bg-background">
       <div className="flex items-center py-6">
@@ -33,19 +54,9 @@ export default function Header({ onMenuClick, currentModule = "Dashboard" }: Hea
         </div>
 
         <div className="flex items-center gap-2 pr-4">
-          <Link
-            className="flex w-10 h-10 items-center justify-center rounded-full bg-accent/20 text-accent text-base font-bold cursor-pointer hover:bg-accent/30 transition-colors"
-            aria-label="User initials"
-            href="/settings/account/profile"
-          >
-            DB
-          </Link>
-
+          <solid.UserCircleIcon className="w-10 h-10" />
           <div className="hidden lg:flex flex-col leading-snug">
-            <span className="text-text text-sm font-normal">
-              Deji Badamosi
-            </span>
-            <span className="text-xs text-secondary">Admin</span>
+            {loading ? "Seye Bamidele" : `${user?.firstName || ""} ${user?.lastName || ""}`}
           </div>
         </div>
       </div>
