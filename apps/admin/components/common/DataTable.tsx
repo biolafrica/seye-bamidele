@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   PencilIcon,
   TrashIcon,
@@ -8,6 +8,7 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
+import TableSkeleton from './tableSkeleton';
 
 export interface TableColumn<T> {
   key: keyof T | string;
@@ -18,88 +19,84 @@ export interface TableColumn<T> {
   headerClassName?: string;
 }
 
+export interface PaginationData {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface DataTableProps<T> {
   columns: TableColumn<T>[];
   data: T[];
+  pagination: PaginationData;
+  loading?: boolean;
+  
+
+  onPageChange: (page: number) => void;
+  onItemsPerPageChange: (limit: number) => void;
+  onSort?: (key: string, direction: 'asc' | 'desc' | null) => void;
+  
+
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
   showActions?: boolean;
   stickyFirstColumn?: boolean;
   itemsPerPageOptions?: number[];
-  defaultItemsPerPage?: number;
-  showPagination?: boolean;
   className?: string;
   emptyMessage?: string;
-  loading?: boolean;
+  skeletonRows?: number;
+  
+
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc' | null;
 }
 
 function DataTable<T extends { id?: string | number }>({
   columns,
   data,
+  pagination,
+  loading = false,
+  onPageChange,
+  onItemsPerPageChange,
+  onSort,
   onEdit,
   onDelete,
   showActions = true,
   stickyFirstColumn = true,
-  itemsPerPageOptions = [10, 20,],
-  defaultItemsPerPage = 10,
-  showPagination = true,
+  itemsPerPageOptions = [10, 20, 50, 100],
   className = '',
   emptyMessage = 'No data available',
-  loading = false,
+  skeletonRows = 3,
+  sortBy,
+  sortOrder,
 }: DataTableProps<T>) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
-  const [sortConfig, setSortConfig] = useState<{
-    key: string;
-    direction: 'asc' | 'desc';
-  } | null>(null);
-
-  // Sorting logic
-  const sortedData = React.useMemo(() => {
-    if (!sortConfig) return data;
-
-    return [...data].sort((a, b) => {
-      const aValue = a[sortConfig.key as keyof T];
-      const bValue = b[sortConfig.key as keyof T];
-
-      if (aValue === null || aValue === undefined) return 1;
-      if (bValue === null || bValue === undefined) return -1;
-
-      if (aValue < bValue) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-  }, [data, sortConfig]);
-
-  // Pagination calculations
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = sortedData.slice(startIndex, endIndex);
+  
+  const { page, limit, total, totalPages } = pagination;
+  const startIndex = (page - 1) * limit;
 
   const handleSort = (key: string) => {
-    setSortConfig((current) => {
-      if (!current || current.key !== key) {
-        return { key, direction: 'asc' };
+    if (!onSort) return;
+    
+    let newDirection: 'asc' | 'desc' | null = 'asc';
+    
+    if (sortBy === key) {
+      if (sortOrder === 'asc') {
+        newDirection = 'desc';
+      } else if (sortOrder === 'desc') {
+        newDirection = null;
       }
-      if (current.direction === 'asc') {
-        return { key, direction: 'desc' };
-      }
-      return null;
-    });
+    }
+    
+    onSort(key, newDirection);
   };
 
   const handleItemsPerPageChange = (value: string) => {
-    setItemsPerPage(Number(value));
-    setCurrentPage(1);
+    onItemsPerPageChange(Number(value));
   };
 
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
+  const goToPage = (newPage: number) => {
+    onPageChange(newPage);
   };
 
   const generatePageNumbers = () => {
@@ -111,13 +108,13 @@ function DataTable<T extends { id?: string | number }>({
         pages.push(i);
       }
     } else {
-      if (currentPage <= 3) {
+      if (page <= 3) {
         for (let i = 1; i <= 3; i++) {
           pages.push(i);
         }
         pages.push('...');
         pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
+      } else if (page >= totalPages - 2) {
         pages.push(1);
         pages.push('...');
         for (let i = totalPages - 2; i <= totalPages; i++) {
@@ -126,7 +123,7 @@ function DataTable<T extends { id?: string | number }>({
       } else {
         pages.push(1);
         pages.push('...');
-        pages.push(currentPage);
+        pages.push(page);
         pages.push('...');
         pages.push(totalPages);
       }
@@ -137,33 +134,25 @@ function DataTable<T extends { id?: string | number }>({
   const getSortIcon = (column: TableColumn<T>) => {
     if (!column.sortable) return null;
 
-    if (!sortConfig || sortConfig.key !== column.key) {
+    const isActive = sortBy === column.key;
+    
+    if (!isActive || !sortOrder) {
       return <ChevronUpDownIcon className="h-4 w-4 text-secondary" />;
     }
 
-    return sortConfig.direction === 'asc' ? (
+    return sortOrder === 'asc' ? (
       <ChevronUpIcon className="h-4 w-4 text-accent" />
     ) : (
       <ChevronDownIcon className="h-4 w-4 text-accent" />
     );
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
-      </div>
-    );
-  }
-
   return (
     <div className={`w-full ${className}`}>
-      {/* Table Container */}
       <div className="bg-card rounded-lg border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
 
-            {/* Table Header */}
             <thead>
               <tr className="bg-hover border-b border-separator">
                 {columns.map((column, index) => (
@@ -191,9 +180,14 @@ function DataTable<T extends { id?: string | number }>({
               </tr>
             </thead>
 
-            {/* Table Body */}
             <tbody className="divide-y divide-separator">
-              {currentData.length === 0 ? (
+              {loading ? (
+                <TableSkeleton
+                  columns={columns.length} 
+                  rows={skeletonRows}
+                  showActions={showActions}
+                />
+              ) : data.length === 0 ? (
                 <tr>
                   <td
                     colSpan={columns.length + (showActions ? 1 : 0)}
@@ -203,7 +197,7 @@ function DataTable<T extends { id?: string | number }>({
                   </td>
                 </tr>
               ) : (
-                currentData.map((row, rowIndex) => (
+                data.map((row, rowIndex) => (
                   <tr
                     key={row.id || rowIndex}
                     className="hover:bg-hover transition-colors"
@@ -256,17 +250,18 @@ function DataTable<T extends { id?: string | number }>({
           </table>
         </div>
 
-        {/* Pagination */}
-        {showPagination && data.length > 0 && (
-          
+
+        {(total > 0 || loading) && (
           <div className="px-6 py-4 bg-background border-t border-separator">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              
               {/* Items per page selector */}
               <div className="flex items-center gap-2">
                 <select
-                  value={itemsPerPage}
+                  value={limit}
                   onChange={(e) => handleItemsPerPageChange(e.target.value)}
-                  className="px-3 py-1.5 bg-card border border-border rounded-lg text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+                  disabled={loading}
+                  className="px-3 py-1.5 bg-card border border-border rounded-lg text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {itemsPerPageOptions.map((option) => (
                     <option key={option} value={option}>
@@ -277,46 +272,51 @@ function DataTable<T extends { id?: string | number }>({
                 <span className="text-sm text-secondary">
                   Items per page
                 </span>
-                <span className="text-sm text-secondary ml-4">
-                  {startIndex + 1}-{Math.min(endIndex, sortedData.length)} of {sortedData.length} items
-                </span>
+                {!loading && (
+                  <span className="text-sm text-secondary ml-4">
+                    {startIndex + 1}-{Math.min(startIndex + limit, total)} of {total} items
+                  </span>
+                )}
+                {loading && (
+                  <span className="text-sm text-secondary ml-4">
+                    ...
+                  </span>
+                )}
               </div>
 
               {/* Page navigation */}
               <div className="flex items-center gap-1">
-                {/* Previous button */}
                 <button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
+                  onClick={() => goToPage(page - 1)}
+                  disabled={page === 1 || loading}
                   className="px-3 py-1.5 text-sm text-secondary hover:text-heading disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Prev
                 </button>
 
-                {/* Page numbers */}
-                {generatePageNumbers().map((page, index) => (
+                {generatePageNumbers().map((pageNum, index) => (
                   <button
                     key={index}
-                    onClick={() => typeof page === 'number' && goToPage(page)}
-                    disabled={page === '...'}
+                    onClick={() => typeof pageNum === 'number' && goToPage(pageNum)}
+                    disabled={pageNum === '...' || loading}
                     className={`
                       px-3 py-1.5 text-sm rounded-lg transition-colors
-                      ${page === currentPage
+                      ${pageNum === page
                         ? 'bg-accent text-white'
-                        : page === '...'
+                        : pageNum === '...'
                         ? 'cursor-default text-secondary'
                         : 'hover:bg-hover text-secondary hover:text-heading'
                       }
+                      ${loading ? 'opacity-50 cursor-not-allowed' : ''}
                     `}
                   >
-                    {page}
+                    {pageNum}
                   </button>
                 ))}
 
-                {/* Next button */}
                 <button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
+                  onClick={() => goToPage(page + 1)}
+                  disabled={page === totalPages || loading}
                   className="px-3 py-1.5 text-sm text-secondary hover:text-heading disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next

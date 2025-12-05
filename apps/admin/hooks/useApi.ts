@@ -1,8 +1,19 @@
 import { Article } from '@/types/articles'
 import { Event } from '@/types/events'
 import { TeamFormData } from '@/types/team'
-import { useState} from 'react'
+import { useState } from 'react'
 
+export interface PaginationData {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: PaginationData;
+}
 
 async function apiFetch(url: string, options?: RequestInit) {
   const response = await fetch(url, {
@@ -23,6 +34,12 @@ async function apiFetch(url: string, options?: RequestInit) {
 
 export function useCrud<T>(endpoint: string) {
   const [data, setData] = useState<T[]>([])
+  const [pagination, setPagination] = useState<PaginationData>({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0,
+  })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -34,8 +51,17 @@ export function useCrud<T>(endpoint: string) {
         ? '?' + new URLSearchParams(params).toString()
         : ''
       const result = await apiFetch(`/api/${endpoint}${queryString}`)
-      setData(result)
-      return result
+      
+      // Check if response has pagination structure
+      if (result.data && result.pagination) {
+        setData(result.data)
+        setPagination(result.pagination)
+        return result
+      } else {
+        // Fallback for non-paginated responses
+        setData(result)
+        return { data: result }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch')
       throw err
@@ -66,7 +92,11 @@ export function useCrud<T>(endpoint: string) {
         method: 'POST',
         body: JSON.stringify(data),
       })
-      setData(prev => [...prev, result])
+      // Refetch to update pagination
+      await getAll({ 
+        page: pagination.page.toString(), 
+        limit: pagination.limit.toString() 
+      })
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create')
@@ -84,9 +114,11 @@ export function useCrud<T>(endpoint: string) {
         method: 'PUT',
         body: JSON.stringify(data),
       })
-      setData(prev => prev.map(item => 
-        (item as any).id === id ? result : item
-      ))
+      // Refetch to update data
+      await getAll({ 
+        page: pagination.page.toString(), 
+        limit: pagination.limit.toString() 
+      })
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update')
@@ -104,7 +136,11 @@ export function useCrud<T>(endpoint: string) {
       await apiFetch(`/api/${endpoint}?id=${id}${permanentParam}`, {
         method: 'DELETE',
       })
-      setData(prev => prev.filter(item => (item as any).id !== id))
+      // Refetch to update pagination
+      await getAll({ 
+        page: pagination.page.toString(), 
+        limit: pagination.limit.toString() 
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete')
       throw err
@@ -115,6 +151,7 @@ export function useCrud<T>(endpoint: string) {
 
   return {
     data,
+    pagination,
     loading,
     error,
     getAll,

@@ -5,7 +5,7 @@ import { Article} from "@/types/articles";
 
 
 export const columns: TableColumn<Article>[] = [
-  { key: "created_at", header: "Date", sortable: false, accessor:(row)=>formatDate(row.created_at )},
+  { key: "created_at", header: "Date", sortable: true, accessor:(row)=>formatDate(row.created_at )},
   { key: "title", header: "Title", sortable: true},
 ];
 

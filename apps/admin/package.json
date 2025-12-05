@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@sendgrid/mail": "^8.1.6",
     "@seye-bamidele/shared-types": "workspace:*",
     "@seye-bamidele/ui": "workspace:*",
     "@seye-bamidele/utils": "workspace:*",

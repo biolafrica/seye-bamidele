@@ -5,11 +5,11 @@ import { Team } from "@/types/team";
 
 
 export const columns: TableColumn<Team>[] = [
-  { key: 'first_name', header: 'First Name', sortable: false },
-  { key: 'last_name', header: 'Last Name', sortable: false },
+  { key: 'first_name', header: 'First Name', sortable: true },
+  { key: 'last_name', header: 'Last Name', sortable: true },
   { key: 'email', header: 'Email', sortable: false },
   {key: "role", header: "Role", sortable: false},
-  { key: 'created_at', header: 'Date Registered', sortable: false, accessor:(row)=>formatDate(row.created_at )},
+  { key: 'created_at', header: 'Date Registered', sortable: true, accessor:(row)=>formatDate(row.created_at )},
 ];
 
 export const profileFields: FormField[] = [

@@ -11,17 +11,61 @@ import { useArticles } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { useEffect, useState } from "react";
 
-
 export default function ArticlesPage() {
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
+  
+
+  const [sortBy, setSortBy] = useState<string>('created_at');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const sidePanel = useSidePanel<any>();
-  const {data, getAll, remove} = useArticles();
+  const { data, pagination, loading, getAll, remove } = useArticles();
 
-  useEffect(() => { getAll() }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (page?: number, limit?: number) => {
+    const params: Record<string, string> = {
+      page: (page || pagination.page).toString(),
+      limit: (limit || pagination.limit).toString(),
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+    };
+    
+    await getAll(params);
+  };
+
+  const handlePageChange = (page: number) => {
+    fetchData(page, pagination.limit);
+  };
+
+  const handleItemsPerPageChange = (limit: number) => {
+    fetchData(1, limit); 
+  };
+
+  const handleSort = (key: string, direction: 'asc' | 'desc' | null) => {
+    if (direction === null) {
+      setSortBy('created_at');
+      setSortOrder('desc');
+    } else {
+      setSortBy(key);
+      setSortOrder(direction);
+    }
+    
+    const params: Record<string, string> = {
+      page: '1', 
+      limit: pagination.limit.toString(),
+      sortBy: direction ? key : 'created_at',
+      sortOrder: direction || 'desc',
+    };
+    
+    getAll(params);
+  };
 
   const handleDeleteClick = (row: any) => {
     setItemToDelete(row);
@@ -53,9 +97,9 @@ export default function ArticlesPage() {
   }
 
   const handleSuccess = async (action: "created" | "updated") => {
-    await getAll(); 
+    await fetchData(); 
     sidePanel.close();
-    setShowSuccess(`The user has been ${action}.`);
+    setShowSuccess(`The article has been ${action}.`);
     setTimeout(() => {
       setShowSuccess("")
     }, 1500)
@@ -125,7 +169,6 @@ export default function ArticlesPage() {
             article={null} 
             onSuccess={handleSuccess}
           />
-          
         )}
       </SidePanel>
 
@@ -140,13 +183,17 @@ export default function ArticlesPage() {
         <DataTable
           columns={columns}
           data={data || []}
+          pagination={pagination}
+          loading={loading}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onSort={handleSort}
           onEdit={sidePanel.openEdit}
           onDelete={handleDeleteClick}
-          defaultItemsPerPage={10}
-          showPagination={false}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
         />
       </div>
-
     </>
   );
 }

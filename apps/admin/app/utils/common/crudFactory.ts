@@ -25,21 +25,49 @@ export function createCRUDHandlers<T>({
       try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
-
-        let query = supabaseAdmin.from(table).select("*");
+        
+        const page = parseInt(searchParams.get("page") || "1");
+        const limit = parseInt(searchParams.get("limit") || "10");
+        const search = searchParams.get("search") || "";
+        const sortBy = searchParams.get("sortBy") || "created_at";
+        const sortOrder = searchParams.get("sortOrder") || "desc";
 
         if (id) {
-          const { data, error } = await query.eq("id", id).single();
+          const { data, error } = await supabaseAdmin
+            .from(table)
+            .select("*")
+            .eq("id", id)
+            .single();
+          
           if (error) throw error;
           return successResponse(data);
         }
 
-        const { data, error } = await query.order("created_at", {
-          ascending: false,
-        });
+        let query = supabaseAdmin.from(table).select("*", { count: "exact" });
+
+        if (search) {
+          query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+        }
+
+        query = query.order(sortBy, { ascending: sortOrder === "asc" });
+
+        const from = (page - 1) * limit;
+        const to = from + limit - 1;
+        query = query.range(from, to);
+
+        const { data, error, count } = await query;
 
         if (error) throw error;
-        return successResponse(data);
+        
+        return successResponse({
+          data,
+          pagination: {
+            page,
+            limit,
+            total: count || 0,
+            totalPages: Math.ceil((count || 0) / limit),
+          },
+        });
       } catch (error) {
         return handleError(error);
       }

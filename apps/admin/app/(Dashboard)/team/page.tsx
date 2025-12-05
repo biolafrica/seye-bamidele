@@ -7,25 +7,70 @@ import SidePanel from "@/components/common/SidePanel";
 import Alert from "@/components/common/alert";
 import ConfirmBanner from "@/components/common/confirmBanner";
 import TeamForm from "@/components/pages/TeamForm";
-import {columns } from "@/data/team";
+import { columns } from "@/data/team";
 import { useTeam } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Team } from "@/types/team";
 import { useEffect, useState } from "react";
-
 
 export default function TeamPage() {  
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
+  
+
+  const [sortBy, setSortBy] = useState<string>('created_at');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const sidePanel = useSidePanel<Team>();
-  const {data, getAll, remove} = useTeam();
+  const { data, pagination, loading, getAll, remove } = useTeam();
 
-  useEffect(() => {getAll()}, []);
 
-  const handleDeleteClick = async(row: any) => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (page?: number, limit?: number) => {
+    const params: Record<string, string> = {
+      page: (page || pagination.page).toString(),
+      limit: (limit || pagination.limit).toString(),
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+    };
+    
+    await getAll(params);
+  };
+
+  const handlePageChange = (page: number) => {
+    fetchData(page, pagination.limit);
+  };
+
+  const handleItemsPerPageChange = (limit: number) => {
+    fetchData(1, limit); 
+  };
+
+  const handleSort = (key: string, direction: 'asc' | 'desc' | null) => {
+    if (direction === null) {
+      setSortBy('created_at');
+      setSortOrder('desc');
+    } else {
+      setSortBy(key);
+      setSortOrder(direction);
+    }
+    
+  
+    const params: Record<string, string> = {
+      page: '1', 
+      limit: pagination.limit.toString(),
+      sortBy: direction ? key : 'created_at',
+      sortOrder: direction || 'desc',
+    };
+    
+    getAll(params);
+  };
+
+  const handleDeleteClick = async (row: any) => {
     const canDelete = await canUserPerform('delete_user');
     if (!canDelete) {
       setErrorMsg('You do not have permission to delete users')
@@ -60,7 +105,7 @@ export default function TeamPage() {
   }
 
   const handleSuccess = async (action: "created" | "updated") => {
-    await getAll(); 
+    await fetchData(); 
     sidePanel.close();
     setShowSuccess(`User has been ${action}.`);
     setTimeout(() => {
@@ -92,8 +137,8 @@ export default function TeamPage() {
 
       <ConfirmBanner
         open={showDialog}
-        title="Delete Article"
-        message={`Are you sure you want to delete "${itemToDelete?.first_name + itemToDelete?.last_name|| 'this event'}"? This action cannot be undone.`}
+        title="Delete Team Member"
+        message={`Are you sure you want to delete "${itemToDelete?.first_name} ${itemToDelete?.last_name || 'this team member'}"? This action cannot be undone.`}
         variant="danger"
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
@@ -105,27 +150,29 @@ export default function TeamPage() {
         title={sidePanel.mode === 'edit' ? "Edit Team Member" : "Add New Team Member"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <TeamForm initialValues={{
-            first_name: sidePanel.selectedItem.last_name, 
-            last_name: sidePanel.selectedItem.first_name, 
-            email: sidePanel.selectedItem.email, 
-            role: sidePanel.selectedItem.role}} 
+          <TeamForm 
+            initialValues={{
+              first_name: sidePanel.selectedItem.first_name, 
+              last_name: sidePanel.selectedItem.last_name, 
+              email: sidePanel.selectedItem.email, 
+              role: sidePanel.selectedItem.role
+            }} 
             edit={true} 
             id={sidePanel.selectedItem.id}
             onSuccess={handleSuccess}
           />
         ) : (
-
-          <TeamForm initialValues={{
+          <TeamForm 
+            initialValues={{
               first_name: "", 
-              last_name:"", email: "", 
-              role:""
+              last_name: "", 
+              email: "", 
+              role: ""
             }} 
             edit={false} 
             onSuccess={handleSuccess} 
           />
         )}
-        
       </SidePanel>
 
       <PageHeader
@@ -138,11 +185,16 @@ export default function TeamPage() {
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
-          data={data|| []}
+          data={data || []}
+          pagination={pagination}
+          loading={loading}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onSort={handleSort}
           onEdit={sidePanel.openEdit}
           onDelete={handleDeleteClick}
-          defaultItemsPerPage={10}
-          showPagination={false}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
         />
       </div>
     </>

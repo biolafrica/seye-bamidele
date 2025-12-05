@@ -27,8 +27,8 @@ export const eventFields:FormField[] = [
 ];
 
 export const columns: TableColumn<Event>[] = [
-  { key: 'created_at', header: 'Date', sortable: false, accessor:(row)=>formatDate(row.created_at ) },
+  { key: 'created_at', header: 'Date', sortable: true, accessor:(row)=>formatDate(row.created_at ) },
   { key: 'event', header: 'Event Name', sortable: true},
   { key: 'title', header: 'Title', sortable: true},
-  { key: 'category', header: 'Category', sortable: false},
+  { key: 'category', header: 'Category', sortable: true},
 ];

@@ -12,17 +12,61 @@ import { useEvents } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Event } from "@/types/events";
 
-
 export default function EventsPage() {
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
+  
+  const [sortBy, setSortBy] = useState<string>('created_at');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const sidePanel = useSidePanel<Event>();
-  const {data, getAll, remove} = useEvents();
+  const { data, pagination, loading, getAll, remove } = useEvents();
 
-  useEffect(() => {getAll()}, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (page?: number, limit?: number) => {
+    const params: Record<string, string> = {
+      page: (page || pagination.page).toString(),
+      limit: (limit || pagination.limit).toString(),
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+    };
+    
+    await getAll(params);
+  };
+
+  const handlePageChange = (page: number) => {
+    fetchData(page, pagination.limit);
+  };
+
+  const handleItemsPerPageChange = (limit: number) => {
+    fetchData(1, limit); 
+  };
+
+  const handleSort = (key: string, direction: 'asc' | 'desc' | null) => {
+    if (direction === null) {
+      setSortBy('created_at');
+      setSortOrder('desc');
+    } else {
+      setSortBy(key);
+      setSortOrder(direction);
+    }
+    
+    
+    const params: Record<string, string> = {
+      page: '1',
+      limit: pagination.limit.toString(),
+      sortBy: direction ? key : 'created_at',
+      sortOrder: direction || 'desc',
+    };
+    
+    getAll(params);
+  };
 
   const handleDeleteClick = (row: any) => {
     setItemToDelete(row);
@@ -54,7 +98,7 @@ export default function EventsPage() {
   }
 
   const handleSuccess = async (action: "created" | "updated") => {
-    await getAll(); 
+    await fetchData(); 
     sidePanel.close();
     setShowSuccess(`The event has been ${action}.`);
     setTimeout(() => {
@@ -86,7 +130,7 @@ export default function EventsPage() {
 
       <ConfirmBanner
         open={showDialog}
-        title="Delete Article"
+        title="Delete Event"
         message={`Are you sure you want to delete "${itemToDelete?.title || 'this event'}"? This action cannot be undone.`}
         variant="danger"
         onConfirm={handleConfirmDelete}
@@ -138,11 +182,16 @@ export default function EventsPage() {
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
-          data={data|| []}
+          data={data || []}
+          pagination={pagination}
+          loading={loading}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onSort={handleSort}
           onEdit={sidePanel.openEdit}
           onDelete={handleDeleteClick}
-          defaultItemsPerPage={10}
-          showPagination={false}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
         />
       </div>
     </>
