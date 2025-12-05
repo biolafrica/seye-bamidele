@@ -1,44 +1,63 @@
-'use client';
+"use client";
 
-import { TeamFormData } from "@/types/team";
-import Form from "../common/Form";
-import { profileFields } from "@/data/team";
+import { useEffect, useState } from "react";
+import { getUserWithRole } from "@/app/utils/supabase/auth-utils";
 
-export default function ProfileForm() {
-  const validateProfile = (values: TeamFormData) => {
-    const errors: Partial<Record<keyof TeamFormData, string>> = {};
-    
-    if (!values.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      errors.email = 'Email is invalid';
+interface UserData {
+  isAuthenticated: boolean;
+  user: any;
+  role: string | null;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  id: string | null;
+}
+
+export default function ProfileFormClient() {
+  const [user, setUser] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const userData = await getUserWithRole();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     
-    if (!values.firstName) {
-      errors.firstName = 'First name is required';
-    }
+    fetchUser();
+  }, []);
 
-    if (!values.lastName) {
-      errors.lastName = 'Last name is required';
-    }
-    
-    return errors;
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const handleProfileSubmit = async (values: TeamFormData) => {
-    console.log('Login submitted:', values);
-  };
+  if (!user) {
+    return <div>Error loading user data</div>;
+  }
+
+  const fields = [
+    { label: "First Name:", value: user.firstName },
+    { label: "Last Name:", value: user.lastName },
+    { label: "Email:", value: user.email },
+    { label: "Role:", value: user.role },
+  ];
 
   return (
     <div>
-      <Form
-        fields={profileFields}
-        initialValues={{ firstName: '', lastName: '', email: '', role: '' }}
-        validate={validateProfile}
-        onSubmit={handleProfileSubmit}
-        submitLabel= "Update Profile"
-        className="xl:w-3/5"
-      />
+      {fields.map((item, i) => (
+        <div 
+          key={i}
+          className={`${i === 0 ? "border-y" :"border-b" } border-border py-5 w-full flex`}
+        >
+          <span className="font-semibold w-2/6">{item.label}</span>
+          <span className="w-4/6">{item.value ?? "-"}</span>
+        </div>
+      ))}
     </div>
   );
 }
