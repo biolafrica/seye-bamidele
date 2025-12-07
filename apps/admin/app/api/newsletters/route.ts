@@ -21,41 +21,56 @@ export async function POST(request: NextRequest) {
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
-
-    // Fetch active subscribers from Supabase
+    // Fetch active subscribers with unsubscribe_token
     const { data: subscribers, error: fetchError } = await supabaseAdmin
-    .from('subscribers')
-    .select('email, name')
-    .eq('is_active', true);
+      .from('subscribers')
+      .select('id, email, name, unsubscribe_token')
+      .eq('is_active', true);
 
-    if (fetchError) throw fetchError;
+    if (fetchError) {
+      console.error('Error fetching subscribers:', fetchError);
+      throw fetchError;
+    }
 
     if (!subscribers || subscribers.length === 0) {
+      console.warn('No active subscribers found');
       return NextResponse.json(
         { error: 'No active subscribers found' },
         { status: 404 }
       );
     }
 
-    // Send via SendGrid
+    console.log(`Found ${subscribers.length} active subscribers`);
+
+    // Send via SendGrid with email template
     const result = await sendBulkEmail(subscribers, subject, content);
 
     if (!result.success) {
+      console.error('SendGrid error:', result.error);
       return NextResponse.json(
         { error: result.error },
         { status: 500 }
       );
     }
 
+    console.log(`Newsletter sent to ${result.sent} subscribers`);
+
     // Save newsletter record to database
-    await supabaseAdmin.from('newsletters').insert([
-      {
-        subject,
-        content,
-        total_sent: result.sent,
-        // created_by: session.user.id, // Uncomment when auth is added
-      },
-    ]);
+    const { error: insertError } = await supabaseAdmin
+      .from('newsletters')
+      .insert([
+        {
+          subject,
+          content,
+          total_sent: result.sent,
+          // created_by: session.user.id, // Uncomment when auth is added
+        },
+      ]);
+
+    if (insertError) {
+      console.error('Error saving newsletter record:', insertError);
+      // Don't fail the request if we can't save the record
+    }
 
     return NextResponse.json({
       success: true,
@@ -70,7 +85,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
 const { GET, DELETE } = createCRUDHandlers<Event>({
   table: "newsletters",
   requiredFields: ["subject", "content"],

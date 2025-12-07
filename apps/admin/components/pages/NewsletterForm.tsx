@@ -11,7 +11,7 @@ export default function NewsletterForm({initialValues, onSuccess }: {
 }) {
   const [errorMsg,   setErrorMsg]  = useState("");
 
-  const {create, update} = useNewsletter();
+  const {create} = useNewsletter();
 
   const validateEvent = (values: NewsletterFormData ) => {
     const errors: Partial<Record<keyof NewsletterFormData, string>> = {};
@@ -25,7 +25,8 @@ export default function NewsletterForm({initialValues, onSuccess }: {
 
   const handleEventSubmit = async (values: NewsletterFormData) => {
     try {
-      await create(values);
+      const res =await create(values);
+      console.log("Newsletter created:", res);
       const action = "created";
       onSuccess?.(action);
 
