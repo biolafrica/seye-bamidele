@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/app/utils/supabase/supabaseAdmin';
-import { sendBulkEmail } from '@/app/utils/common/sendGrid';
 import { createCRUDHandlers } from '@/app/utils/common/crudFactory';
+import { sendTrackedNewsletter } from '@/app/utils/common/sendGrid';
+import { supabaseAdmin } from '@/app/utils/supabase/supabaseAdmin';
+import { NextRequest, NextResponse } from 'next/server';
+
 
 export async function POST(request: NextRequest) {
   try {
     const { subject, content } = await request.json();
 
-    // Validate input
     if (!subject || !content) {
       return NextResponse.json(
         { error: 'Subject and content are required' },
@@ -15,68 +15,71 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Add authentication check
-    // const session = await getServerSession();
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
-    // Fetch active subscribers with unsubscribe_token
+    // Fetch active subscribers with all needed fields
     const { data: subscribers, error: fetchError } = await supabaseAdmin
       .from('subscribers')
       .select('id, email, name, unsubscribe_token')
       .eq('is_active', true);
 
-    if (fetchError) {
-      console.error('Error fetching subscribers:', fetchError);
-      throw fetchError;
-    }
+    console.log('Active subscribers fetched:', subscribers?.length);
+    console.log('subscribers:', subscribers);
+
+    if (fetchError) throw fetchError;
 
     if (!subscribers || subscribers.length === 0) {
-      console.warn('No active subscribers found');
       return NextResponse.json(
         { error: 'No active subscribers found' },
         { status: 404 }
       );
     }
 
-    console.log(`Found ${subscribers.length} active subscribers`);
-
-    // Send via SendGrid with email template
-    const result = await sendBulkEmail(subscribers, subject, content);
-
-    if (!result.success) {
-      console.error('SendGrid error:', result.error);
-      return NextResponse.json(
-        { error: result.error },
-        { status: 500 }
-      );
-    }
-
-    console.log(`Newsletter sent to ${result.sent} subscribers`);
-
-    // Save newsletter record to database
-    const { error: insertError } = await supabaseAdmin
+    // Create newsletter record first to get the ID
+    const { data: newsletter, error: newsletterError } = await supabaseAdmin
       .from('newsletters')
       .insert([
         {
           subject,
           content,
-          total_sent: result.sent,
-          // created_by: session.user.id, // Uncomment when auth is added
+          total_sent: subscribers.length,
         },
-      ]);
+      ])
+      .select()
+      .single();
 
-    if (insertError) {
-      console.error('Error saving newsletter record:', insertError);
-      // Don't fail the request if we can't save the record
+    console.log('Newsletter record created:', newsletter);
+    if (newsletterError) throw newsletterError;
+
+    // Send emails with tracking
+    const result = await sendTrackedNewsletter(
+      subscribers,
+      subject,
+      content,
+      newsletter.id
+    );
+    console.log('Newsletter send result:', result);
+
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: 500 });
     }
+
+    // Record sent events for each subscriber
+    const analyticsRecords = subscribers.map(sub => ({
+      newsletter_id: newsletter.id,
+      subscriber_id: sub.id,
+      event_type: 'sent',
+    }));
+
+    console.log('Inserting analytics records:', analyticsRecords);
+
+    await supabaseAdmin.from('email_analytics').insert(analyticsRecords);
 
     return NextResponse.json({
       success: true,
       message: `Newsletter sent to ${result.sent} subscribers`,
+      newsletterId: newsletter.id,
       sent: result.sent,
     });
+    
   } catch (error: any) {
     console.error('Newsletter send error:', error);
     return NextResponse.json(
@@ -85,6 +88,7 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 const { GET, DELETE } = createCRUDHandlers<Event>({
   table: "newsletters",
   requiredFields: ["subject", "content"],

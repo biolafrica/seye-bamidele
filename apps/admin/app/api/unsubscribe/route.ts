@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const token = searchParams.get('token');
+  const newsletterId = searchParams.get('nid');
+  console.log('Unsubscribe request received with token:', token, 'and newsletterId:', newsletterId);
 
   if (!token) {
     return NextResponse.json(
@@ -16,9 +18,11 @@ export async function GET(request: NextRequest) {
     // Find subscriber by token
     const { data: subscriber, error } = await supabaseAdmin
       .from('subscribers')
-      .select('email, is_active')
+      .select('id, email, is_active')
       .eq('unsubscribe_token', token)
       .single();
+    
+    
 
     if (error || !subscriber) {
       console.error('Subscriber not found:', error);
@@ -45,6 +49,39 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(
         new URL('/unsubscribed?error=failed', request.url)
       );
+    }
+
+    // Track unsubscribe in analytics if newsletter ID is provided
+    if (newsletterId && subscriber.id) {
+      try {
+        const { error: insertError } = await supabaseAdmin
+          .from('email_analytics')
+          .insert([
+            {
+              newsletter_id: newsletterId,
+              subscriber_id: subscriber.id,
+              event_type: 'unsubscribed',
+            },
+          ]);
+
+        if (insertError) {
+          console.error('Error inserting unsubscribe event:', insertError);
+        }
+
+        // Update newsletter unsubscribe count
+        const { error: rpcError } = await supabaseAdmin.rpc(
+          'increment_newsletter_unsubscribes',
+          { nid: newsletterId }  // Using nid to match function parameter
+        );
+
+        if (rpcError) {
+          console.error('Error incrementing unsubscribes:', rpcError);
+        }
+
+      } catch (analyticsError) {
+        console.error('Error tracking unsubscribe:', analyticsError);
+        // Don't fail the unsubscribe if analytics fails
+      }
     }
 
     // Redirect to unsubscribe confirmation page
