@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleError, successResponse, validateRequired } from "@/app/utils/common/serverResponse";
-import { supabaseAdmin } from "../supabase/supabaseAdmin";
+import { SupabaseQueryBuilder } from "../supabase/queryBuilder";
 
 export function createCRUDHandlers<T>({
   table,
   requiredFields = [],
-  hooks = {}
+  searchFields = ['title', 'description'],
+  hooks = {},
+  customHandlers = {}
 }: {
   table: string;
   requiredFields?: string[];
+  searchFields?: string[];
   hooks?: {
     beforeCreate?: (body: T) => Promise<any>;
     afterCreate?: (created: any, body: T, ctx?: any) => Promise<any>;
@@ -17,63 +20,50 @@ export function createCRUDHandlers<T>({
     beforeDelete?: (id: string) => Promise<any>;
     afterDelete?: (id: string) => Promise<any>;
   };
+  customHandlers?: {
+    GET?: (request: NextRequest, queryBuilder: SupabaseQueryBuilder<T>) => Promise<NextResponse>;
+    POST?: (request: NextRequest, queryBuilder: SupabaseQueryBuilder<T>) => Promise<NextResponse>;
+    PUT?: (request: NextRequest, queryBuilder: SupabaseQueryBuilder<T>) => Promise<NextResponse>;
+    DELETE?: (request: NextRequest, queryBuilder: SupabaseQueryBuilder<T>) => Promise<NextResponse>;
+  };
 }) {
-  
-  return {
+  const queryBuilder = new SupabaseQueryBuilder<T>(table);
 
+  return {
     GET: async (request: NextRequest) => {
+      if (customHandlers.GET) {
+        return customHandlers.GET(request, queryBuilder);
+      }
+
       try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
-        
-        const page = parseInt(searchParams.get("page") || "1");
-        const limit = parseInt(searchParams.get("limit") || "10");
-        const search = searchParams.get("search") || "";
-        const sortBy = searchParams.get("sortBy") || "created_at";
-        const sortOrder = searchParams.get("sortOrder") || "desc";
 
         if (id) {
-          const { data, error } = await supabaseAdmin
-            .from(table)
-            .select("*")
-            .eq("id", id)
-            .single();
-          
-          if (error) throw error;
+          const data = await queryBuilder.findById(id);
           return successResponse(data);
         }
 
-        let query = supabaseAdmin.from(table).select("*", { count: "exact" });
-
-        if (search) {
-          query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
-        }
-
-        query = query.order(sortBy, { ascending: sortOrder === "asc" });
-
-        const from = (page - 1) * limit;
-        const to = from + limit - 1;
-        query = query.range(from, to);
-
-        const { data, error, count } = await query;
-
-        if (error) throw error;
-        
-        return successResponse({
-          data,
-          pagination: {
-            page,
-            limit,
-            total: count || 0,
-            totalPages: Math.ceil((count || 0) / limit),
-          },
+        const result = await queryBuilder.findPaginated({
+          page: parseInt(searchParams.get("page") || "1"),
+          limit: parseInt(searchParams.get("limit") || "10"),
+          search: searchParams.get("search") || "",
+          searchFields,
+          sortBy: searchParams.get("sortBy") || "created_at",
+          sortOrder: (searchParams.get("sortOrder") as 'asc' | 'desc') || "desc",
         });
+
+        return successResponse(result);
       } catch (error) {
         return handleError(error);
       }
     },
 
     POST: async (request: NextRequest) => {
+      if (customHandlers.POST) {
+        return customHandlers.POST(request, queryBuilder);
+      }
+
       try {
         const body: T = await request.json();
 
@@ -89,13 +79,7 @@ export function createCRUDHandlers<T>({
           }
         }
 
-        const { data, error } = await supabaseAdmin
-        .from(table)
-        .insert([body])
-        .select()
-        .single();
-
-        if (error) throw error;
+        const data = await queryBuilder.create(body);
 
         if (hooks.afterCreate) {
           await hooks.afterCreate(data, body, ctx);
@@ -108,6 +92,10 @@ export function createCRUDHandlers<T>({
     },
 
     PUT: async (request: NextRequest) => {
+      if (customHandlers.PUT) {
+        return customHandlers.PUT(request, queryBuilder);
+      }
+
       try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
@@ -125,19 +113,7 @@ export function createCRUDHandlers<T>({
           await hooks.beforeUpdate(id, body);
         }
 
-        const updateData = {
-          ...body,
-          updated_at: new Date().toISOString(),
-        };
-
-        const { data, error } = await supabaseAdmin
-          .from(table)
-          .update(updateData)
-          .eq("id", id)
-          .select()
-          .single();
-
-        if (error) throw error;
+        const data = await queryBuilder.update(id, body);
 
         if (hooks.afterUpdate) {
           await hooks.afterUpdate(data, body);
@@ -150,6 +126,10 @@ export function createCRUDHandlers<T>({
     },
 
     DELETE: async (request: NextRequest) => {
+      if (customHandlers.DELETE) {
+        return customHandlers.DELETE(request, queryBuilder);
+      }
+
       try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get("id");
@@ -165,12 +145,7 @@ export function createCRUDHandlers<T>({
           await hooks.beforeDelete(id);
         }
 
-        const { error } = await supabaseAdmin
-          .from(table)
-          .delete()
-          .eq("id", id);
-
-        if (error) throw error;
+        await queryBuilder.delete(id);
 
         if (hooks.afterDelete) {
           await hooks.afterDelete(id);
@@ -181,7 +156,6 @@ export function createCRUDHandlers<T>({
         return handleError(error);
       }
     },
-    
   };
 }
 

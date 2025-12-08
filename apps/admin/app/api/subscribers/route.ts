@@ -1,63 +1,50 @@
-import { supabaseAdmin } from '@/app/utils/supabase/supabaseAdmin';
-import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { SupabaseQueryBuilder } from '@/app/utils/supabase/queryBuilder';
+import { successResponse, handleError } from '@/app/utils/common/serverResponse';
+import { createCRUDHandlers } from '@/app/utils/common/crudFactory';
 
-export async function GET() {
-  try {
-    const { data: subscribers, error } = await supabaseAdmin
-      .from('subscribers')
-      .select('email, name')
-      .eq('is_active', true);
-
-    if (error) throw error;
-
-    return NextResponse.json({ 
-      success: true, 
-      subscribers,
-      count: subscribers?.length || 0 
-    });
-  } catch (error: any) {
-    console.error('Error fetching subscribers:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch subscribers' },
-      { status: 500 }
-    );
-  }
+interface Subscriber {
+  id: string;
+  email: string;
+  name?: string;
+  is_active: boolean;
 }
 
-// Add new subscriber
-export async function POST(request: Request) {
-  try {
-    const { email, name } = await request.json();
+const subscriberQuery = new SupabaseQueryBuilder<Subscriber>('subscribers');
 
-    if (!email) {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
-    }
+const handlers = createCRUDHandlers<Subscriber>({
+  table: 'subscribers',
+  requiredFields: ['email'],
+  searchFields: ['email', 'name'],
+  customHandlers: {
+    GET: async (request: NextRequest) => {
+      try {
+        const { searchParams } = new URL(request.url);
+        
+        // If requesting active subscribers only
+        if (searchParams.get('active') === 'true') {
+          const subscribers = await subscriberQuery.findByCondition('is_active', true);
+          return successResponse({
+            success: true,
+            subscribers,
+            count: subscribers.length
+          });
+        }
 
-    const { data, error } = await supabaseAdmin
-      .from('subscribers')
-      .insert([{ email, name }])
-      .select()
-      .single();
+        // Default pagination
+        const result = await subscriberQuery.findPaginated({
+          page: parseInt(searchParams.get("page") || "1"),
+          limit: parseInt(searchParams.get("limit") || "10"),
+          search: searchParams.get("search") || "",
+          searchFields: ['email', 'name'],
+        });
 
-    if (error) {
-      if (error.code === '23505') { // Unique violation
-        return NextResponse.json(
-          { error: 'Email already subscribed' },
-          { status: 409 }
-        );
+        return successResponse(result);
+      } catch (error) {
+        return handleError(error);
       }
-      throw error;
     }
-
-    return NextResponse.json({ success: true, subscriber: data });
-  } catch (error: any) {
-    console.error('Error adding subscriber:', error);
-    return NextResponse.json(
-      { error: 'Failed to add subscriber' },
-      { status: 500 }
-    );
   }
-}
+});
+
+export const { GET, POST, PUT, DELETE } = handlers;

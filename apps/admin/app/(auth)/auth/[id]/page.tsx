@@ -35,7 +35,7 @@ export default function NewsletterAnalyticsPage() {
       const res = await fetch(`/api/newsletters/${params.id}/analytics`);
       const result = await res.json();
       console.log('Fetched analytics:', result);
-      if (result.success) {
+      if (result) {
         setData(result);
       }
     } catch (error) {
