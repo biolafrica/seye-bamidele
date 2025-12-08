@@ -50,6 +50,7 @@ export async function GET(
         id: newsletter.id,
         subject: newsletter.subject,
         sent_at: newsletter.sent_at,
+        
       },
       stats,
       uniqueOpens,

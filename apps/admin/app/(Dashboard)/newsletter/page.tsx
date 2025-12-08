@@ -103,7 +103,10 @@ export default function NewsletterPage() {
         title={sidePanel.mode === 'edit' ? "Edit Newsletter" : "Create Newsletter"}
       >
         {sidePanel.mode === 'edit' && sidePanel.selectedItem ? (
-          <NewsletterDetails/>
+          <NewsletterDetails 
+          id={sidePanel.selectedItem.id} content={sidePanel.selectedItem.content}
+          
+            />
         ) : (
           <NewsletterForm 
             initialValues={{ 
