@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import PageSectionSkeleton from "../common/pageSkeleton";
 import HomeBlog from "./HomeBlog";
+import Subscriber from "../common/subscriber";
 
 
 export default function HomeBody() {
@@ -35,26 +36,13 @@ export default function HomeBody() {
                 time.
               </p>
 
-              <form className="space-y-3">
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  className="w-full px-4 py-2.5 bg-background text-text border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-disabled transition-all"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2.5 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition-colors"
-                >
-                  Join
-                </button>
-
-              </form>
+              <Subscriber />
               
             </section>
 
             {/* Work History */}
             <section className="bg-card border border-border rounded-2xl p-6">
+
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-accent/10 rounded-lg">
                   <BriefcaseIcon className="w-5 h-5 text-accent" />
@@ -101,6 +89,7 @@ export default function HomeBody() {
                 <ArrowDownTrayIcon className="w-4 h-4" />
                 <span>Explore CV</span>
               </Link>
+
             </section>
           </aside>
         </div>

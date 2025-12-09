@@ -1,37 +1,97 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [],
+  darkMode: 'class',
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./data/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../packages/ui/src/**/*.{js,ts,jsx,tsx}"
+  ],
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+        heading: 'var(--heading-text)',
+        text: 'var(--text)',
+        secondary: 'var(--secondary-text)',
+        disabled: 'var(--disabled-text)',
+        
+        border: 'var(--default-border)',
+        separator: 'var(--separator)',
+        
+        layout: 'var(--layout-bg)',
+        background: 'var(--background)',
+        card: 'var(--card-bg)',
+        hover: 'var(--hover-bg)',
+        active: 'var(--active-bg)',
+        
+        accent: {
+          DEFAULT: 'var(--accent-primary)',
+          hover: 'var(--accent-hover)',
         },
-        secondary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-        }
+
+        btn: {
+          primary: {
+            DEFAULT: 'var(--btn-primary-bg)',
+            hover: 'var(--btn-primary-hover)',
+            active: 'var(--btn-primary-active)',
+            text: 'var(--btn-primary-text)',
+          },
+          secondary: {
+            DEFAULT: 'var(--btn-secondary-bg)',
+            hover: 'var(--btn-secondary-hover)',
+            active: 'var(--btn-secondary-active)',
+            text: 'var(--btn-secondary-text)',
+          },
+          outline: {
+            border: 'var(--btn-outline-border)',
+            hover: 'var(--btn-outline-hover-bg)',
+            active: 'var(--btn-outline-active-bg)',
+            text: 'var(--btn-outline-text)',
+          },
+          text: {
+            DEFAULT: 'var(--btn-text-color)',
+            hover: 'var(--btn-text-hover-bg)',
+            active: 'var(--btn-text-active-bg)',
+          },
+          danger: {
+            DEFAULT: 'var(--btn-danger-bg)',
+            hover: 'var(--btn-danger-hover)',
+            active: 'var(--btn-danger-active)',
+            text: 'var(--btn-danger-text)',
+          },
+          disabled: {
+            bg: 'var(--btn-disabled-bg)',
+            text: 'var(--btn-disabled-text)',
+            border: 'var(--btn-disabled-border)',
+          },
+        },
+
+        focus: {
+          ring: 'var(--focus-ring)',
+          offset: 'var(--focus-ring-offset)',
+        },
+
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+      backgroundColor: {
+        layout: 'var(--layout-bg)',
+        card: 'var(--card-bg)',
+      },
+      textColor: {
+        heading: 'var(--heading-text)',
+        body: 'var(--text)',
+      },
+      borderColor: {
+        DEFAULT: 'var(--default-border)',
+        separator: 'var(--separator)',
+      },
+      ringColor: {
+        DEFAULT: 'var(--focus-ring)',
+      },
+      ringOffsetColor: {
+        DEFAULT: 'var(--focus-ring-offset)',
       },
     },
   },

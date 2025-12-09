@@ -20,8 +20,6 @@ export interface ArticleFormData {
   image2: any;
 }
 
-
-
 export interface BackendArticle {
   id: string;
   created_at: string;

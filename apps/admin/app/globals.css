@@ -99,8 +99,6 @@
     --focus-ring-offset: #141414;
   }
 
-
-
   /* Base styles */
   * {
     @apply border-border;

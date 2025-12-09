@@ -44,6 +44,7 @@ const handlers = createCRUDHandlers<Subscriber>({
         return handleError(error);
       }
     }
+    
   }
 });
 
