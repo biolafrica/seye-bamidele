@@ -7,7 +7,6 @@ import PageSectionSkeleton from "../common/pageSkeleton";
 import HomeBlog from "./HomeBlog";
 
 
-
 export default function HomeBody() {
   return (
     <div className="min-h-screen">
@@ -18,8 +17,8 @@ export default function HomeBody() {
             <HomeBlog/>
           </Suspense>
 
-          {/* Sidebar */}
           <aside className="lg:col-span-2 space-y-10">
+
             {/* Newsletter Signup */}
             <section className="bg-card border border-border rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-4">
@@ -42,13 +41,16 @@ export default function HomeBody() {
                   placeholder="Email address"
                   className="w-full px-4 py-2.5 bg-background text-text border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-disabled transition-all"
                 />
+
                 <button
                   type="submit"
                   className="w-full px-4 py-2.5 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition-colors"
                 >
                   Join
                 </button>
+
               </form>
+              
             </section>
 
             {/* Work History */}
@@ -66,7 +68,6 @@ export default function HomeBody() {
                     key={idx}
                     className="flex items-center gap-4 group hover:bg-hover -mx-2 px-2 py-2 rounded-lg transition-colors"
                   >
-                    {/* Company Logo */}
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center overflow-hidden">
                       <Image
                         src={job.logo}
@@ -77,7 +78,6 @@ export default function HomeBody() {
                       />
                     </div>
 
-                    {/* Job Info */}
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-heading text-sm">
                         {job.company}
@@ -85,22 +85,21 @@ export default function HomeBody() {
                       <div className="text-xs text-secondary">{job.role}</div>
                     </div>
 
-                    {/* Years */}
                     <div className="text-xs text-secondary whitespace-nowrap">
                       {job.startYear} — {job.endYear}
                     </div>
+
                   </div>
                 ))}
               </div>
 
-              {/* Download CV Button */}
               <Link
-                href="/cv.pdf"
+                href="https://www.linkedin.com/in/seye-bandele-9550573b/"
                 download
                 className="mt-6 flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-border text-secondary hover:text-text hover:bg-hover rounded-lg font-medium transition-colors group"
               >
                 <ArrowDownTrayIcon className="w-4 h-4" />
-                <span>Download CV</span>
+                <span>Explore CV</span>
               </Link>
             </section>
           </aside>

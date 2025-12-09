@@ -26,20 +26,16 @@ interface BlogDetailPageProps {
 }
 
 export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
-  console.log('BlogDetailPage blog:', blog);
-
-  // Convert images object to array, filtering out empty values
   const imageArray = blog.images 
-    ? Object.values(blog.images).filter(img => img && img.trim() !== '')
-    : [];
-  console.log('Image Array:', imageArray);
+  ? Object.values(blog.images).filter(img => img && img.trim() !== '')
+  : [];
+  
   const sections = parseContent(blog.content || '');
   const contentWithImages = insertImagesIntoSections(sections, imageArray);
 
   return (
     <div className="min-h-screen">
 
-      {/* Navigation */}
       <nav className=" sticky top-0 z-50 backdrop-blur-sm bg-card/90">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button 
@@ -52,11 +48,9 @@ export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
         </div>
       </nav>
 
-      {/* Main Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
         <header className="mb-8 md:mb-12">
-          {/* Date and Read Time */}
           <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-secondary mb-4">
             <div className="flex items-center">
               <CalendarDateRangeIcon className="w-4 h-4 mr-1.5" />
@@ -73,12 +67,10 @@ export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
             )}
           </div>
 
-          {/* Title */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6 leading-tight">
             {blog.title || 'Untitled Post'}
           </h1>
 
-          {/* Author */}
           <div className="flex items-center justify-between flex-wrap gap-4 pt-6 border-t border-separator">
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center text-white font-semibold text-lg mr-3">

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ReactNode } from "react";
 
-// Type definitions
+
 interface TextSection {
   type: 'text';
   content: string | string[];
@@ -62,7 +62,6 @@ export const parseContent = (content: string): Section[] => {
   let codeContent: string[] = [];
   let codeLanguage = '';
 
-  // Helper function to save current section
   const saveCurrentSection = (): void => {
     if (currentSection.type === 'list' && Array.isArray(currentSection.items) && currentSection.items.length > 0) {
       sections.push({
@@ -88,16 +87,13 @@ export const parseContent = (content: string): Section[] => {
     // Check for code block start/end
     if (line.trim().startsWith('```')) {
       if (!inCodeBlock) {
-        // Start of code block
         inCodeBlock = true;
         codeLanguage = line.trim().substring(3).trim() || 'code';
         codeContent = [];
         
-        // Save current section
         saveCurrentSection();
         currentSection = { type: 'text', content: [] };
       } else {
-        // End of code block
         inCodeBlock = false;
         sections.push({
           type: 'code',
@@ -118,10 +114,8 @@ export const parseContent = (content: string): Section[] => {
 
     // Check for headers (### Subheading)
     if (line.trim().startsWith('###')) {
-      // Save previous section
       saveCurrentSection();
       
-      // Start new section with subheading
       currentSection = {
         type: 'text',
         subheading: line.trim().substring(3).trim(),
@@ -132,10 +126,8 @@ export const parseContent = (content: string): Section[] => {
     
     // Check for headers (## Heading)
     if (line.trim().startsWith('##')) {
-      // Save previous section
       saveCurrentSection();
       
-      // Start new section with heading
       currentSection = {
         type: 'text',
         heading: line.trim().substring(2).trim(),
@@ -146,19 +138,16 @@ export const parseContent = (content: string): Section[] => {
 
     // Check for numbered lists (1. Item)
     if (line.trim().match(/^\d+\.\s+/)) {
-      // If we have text content with heading, save it first
       if (currentSection.type === 'text' && 
           (currentSection.heading || currentSection.subheading || 
            (Array.isArray(currentSection.content) && currentSection.content.length > 0))) {
         saveCurrentSection();
       }
       
-      // If not in a list section, create one
       if (currentSection.type !== 'list') {
         currentSection = { type: 'list', items: [], ordered: true };
       }
-      
-      // Add list item
+
       const item = line.trim().replace(/^\d+\.\s+/, '');
       if (!Array.isArray(currentSection.items)) {
         currentSection.items = [];
@@ -169,19 +158,16 @@ export const parseContent = (content: string): Section[] => {
 
     // Check for bullet lists (- Item or * Item)
     if (line.trim().match(/^[-*]\s+/)) {
-      // If we have text content with heading, save it first
       if (currentSection.type === 'text' && 
           (currentSection.heading || currentSection.subheading || 
            (Array.isArray(currentSection.content) && currentSection.content.length > 0))) {
         saveCurrentSection();
       }
       
-      // If not in a list section, create one
       if (currentSection.type !== 'list') {
         currentSection = { type: 'list', items: [], ordered: false };
       }
       
-      // Add list item
       const item = line.trim().replace(/^[-*]\s+/, '');
       if (!Array.isArray(currentSection.items)) {
         currentSection.items = [];
@@ -192,7 +178,6 @@ export const parseContent = (content: string): Section[] => {
 
     // Regular text line
     if (line.trim()) {
-      // If we were in a list, save it and start new text section
       if (currentSection.type === 'list') {
         if (Array.isArray(currentSection.items) && currentSection.items.length > 0) {
           sections.push({
@@ -204,19 +189,16 @@ export const parseContent = (content: string): Section[] => {
         currentSection = { type: 'text', content: [] };
       }
       
-      // Ensure content array exists
       if (!Array.isArray(currentSection.content)) {
         currentSection.content = [];
       }
       
       currentSection.content.push(line);
     } else if (Array.isArray(currentSection.content) && currentSection.content.length > 0) {
-      // Empty line - add to content to preserve spacing
       currentSection.content.push('');
     }
   });
 
-  // Save the last section
   saveCurrentSection();
 
   return sections;
@@ -225,7 +207,6 @@ export const parseContent = (content: string): Section[] => {
 export const renderSection = (section: Section, index: number): ReactNode => {
   if (!section || !section.type) return null;
 
-  // Helper function to parse bold text and links
   const parseInlineMarkdown = (text: string): ReactNode => {
     if (!text) return text;
     

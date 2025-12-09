@@ -27,7 +27,7 @@ export default async function HomeBlog() {
           </p>
 
           <Link
-            href="#"
+            href={item.link.url}
             className="mt-3 inline-flex items-center text-accent hover:text-accent-hover font-medium transition-colors group text-sm"
           >
             Read article

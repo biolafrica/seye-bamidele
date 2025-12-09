@@ -11,12 +11,10 @@ export default function HomeHero() {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
 
         <section className="pb-10 sm:pb-24">
           
           <div className="max-w-3xl">
-            {/* Avatar */}
             <div className="mb-8">
               <div className="relative h-16 w-16 rounded-full overflow-hidden ring-2 ring-border">
                 <Image
@@ -34,7 +32,6 @@ export default function HomeHero() {
               description="My name is Seye Bandele. I’m cofounder at PaidHR, a fast growing HRTech platform in Africa. I’m passionate about the future of work in Africa and I support entrepreneurs in building and scaling their businesses."
             />
 
-            {/* Social Links */}
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <Link
@@ -53,7 +50,6 @@ export default function HomeHero() {
 
         </section>
 
-        {/* Photo Grid */}
         <section className="pb-16">
           <div className="flex gap-5 overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
             {photos.map((photo, idx) => (
@@ -67,7 +63,8 @@ export default function HomeHero() {
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                {/* Optional gradient overlay */}
+
+                {/* gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             ))}
