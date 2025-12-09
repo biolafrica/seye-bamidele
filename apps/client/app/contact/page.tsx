@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
-import PageSection from "@/components/common/PageSection";
+import PageSection from "@/components/sections/PageSection";
 import { contacts } from "@/data/contact";
 
 

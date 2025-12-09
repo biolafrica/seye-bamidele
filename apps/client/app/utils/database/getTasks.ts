@@ -55,3 +55,37 @@ export async function getArticleById(id: string | number): Promise<DBArticle | n
 export async function getEvents(): Promise<DbEvent[]> {
   return fetchAll<DbEvent>("Events");
 }
+
+async function fetchPaginated<T>(
+  tableName: string,
+  page: number,
+  limit: number,
+  selectQuery: string = "*"
+): Promise<{ data: T[]; hasMore: boolean }> {
+  const supabase: SupabaseClient = await createClient();
+
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const { data, error, count } = await supabase
+    .from(tableName)
+    .select(selectQuery, { count: "exact" })
+    .range(from, to);
+
+  if (error) throw new Error(error.message);
+
+  return {
+    data: data as T[],
+    hasMore: count !== null ? to + 1 < count : false, // If total > fetched items
+  };
+}
+
+export async function getPaginatedArticles(page: number, limit: number) {
+  return fetchPaginated<DBArticle>("Articles", page, limit);
+}
+
+export async function getPaginatedEvents(page: number, limit: number) {
+  return fetchPaginated<DbEvent>("Events", page, limit);
+}
+
+
