@@ -16,9 +16,12 @@
     "@seye-bamidele/utils": "workspace:*",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.81.1",
+    "lucide-react": "^0.556.0",
     "next": "15.1.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@seye-bamidele/eslint-config": "workspace:*",
