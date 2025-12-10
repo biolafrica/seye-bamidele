@@ -9,7 +9,7 @@ export default function LoginPage() {
           
           <div className="mb-10">
             <div className="h-10 w-10  rounded-full flex items-center justify-center">
-              <img src="/seye-logo.svg" alt="seye-logo" />
+              <img src="logos/seye-logo.svg" alt="seye-logo" />
             </div>
           </div>
 

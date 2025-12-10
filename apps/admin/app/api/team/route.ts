@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/app/utils/supabase/supabaseAdmin";
 import { BackendUserData} from "@/types/team";
 
 export const { GET, POST, PUT, DELETE } = createCRUDHandlers({
-  table: "Users",
+  table: "users",
   requiredFields: ["email", "first_name", "last_name"],
 
   hooks: {

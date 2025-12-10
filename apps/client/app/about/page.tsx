@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { socialLinks } from "../../data/socialLinks";
 import { createMetadata } from "@seye-bamidele/ui";
+import seyeOfficeImg from '@/public/photo/seye-office.jpg';
 
 export const metadata = createMetadata({
   title: "About ",
@@ -43,13 +44,14 @@ export default function About() {
 
           <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-2xl">
             <Image
-              src="/photo/seye-office.jpg"
-              alt="Description"
+              src={seyeOfficeImg}
+              alt="Seye Bamidele - Portfolio website owner, working at office"
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover"
               priority
               quality={85}
+              placeholder="blur"
             />
           </div>
 

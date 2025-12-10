@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PageHeader from "../common/PageHeader";
 import { photos } from "@/data/homeHeroPhotos";
+import seyeIconImg from '@/public/photo/seye.png';
 
 export default function HomeHero() {
 
@@ -18,13 +19,15 @@ export default function HomeHero() {
             <div className="mb-8">
               <div className="relative h-16 w-16 rounded-full overflow-hidden ring-2 ring-border">
                 <Image
-                  src="/photo/seye.png"
+                  src={seyeIconImg}
                   alt="Profile picture"
                   fill
                   className="object-cover"
+                  placeholder="blur"
                   priority
                 />
               </div>
+
             </div>
 
             <PageHeader
@@ -41,6 +44,7 @@ export default function HomeHero() {
                   rel="noopener noreferrer"
                   className="text-secondary hover:text-accent transition-colors"
                   aria-label={social.name}
+                  
                 >
                   {social.icon}
                 </Link>
@@ -62,6 +66,7 @@ export default function HomeHero() {
                   alt={photo.alt}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  placeholder="blur"
                 />
 
                 {/* gradient overlay */}

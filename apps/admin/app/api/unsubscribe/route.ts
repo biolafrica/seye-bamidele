@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Find subscriber by token
     const { data: subscriber, error } = await supabaseAdmin
       .from('subscribers')
       .select('id, email, is_active')
@@ -31,14 +30,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check if already unsubscribed
     if (!subscriber.is_active) {
       return NextResponse.redirect(
         new URL('/unsubscribed?email=' + encodeURIComponent(subscriber.email) + '&already=true', request.url)
       );
     }
 
-    // Update subscriber status to inactive
     const { error: updateError } = await supabaseAdmin
       .from('subscribers')
       .update({ is_active: false })
@@ -51,7 +48,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Track unsubscribe in analytics if newsletter ID is provided
     if (newsletterId && subscriber.id) {
       try {
         const { error: insertError } = await supabaseAdmin
@@ -68,10 +64,9 @@ export async function GET(request: NextRequest) {
           console.error('Error inserting unsubscribe event:', insertError);
         }
 
-        // Update newsletter unsubscribe count
         const { error: rpcError } = await supabaseAdmin.rpc(
           'increment_newsletter_unsubscribes',
-          { nid: newsletterId }  // Using nid to match function parameter
+          { nid: newsletterId } 
         );
 
         if (rpcError) {
@@ -80,11 +75,9 @@ export async function GET(request: NextRequest) {
 
       } catch (analyticsError) {
         console.error('Error tracking unsubscribe:', analyticsError);
-        // Don't fail the unsubscribe if analytics fails
       }
     }
 
-    // Redirect to unsubscribe confirmation page
     return NextResponse.redirect(
       new URL('/unsubscribed?email=' + encodeURIComponent(subscriber.email), request.url)
     );

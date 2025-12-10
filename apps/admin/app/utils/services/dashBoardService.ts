@@ -24,9 +24,9 @@ interface RecentArticle {
 
 class DashboardService {
   private subscriberQuery = new SupabaseQueryBuilder<RecentSubscriber>('subscribers');
-  private articleQuery = new SupabaseQueryBuilder<RecentArticle>('Articles');
+  private articleQuery = new SupabaseQueryBuilder<RecentArticle>('articles');
   private newsletterQuery = new SupabaseQueryBuilder<any>('newsletters');
-  private eventQuery = new SupabaseQueryBuilder<any>('Events');
+  private eventQuery = new SupabaseQueryBuilder<any>('events');
 
   async getStats(): Promise<DashboardStats> {
     const [
@@ -61,7 +61,7 @@ class DashboardService {
 
   async getRecentArticles(limit: number = 5): Promise<RecentArticle[]> {
     const { data } = await supabaseAdmin
-    .from('Articles')
+    .from('articles')
     .select('id, title, created_at,status')
     .order('created_at', { ascending: false })
     .limit(limit);

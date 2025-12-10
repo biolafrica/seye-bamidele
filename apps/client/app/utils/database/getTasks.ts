@@ -45,15 +45,15 @@ async function fetchById<T>(
 
 
 export async function getArticles(): Promise<DBArticle[]> {
-  return fetchAll<DBArticle>("Articles");
+  return fetchAll<DBArticle>("articles");
 }
 
 export async function getArticleById(id: string | number): Promise<DBArticle | null> {
-  return fetchById<DBArticle>("Articles", id);
+  return fetchById<DBArticle>("articles", id);
 }
 
 export async function getEvents(): Promise<DbEvent[]> {
-  return fetchAll<DbEvent>("Events");
+  return fetchAll<DbEvent>("events");
 }
 
 async function fetchPaginated<T>(
@@ -81,11 +81,11 @@ async function fetchPaginated<T>(
 }
 
 export async function getPaginatedArticles(page: number, limit: number) {
-  return fetchPaginated<DBArticle>("Articles", page, limit);
+  return fetchPaginated<DBArticle>("articles", page, limit);
 }
 
 export async function getPaginatedEvents(page: number, limit: number) {
-  return fetchPaginated<DbEvent>("Events", page, limit);
+  return fetchPaginated<DbEvent>("events", page, limit);
 }
 
 

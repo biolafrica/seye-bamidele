@@ -2,7 +2,7 @@ import { createCRUDHandlers } from "@/app/utils/common/crudFactory";
 import { Article } from "@/types/articles";
 
 const { GET, POST, PUT, DELETE } = createCRUDHandlers<Article>({
-  table: "Articles",
+  table: "articles",
   requiredFields: ["title", "content", "excerpt", "image", "images"],
 });
 
