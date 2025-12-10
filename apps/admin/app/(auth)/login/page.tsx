@@ -4,10 +4,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex ">
 
-      {/* Left Side (Form) */}
       <div className="w-full lg:w-3/7 flex items-center justify-center p-8 md:p-16">
         <div className="w-full max-w-md">
-          {/* Logo */}
           
           <div className="mb-10">
             <div className="h-10 w-10  rounded-full flex items-center justify-center">
@@ -26,7 +24,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Side (Image) */}
       <div className="hidden lg:block w-5/7 relative">
         <img
           src="/seye-office.jpg"

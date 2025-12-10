@@ -1,9 +1,9 @@
 'use client'
 
 import { createClient } from "@/app/utils/supabase/client";
-import Form, { FormField } from "../common/Form";
+import { Alert, Form, FormField } from "@seye-bamidele/ui";
 import { useState } from "react";
-import Alert from "../common/alert";
+
 
 interface ChangePasswordFormData {
   currentPassword: string;

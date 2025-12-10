@@ -1,15 +1,14 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
-import Alert from "@/components/common/alert";
-import ConfirmBanner from "@/components/common/confirmBanner";
 import ArticleForm from "@/components/pages/ArticleForm";
 import { columns } from "@/data/articles";
-import { useArticles } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
-import { useEffect, useState } from "react";
+import { useArticles } from "../../../../../packages/ui/src/hooks/useApi";
+import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
+
 
 export default function ArticlesPage() {
   const [showSuccess, setShowSuccess] = useState("")

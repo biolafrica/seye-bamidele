@@ -9,7 +9,7 @@ import {
   ChevronDownIcon,
   DocumentArrowUpIcon,
 } from '@heroicons/react/24/outline';
-import TableSkeleton from './tableSkeleton';
+import TableSkeleton from '../skeleton/tableSkeleton';
 
 export interface TableColumn<T> {
   key: keyof T | string;
@@ -155,7 +155,6 @@ function DataTable<T extends { id?: string | number }>({
       <div className="bg-card rounded-lg border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-
             <thead>
               <tr className="bg-hover border-b border-separator">
                 {columns.map((column, index) => (
@@ -175,6 +174,7 @@ function DataTable<T extends { id?: string | number }>({
                     </div>
                   </th>
                 ))}
+
                 {showActions && (
                   <th className="px-6 py-4 text-left text-sm font-medium text-secondary">
                     Actions

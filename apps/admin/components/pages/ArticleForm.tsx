@@ -1,12 +1,11 @@
 "use  client";
 
 import { ArticleFormData, BackendArticle, MainArticle } from "@/types/articles";
-import Form from "../common/Form";
 import { articleFields } from "@/data/articles";
-import { useArticles } from "@/hooks/useApi";
 import { handleMultipleImagesUpload } from "@/app/utils/common/imageUpload";
 import { useState } from "react";
-import Alert from "../common/alert";
+import { useArticles } from "../../../../packages/ui/src/hooks/useApi";
+import { Alert, Form } from "@seye-bamidele/ui";
 
 export default function ArticleForm({initialValues, edit, article , onSuccess }: {
   initialValues: ArticleFormData;
@@ -14,7 +13,7 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
   article: BackendArticle | null;
   onSuccess?: (action: "created" | "updated") => void;
 }) {
-  const [errorMsg,   setErrorMsg]   = useState("");
+  const [errorMsg,  setErrorMsg]   = useState("");
 
   const {create,update} = useArticles();
 
@@ -87,7 +86,6 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
       console.error("Error submitting articles form:", error);
     }
   };
-
 
   return (
     <>

@@ -4,14 +4,13 @@ import { canUserPerform } from "@/app/utils/supabase/auth-utils";
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
-import Alert from "@/components/common/alert";
-import ConfirmBanner from "@/components/common/confirmBanner";
 import TeamForm from "@/components/pages/TeamForm";
 import { columns } from "@/data/team";
-import { useTeam } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Team } from "@/types/team";
 import { useEffect, useState } from "react";
+import { useTeam } from "../../../../../packages/ui/src/hooks/useApi";
+import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
 
 export default function TeamPage() {  
   const [showSuccess, setShowSuccess] = useState("")

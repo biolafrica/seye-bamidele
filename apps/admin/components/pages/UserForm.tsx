@@ -1,10 +1,10 @@
 'use client';
 
 import { loginFields } from "@/data/user";
-import Form from "../common/Form";
 import { User } from "@/types/user";
 import { createClient } from "@/app/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import { Form } from "@seye-bamidele/ui";
 
 
 export default function LoginForm() {

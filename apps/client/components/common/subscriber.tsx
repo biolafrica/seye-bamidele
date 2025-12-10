@@ -1,11 +1,9 @@
 "use client";
 
-import { Alert, Form, FormField, useSubscribers } from "@seye-bamidele/ui";
 import { useState } from "react";
+import { Subscribers } from "@seye-bamidele/shared-types";
+import { Alert, Form, FormField, useSubscribers } from "@seye-bamidele/ui";
 
-export interface SubscriberFormData {
-  email: string;
-}
 
 export default function Subscriber() {
   const [showSuccess, setShowSuccess] = useState("")
@@ -15,7 +13,7 @@ export default function Subscriber() {
 
   const initialValues = { email: "" };
   
-  const handleSubmit = async(values:SubscriberFormData) => {
+  const handleSubmit = async(values:Subscribers) => {
     console.log("Subscriber email submitted:", values);
     try {
       await create(values);
@@ -32,8 +30,8 @@ export default function Subscriber() {
  
   }
 
-  const validateSubscriber = (values:SubscriberFormData) => {
-    const errors: Partial<Record<keyof SubscriberFormData, string>> = {};
+  const validateSubscriber = (values:Subscribers) => {
+    const errors: Partial<Record<keyof Subscribers, string>> = {};
     
     if (!values.email) {
       errors.email = 'Email is required';

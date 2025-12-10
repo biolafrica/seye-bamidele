@@ -3,14 +3,14 @@
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
-import Alert from "@/components/common/alert";
 import NewsletterDetails from "@/components/pages/NewsletterDetails";
 import NewsletterForm from "@/components/pages/NewsletterForm";
 import { columns } from "@/data/newsletter";
-import { useNewsletter } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Newsletter } from "@/types/newsletter";
 import { useEffect, useState } from "react";
+import { useNewsletter } from "../../../../../packages/ui/src/hooks/useApi";
+import { Alert } from "@seye-bamidele/ui";
 
 export default function NewsletterPage() {  
   const [showSuccess, setShowSuccess] = useState("")

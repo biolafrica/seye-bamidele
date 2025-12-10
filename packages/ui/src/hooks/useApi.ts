@@ -4,6 +4,45 @@ export interface Subscribers {
   email: string;
 }
 
+export interface Article {
+  id?: string;
+  date: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  image1: string;
+  image2: string;
+  created_at: string;
+  content: string;
+}
+
+export interface Event {
+  id?: any;
+  date?: string;
+  title: string;
+  category?: string;
+  description?: string;
+  link?: string;
+  type?: string;
+  created_at?: string;
+  event?: string;
+  updated_at?: string;
+
+}
+
+export interface TeamFormData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+}
+
+export interface NewsletterFormData { 
+  subject: string;
+  content: string;  
+}
+
+
 export interface PaginationData {
   page: number;
   limit: number;
@@ -160,4 +199,20 @@ export function useCrud<T>(endpoint: string) {
 
 export function useSubscribers() {
   return useCrud<Subscribers>('subscribers')
+}
+
+export function useArticles() {
+  return useCrud<Article>('article')
+}
+
+export function useEvents() {
+  return useCrud<Event>('event')
+}
+
+export function useTeam() {
+  return useCrud<TeamFormData>('team')
+}
+
+export function useNewsletter() {
+  return useCrud<NewsletterFormData>('newsletters')
 }

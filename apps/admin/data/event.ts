@@ -1,7 +1,6 @@
-import { formatDate } from "@/app/utils/common/formatDate";
 import { TableColumn } from "@/components/common/DataTable";
-import { FormField } from "@/components/common/Form";
 import { Event } from "@/types/events";
+import { FormField, formatDate } from "@seye-bamidele/ui";
 
 export const eventFields:FormField[] = [
   { name: 'event', label: 'Event Name', type: 'text', placeholder: 'Enter event name', required: true },

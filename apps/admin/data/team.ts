@@ -1,7 +1,6 @@
-import { formatDate } from "@/app/utils/common/formatDate";
 import { TableColumn } from "@/components/common/DataTable";
-import { FormField } from "@/components/common/Form";
 import { Team } from "@/types/team";
+import { FormField, formatDate } from "@seye-bamidele/ui";
 
 
 export const columns: TableColumn<Team>[] = [

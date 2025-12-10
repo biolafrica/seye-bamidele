@@ -7,9 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { SiderProps } from "@/types/layout";
 import { SECTIONS } from "@/data/layout";
 import { createClient } from "@/app/utils/supabase/client";
-import ConfirmBanner from "../common/confirmBanner";
-import Alert from "../common/alert";
 import { clearAuthCache } from "@/app/utils/supabase/auth-utils";
+import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
 
 export default function Sider({ onModuleChange }: SiderProps) {
   const pathname = usePathname();

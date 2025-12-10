@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         currentModule={currentModule}
       />
 
-      <div className="flex pt-[88px]"> {/* Adjust based on your header height */}
+      <div className="flex pt-[88px]"> 
         <aside className="hidden lg:block">
           <Sider onModuleChange={setCurrentModule} />
         </aside>

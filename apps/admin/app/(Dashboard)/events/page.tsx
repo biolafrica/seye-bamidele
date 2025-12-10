@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import DataTable from "@/components/common/DataTable";
 import PageHeader from "@/components/common/PageHeader";
 import SidePanel from "@/components/common/SidePanel";
-import Alert from "@/components/common/alert";
-import ConfirmBanner from "@/components/common/confirmBanner";
 import EventForm from "@/components/pages/EventForm";
 import { columns } from "@/data/event";
-import { useEvents } from "@/hooks/useApi";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Event } from "@/types/events";
+import { useEvents } from "../../../../../packages/ui/src/hooks/useApi";
+import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
 
 export default function EventsPage() {
   const [showSuccess, setShowSuccess] = useState("")
