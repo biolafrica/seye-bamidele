@@ -308,39 +308,3 @@
     }
   }
 }
-
-/* Sider Navigation Styles */
-.sider-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  width: 228px;
-  height: 45px;
-  border-radius: 6px;
-  font-weight: 400;
-  font-size: 14px;
-  color: var(--text);
-  transition: all 200ms ease;
-}
-
-.sider-item:hover {
-  background-color: var(--hover-bg);
-}
-
-.sider-item--active {
-  border-right: 5px solid var(--accent-primary);
-
-  background: linear-gradient(to right, #ffffff, #cde0df);
-  font-weight: 600;
-  color: var(--accent-primary);
-
-}
-
-/* Dark mode adjustments */
-.dark .sider-item--active {
-  background: linear-gradient(to right,
-      var(--card-bg),
-      var(--accent-primary) 10%,
-      transparent);
-}

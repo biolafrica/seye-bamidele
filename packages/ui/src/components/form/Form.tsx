@@ -3,6 +3,7 @@
 import { Button } from '../primitives/Button';
 import ImageField from './ImageField';
 import { useForm } from '../../hooks/useForm';  
+import RichTextEditor from './RichTextEditor';
 
 export type FieldType = 
   | 'text' 
@@ -19,7 +20,8 @@ export type FieldType =
   | 'checkbox' 
   | 'radio'
   | 'image'
-  | 'file'; 
+  | 'file'
+  | 'richtext'
 
 export interface SelectOption {
   value: string | number;
@@ -105,6 +107,7 @@ function Form<T extends Record<string, any>>({
 
   const getInputClassName = (showError: boolean, isCheckbox = false) => {
     if (isCheckbox) {
+      
       return `
         h-4 w-4 rounded border-border text-accent 
         focus:ring-2 focus:ring-accent focus:ring-offset-2 
@@ -174,6 +177,19 @@ function Form<T extends Record<string, any>>({
       );
     }
 
+    if (type === 'richtext') {
+      return (
+        <div>
+          <RichTextEditor
+            content={values[name] || ''}
+            onChange={(html) => {
+              setFieldValue(name as keyof T, html as any);
+              setFieldTouched(name as keyof T, true);
+            }}
+          />
+        </div>
+      );
+    }
 
     if (type === 'file') {
       return (

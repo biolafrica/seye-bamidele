@@ -24,8 +24,7 @@ export default function NewsletterForm({initialValues, onSuccess }: {
 
   const handleEventSubmit = async (values: NewsletterFormData) => {
     try {
-      const res =await create(values);
-      console.log("Newsletter created:", res);
+      await create(values);
       const action = "created";
       onSuccess?.(action);
 

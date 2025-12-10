@@ -12,10 +12,22 @@ export const columns: TableColumn<Newsletter>[] = [
   { key: 'subject', header: 'Subject', sortable: true }
 ];
 
-export const newsletterFields:FormField[] = [
-  { name: 'subject', label: 'Title', type: 'text', placeholder: 'Enter subject', required: true },
-  { name: 'content', label: 'Content', type: 'textarea', placeholder: 'Enter content', required: true },
-  
- 
- 
+
+export const newsletterFields: FormField[] = [
+  { 
+    name: 'subject', 
+    label: 'Title', 
+    type: 'text', 
+    placeholder: 'Enter the email subject...', 
+    required: true ,
+    helperText: 'Max 200 characters'
+  },
+  {
+    name: 'content',
+    label: 'Newsletter Content',
+    type: 'richtext',
+    required: true,
+    helperText: 'Use the toolbar to format your content with headings, lists, links, and more',
+  },
 ];
+

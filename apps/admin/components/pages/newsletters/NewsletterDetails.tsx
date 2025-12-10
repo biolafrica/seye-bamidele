@@ -77,11 +77,25 @@ export default function NewsletterDetails({ id, content }: NewsletterAnalyticsPa
 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Newsletter Content</h2>
-          <div className="space-y-4">
-            <p className="text-gray-900">{content}</p>
+          
+          <div className="h-[400px] overflow-y-auto border border-gray-200 rounded-lg bg-gray-50">
+            <div className="p-4">
+              <div 
+                className="prose prose-sm max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 prose-strong:text-gray-900"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            </div>
           </div>
+          
+          <div className="mt-3 text-xs text-gray-500">
+            {content.replace(/<[^>]*>/g, '').length.toLocaleString()} characters
+          </div>
+          
         </div>
 
         {/* Click Analytics */}

@@ -22,13 +22,11 @@ export async function sendTrackedNewsletter(
     console.log('Base URL for links:', baseUrl);
 
     const messages = subscribers.map(subscriber => {
-      // Generate unsubscribe link
+
       const unsubscribeLink = `${baseUrl}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
 
-      // Add tracking pixel
       const trackingPixel = `<img src="${baseUrl}/api/track/open?nid=${newsletterId}&sid=${subscriber.id}" width="1" height="1" style="display:none;" />`;
 
-      // Wrap links for click tracking
       let trackedContent = content.replace(
         /<a\s+href="([^"]+)"/gi,
         (_, url) => {
@@ -38,10 +36,8 @@ export async function sendTrackedNewsletter(
       );
       console.log('Tracked content for subscriber', subscriber.email, ':', trackedContent);
 
-      // Wrap content in template with unsubscribe link
       const htmlContent = baseEmailTemplate(trackedContent, unsubscribeLink, subscriber.name);
 
-      // Add tracking pixel at the end
       const finalHtml = htmlContent.replace('</body>', `${trackingPixel}</body>`);
 
       return {
@@ -54,6 +50,7 @@ export async function sendTrackedNewsletter(
 
     await sgMail.send(messages);
     return { success: true, sent: messages.length };
+    
   } catch (error: any) {
     console.error('SendGrid Error:', error.response?.body || error);
     return { success: false, error: error.message };

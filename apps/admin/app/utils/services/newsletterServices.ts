@@ -58,7 +58,6 @@ class NewsletterService {
     subject: string,
     content: string
   ): Promise<SendNewsletterResult> {
-    // Validate input
     if (!subject || !content) {
       return {
         success: false,
@@ -69,7 +68,6 @@ class NewsletterService {
       };
     }
 
-    // Fetch active subscribers
     const subscribers = await this.getActiveSubscribers();
 
     if (!subscribers || subscribers.length === 0) {
@@ -82,14 +80,12 @@ class NewsletterService {
       };
     }
 
-    // Create newsletter record
     const newsletter = await this.createNewsletter(
       subject,
       content,
       subscribers.length
     );
 
-    // Send emails with tracking
     const sendResult = await sendTrackedNewsletter(
       subscribers,
       subject,
@@ -107,7 +103,6 @@ class NewsletterService {
       };
     }
 
-    // Record sent events for analytics
     await this.recordSentEvents(
       newsletter.id,
       subscribers.map(sub => sub.id)

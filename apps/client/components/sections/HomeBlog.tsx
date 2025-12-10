@@ -9,7 +9,7 @@ export default async function HomeBlog() {
   const articles = allArticles.slice(0, 3);
 
   return(
-    <div className="lg:col-span-3 space-y-5 mr-24 mb-20">
+    <div className="lg:col-span-3 space-y-5 lg:mr-24 mb-20">
       {articles.map((item, idx) => (
 
         <div key={idx} className="rounded-xl mt-3 w-full mb-9 md:hover:bg-hover md:cursor-pointer md:p-6 md:3/4 md:mt-0">

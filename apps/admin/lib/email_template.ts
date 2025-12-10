@@ -122,13 +122,11 @@ export function baseEmailTemplate(content: string, unsubscribeLink: string, subs
   <div class="email-wrapper">
     <div class="email-container">
       <div class="header">
-        <h1>📧 Your Newsletter</h1>
+        <h1>📧 Seye Bandele Newsletter</h1>
       </div>
-      
       <div class="content">
         ${subscriberName ? `<p>Hi ${subscriberName},</p>` : ''}
         ${content}
-      </div>
       
       <div class="footer">
         <p>You're receiving this email because you subscribed to our newsletter.</p>
@@ -136,7 +134,7 @@ export function baseEmailTemplate(content: string, unsubscribeLink: string, subs
           <a href="${unsubscribeLink}" class="unsubscribe-link">Unsubscribe from this list</a>
         </p>
         <div class="divider"></div>
-        <p style="margin-top: 20px;">&copy; ${new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+        <p style="margin-top: 20px;">&copy; ${new Date().getFullYear()} Seye Bandele. All rights reserved.</p>
       </div>
     </div>
   </div>

@@ -11,7 +11,7 @@ export default function ClientLayout({
 }) {
   return (
     <ThemeProvider>
-      <div className="bg-background border-x border-separator px-4 py-6 lg:px-16 sm:px-8 sm:py-8 min-h-screen">
+      <div className="bg-background border-x border-separator px-4 py-6 lg:px-16 sm:px-8 sm:py-8 min-h-screen ">
         <Header />
         {children}
         <Footer />

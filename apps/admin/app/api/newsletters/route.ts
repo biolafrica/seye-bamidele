@@ -15,14 +15,14 @@ interface Newsletter {
   sent_at?: string;
 }
 
-// Create CRUD handlers for GET and DELETE
+
 const handlers = createCRUDHandlers<Newsletter>({
   table: 'newsletters',
   requiredFields: ['subject', 'content'],
   searchFields: ['subject'],
 });
 
-// Custom POST handler for sending newsletters
+
 export async function POST(request: NextRequest) {
   try {
     const { subject, content } = await request.json();
@@ -50,5 +50,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Export GET and DELETE from CRUD handlers
 export const { GET, DELETE } = handlers;
