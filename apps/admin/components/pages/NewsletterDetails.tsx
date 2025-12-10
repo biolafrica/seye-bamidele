@@ -39,7 +39,6 @@ export default function NewsletterDetails({ id, content }: NewsletterAnalyticsPa
     try {
       const res = await fetch(`/api/newsletters/${id}/analytics`);
       const result = await res.json();
-      console.log(result)
       if (result) {
         setData(result);
       }
@@ -116,8 +115,8 @@ export default function NewsletterDetails({ id, content }: NewsletterAnalyticsPa
       </div>
 
       {/* Content Section */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Newsletter Content */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Newsletter Content</h2>
           <div className="space-y-4">
@@ -152,6 +151,7 @@ export default function NewsletterDetails({ id, content }: NewsletterAnalyticsPa
             </div>
           )}
         </div>
+        
       </div>
 
       {/* Detailed Stats */}

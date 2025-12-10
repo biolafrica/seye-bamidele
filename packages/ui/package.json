@@ -6,7 +6,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./styles": "./src/styles/globals.css"
+    "./styles": "./src/styles/globals.css",
+    "./tailwind.config": "./tailwind.config.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

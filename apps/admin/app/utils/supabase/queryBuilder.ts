@@ -3,7 +3,6 @@ import { supabaseAdmin } from './supabaseAdmin';
 export class SupabaseQueryBuilder<T> {
   constructor(private table: string) {}
 
-  // Basic CRUD operations
   async findById(id: string) {
     const { data, error } = await supabaseAdmin
     .from(this.table)
@@ -78,7 +77,6 @@ export class SupabaseQueryBuilder<T> {
     return true;
   }
 
-  // Paginated query with search and sort
   async findPaginated({
     page = 1,
     limit = 10,
@@ -135,8 +133,7 @@ export class SupabaseQueryBuilder<T> {
       },
     };
   }
-
-  // Count with optional filters
+  
   async count(filters: Record<string, any> = {}) {
     let query = supabaseAdmin
     .from(this.table)
@@ -152,7 +149,6 @@ export class SupabaseQueryBuilder<T> {
     return count || 0;
   }
 
-  // Increment a numeric field
   async increment(id: string, field: string, amount = 1) {
     const { error } = await supabaseAdmin.rpc(`increment_${this.table}_${field}`, {
       row_id: id,
@@ -163,7 +159,6 @@ export class SupabaseQueryBuilder<T> {
     return true;
   }
 
-  // Bulk operations
   async bulkCreate(items: Partial<T>[]) {
     const { data, error } = await supabaseAdmin
     .from(this.table)
@@ -178,4 +173,5 @@ export class SupabaseQueryBuilder<T> {
     const promises = updates.map(({ id, data }) => this.update(id, data));
     return Promise.all(promises);
   }
+
 }

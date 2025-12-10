@@ -14,7 +14,7 @@ export const contacts: ContactOption[] = [
     title: "Book a 1-on-1 Strategy Session",
     description:
       "Wanna pick my brain about scaling your business operations, engage with investors, and securing funding? You can snag a paid spot here.",
-    link: { text: "Schedule a call", url: "#" },
+    link: { text: "Schedule a call", url: "https://cal.com/abiodun-biobaku/30min" },
   },
   {
     category: "Pitch Refinement",
