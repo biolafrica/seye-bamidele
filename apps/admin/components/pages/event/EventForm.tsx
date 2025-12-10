@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { EventFormData } from "@/types/events";
 import { eventFields } from "@/data/event";
-import { useEvents } from "../../../../packages/ui/src/hooks/useApi";
+import { useEvents } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
 
 

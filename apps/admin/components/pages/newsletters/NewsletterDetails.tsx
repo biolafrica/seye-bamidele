@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AnalyticsLoadingSkeleton } from '../skeleton/AnalyticLoading';
-import { DetailedStat, StatCard } from '../card/newsletter';
+import { AnalyticsLoadingSkeleton } from '../../skeleton/AnalyticLoading';
+import { DetailedStat, StatCard } from '../../card/newsletter';
 import { AnalyticsData, NewsletterAnalyticsPageProps } from '@/types/newsletter';
-import { ErrorState } from '../Error/dashboard';
+import { ErrorState } from '../../Error/dashboard';
 import { formatDate, formatTime } from '@seye-bamidele/ui';
 
 export default function NewsletterDetails({ id, content }: NewsletterAnalyticsPageProps) {

@@ -1,8 +1,10 @@
+"use client"
+
 import { useState } from "react";
 import { TeamFormData } from "@/types/team";
 import { teamFields } from "@/data/team";
 import { canUserPerform } from "@/app/utils/supabase/auth-utils";
-import { useTeam } from "../../../../packages/ui/src/hooks/useApi";
+import { useTeam } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
 
 export default function TeamForm({edit, initialValues, id = "", onSuccess}:{

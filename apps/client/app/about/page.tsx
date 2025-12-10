@@ -1,21 +1,24 @@
-
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { socialLinks } from "../../data/socialLinks";
+import { createMetadata } from "@seye-bamidele/ui";
+
+export const metadata = createMetadata({
+  title: "About ",
+  description: "Learn more about Seye Bandele, and his passion for building and scaling businesses in Africa.",
+});
 
 export default function About() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-        {/* Left Column - Text Content */}
+  
         <div className="space-y-6">
-          {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl font-bold text-heading leading-tight">
             I'm Seye Bandele, cofounder at PaidHR, a fast growing HRTech platform in Africa.
           </h1>
 
-          {/* Paragraphs */}
           <div className="space-y-4 text-base text-secondary leading-relaxed">
             <p>
               I am passionate about the future of work in Africa and I support entrepreneurs in building and scaling their businesses.
@@ -36,7 +39,6 @@ export default function About() {
           
         </div>
 
-        {/* Right Column - Image */}
         <div className="space-y-6">
 
           <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-2xl">
@@ -51,7 +53,6 @@ export default function About() {
             />
           </div>
 
-          {/* Social Links */}
           <div className="pt-6 ">
             <div className="flex flex-col gap-3">
               {socialLinks.map((link) => (
@@ -71,7 +72,6 @@ export default function About() {
             </div>
           </div>
 
-          {/* Email */}
           <div className="pt-6 border-t border-separator">
             <Link
               href="mailto:seyedele@paidhr.com"

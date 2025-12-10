@@ -16,12 +16,11 @@ export interface TimestampMeta {
 }
 
 export interface SEOMeta {
-  metaTitle?: string;
-  metaDescription?: string;
-  metaKeywords?: string[];
-  ogImage?: string;
-  ogTitle?: string;
-  ogDescription?: string;
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  image?: string;
+  url?: string;
 }
 
 export interface ImageMeta {

@@ -4,7 +4,7 @@ import { ArticleFormData, BackendArticle, MainArticle } from "@/types/articles";
 import { articleFields } from "@/data/articles";
 import { handleMultipleImagesUpload } from "@/app/utils/common/imageUpload";
 import { useState } from "react";
-import { useArticles } from "../../../../packages/ui/src/hooks/useApi";
+import { useArticles } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
 
 export default function ArticleForm({initialValues, edit, article , onSuccess }: {

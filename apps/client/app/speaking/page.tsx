@@ -2,7 +2,12 @@ import PageHeader from "@/components/common/PageHeader";
 import { Suspense } from "react";
 import PageSectionSkeleton from "@/components/common/pageSkeleton";
 import SpeakingDynamic from "@/components/common/SpeakingDynamic";
+import { createMetadata } from "@seye-bamidele/ui";
 
+export const metadata = createMetadata({
+  title: "Speaking",
+  description: "I've spoken at events all around the world and been interviewed for many podcasts.",
+});
 
 export default async function Speaking() {
   return (

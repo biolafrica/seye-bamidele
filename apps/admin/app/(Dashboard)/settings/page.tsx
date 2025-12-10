@@ -1,7 +1,12 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsSider from "@/components/layout/settingsSider";
-import ProfileForm from "@/components/pages/ProfileForm";
+import ProfileForm from "@/components/pages/settings/ProfileForm";
+import { createMetadata } from "@seye-bamidele/ui";
 
+export const metadata = createMetadata({
+  title: "Settings",
+  description: "Manage your account settings",
+});
 
 export default function SettingsPage() {   
   return (

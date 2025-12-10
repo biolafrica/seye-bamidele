@@ -1,8 +1,12 @@
 import PageHeader from "@/components/common/PageHeader";
 import PageSection from "@/components/sections/PageSection";
 import { contacts } from "@/data/contact";
+import { createMetadata } from "@seye-bamidele/ui";
 
-
+export const metadata = createMetadata({
+  title: "Contact",
+  description: "Get in touch with Seye Bandele for business inquiries, collaborations.",
+});
 
 export default function Contact() {
   return (

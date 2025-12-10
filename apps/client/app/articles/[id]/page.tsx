@@ -1,13 +1,17 @@
 import { getArticleById } from "@/app/utils/database/getTasks";
 import BlogDetailPage from "@/components/common/BlogDetails";
+import { createMetadata } from "@seye-bamidele/ui";
 import { Suspense } from "react";
 
 export async function generateMetadata({params}:any){
   const {id} = await params;
   const article = await getArticleById(id)
-  return{
-    title: ` Article Details | ${article?.title}`
-  }
+
+  return createMetadata({
+    title: article?.title,
+    description: article?.excerpt,
+    url: `https://seyebandele.com/articles/${params.id}`,
+  });
 
 }
 
@@ -15,7 +19,6 @@ export default async function SelectedBlog({params}: any) {
   const {id} = await params;
   const article = await getArticleById(id);
   
-  // Handle null case
   if (!article) {
     return (
       <div className="min-h-screen flex items-center justify-center">

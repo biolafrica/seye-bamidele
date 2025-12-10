@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getUserWithRole } from "@/app/utils/supabase/auth-utils";
+import { ErrorState } from "@/components/Error/dashboard";
+import { CardSkeleton } from "@seye-bamidele/ui";
 
 export interface UserData {
   isAuthenticated: boolean;
@@ -18,26 +20,26 @@ export default function ProfileFormClient() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchUser() {
-      try {
-        const userData = await getUserWithRole();
-        setUser(userData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
     fetchUser();
   }, []);
 
+  async function fetchUser() {
+    try {
+      const userData = await getUserWithRole();
+      setUser(userData);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <CardSkeleton/>;
   }
 
   if (!user) {
-    return <div>Error loading user data</div>;
+    return <ErrorState message="Failed to load user data" onRetry={fetchUser} />;
   }
 
   const fields = [

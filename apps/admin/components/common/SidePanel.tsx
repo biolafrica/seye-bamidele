@@ -18,7 +18,7 @@ export default function SidePanel({ isOpen, onClose, title, children }: SidePane
         className="absolute inset-0 bg-black opacity-50"
         onClick={onClose}
       />
-      <div className="relative z-65 w-screen lg:w-1/2 right-0 top-0 h-screen bg-white overflow-y-auto shadow-lg border-l border-gray-200">
+      <div className="relative z-65 w-screen lg:w-1/2 right-0 top-0 h-screen bg-white overflow-y-auto shadow-lg border-l border-gray-200 ml-auto">
         
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold">{title}</h2>

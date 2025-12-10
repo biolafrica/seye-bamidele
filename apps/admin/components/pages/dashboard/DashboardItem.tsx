@@ -1,3 +1,5 @@
+"use client"
+
 import { getStatusColor } from "@/app/utils/common/getStatusColor";
 import { BaseListItemProps, ListItemContentProps, RecentArticle, RecentSubscriber } from "@/types/dashboard";
 import { formatDate, formatTime } from "@seye-bamidele/ui";

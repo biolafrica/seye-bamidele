@@ -1,6 +1,12 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsSider from "@/components/layout/settingsSider";
-import ChangePasswordPage from "@/components/pages/changePassword";
+import ChangePasswordPage from "@/components/pages/settings/changePassword";
+import { createMetadata } from "@seye-bamidele/ui";
+
+export const metadata = createMetadata({
+  title: "Password Settings",
+  description: "Manage your password settings",
+});
 
 export default function PasswordPage() {    
   return (

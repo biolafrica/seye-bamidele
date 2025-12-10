@@ -1,6 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import SettingsSider from "@/components/layout/settingsSider";
-import ProfileForm from "@/components/pages/ProfileForm";
+import ProfileForm from "@/components/pages/settings/ProfileForm";
 
 export default function ProfilePage() {    
   return (

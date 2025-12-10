@@ -4,7 +4,7 @@ import * as outline from "@heroicons/react/24/outline";
 import * as solid from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { UserData } from "../pages/ProfileForm";
+import { UserData } from "../pages/settings/ProfileForm";
 
 
 export default function Header({ onMenuClick, currentModule = "Dashboard" }: HeaderProps) {

@@ -2,7 +2,12 @@ import PageHeader from "@/components/common/PageHeader";
 import { Suspense } from "react";
 import PageSectionSkeleton from "@/components/common/pageSkeleton";
 import ArticleDynamic from "@/components/common/ArticleDynamic";
+import { createMetadata } from "@seye-bamidele/ui";
 
+export const metadata = createMetadata({
+  title: "Articles",
+  description: "All of my long-form thoughts on Marketing, leadership, and more.",
+});
 
 export default function Articles() {
   return (

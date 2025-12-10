@@ -1,7 +1,12 @@
 import PageHeader from "@/components/common/PageHeader";
 import { projects } from "@/data/projects";
 import { LinkIcon } from "@heroicons/react/24/outline";
+import { createMetadata } from "@seye-bamidele/ui";
 
+export const metadata = createMetadata({
+  title: "Projects",
+  description: "Explore a curated selection of projects I've built.",
+});
 
 export default function ProjectsPage() {
   return (
