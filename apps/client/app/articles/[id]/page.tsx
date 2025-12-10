@@ -10,7 +10,6 @@ export async function generateMetadata({params}:any){
   return createMetadata({
     title: article?.title,
     description: article?.excerpt,
-    url: `https://seyebandele.com/articles/${params.id}`,
   });
 
 }
