@@ -1,2 +1,2 @@
 export { cn } from './utils';
-export { formatDate} from './formatters';
+export { formatDate, formatTime} from './formatters';

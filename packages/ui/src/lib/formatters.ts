@@ -10,3 +10,13 @@ export function formatDate(dateString?: string | null): string {
 
   return `${day}-${month}-${year}`;
 }
+
+export function formatTime(input: string | number | Date) {
+  const date = new Date(input);
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
