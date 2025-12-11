@@ -7,5 +7,6 @@ export const metadata = createMetadata({
 });
 
 export default function EventsPage() {
+  
   return (<EventClient/>);
 }

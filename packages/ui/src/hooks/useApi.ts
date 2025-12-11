@@ -22,12 +22,12 @@ export interface Event {
   id?: any;
   date?: string;
   title: string;
-  category?: string;
+  category: string;
   description?: string;
-  link?: string;
-  type?: string;
+  link: string;
+  type: string;
   created_at?: string;
-  event?: string;
+  event: string;
   updated_at?: string;
 
 }

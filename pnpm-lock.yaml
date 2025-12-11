@@ -29,6 +29,9 @@ importers:
       '@sendgrid/mail':
         specifier: ^8.1.6
         version: 8.1.6
+      '@seye-bamidele/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@seye-bamidele/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -129,6 +132,9 @@ importers:
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.0)
+      '@seye-bamidele/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@seye-bamidele/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -203,6 +209,12 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  packages/config:
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+
   packages/config-eslint:
     dependencies:
       '@typescript-eslint/eslint-plugin':
@@ -234,9 +246,6 @@ importers:
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.0)
-      '@seye-bamidele/shared-types':
-        specifier: workspace:*
-        version: link:../shared-types
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1

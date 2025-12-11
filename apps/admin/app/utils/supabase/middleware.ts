@@ -1,3 +1,4 @@
+import { cacheHeaders, getCacheHeaders } from '@seye-bamidele/config'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -10,6 +11,10 @@ export async function updateSession(request: NextRequest) {
   ]
 
   const isPreflight = request.method === 'OPTIONS'
+  const isApiRoute = request.nextUrl.pathname.startsWith("/api")
+  const url = request.nextUrl.clone()
+  const isPublic = request.method === "GET" && (url.pathname.startsWith("/api/articles") || url.pathname.startsWith("/api/events"));
+
 
   if (isPreflight) {
     const preflightHeaders: Record<string, string> = {
@@ -17,6 +22,7 @@ export async function updateSession(request: NextRequest) {
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept',
       'Access-Control-Max-Age': '86400',
+      ...getCacheHeaders("noStore")
     }
 
     if (origin && allowedOrigins.includes(origin)) {
@@ -49,8 +55,6 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const isApiRoute = request.nextUrl.pathname.startsWith('/api')
-
 
   if (isApiRoute && origin && allowedOrigins.includes(origin)) {
     supabaseResponse.headers.set('Access-Control-Allow-Origin', origin)
@@ -70,7 +74,6 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/auth') &&
     !isApiRoute
   ) {
-    const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
@@ -80,5 +83,16 @@ export async function updateSession(request: NextRequest) {
     supabaseResponse.headers.set('Access-Control-Allow-Credentials', 'true')
   }
 
+  if (isPublic) {
+    Object.entries(cacheHeaders.apiMedium).forEach(([k, v]) =>
+      supabaseResponse.headers.set(k, v)
+    );
+  } else {
+    Object.entries(cacheHeaders.noStore).forEach(([k, v]) =>
+      supabaseResponse.headers.set(k, v)
+    );
+  }
+
+ 
   return supabaseResponse
 }

@@ -2,6 +2,12 @@ import { DbEvent } from "@/types/event";
 import { createClient } from "../supabase/server";
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { DBArticle } from "@/types/article";
+import { getCacheHeaders } from "@seye-bamidele/config";
+
+export function cachePublicShort() {
+  return getCacheHeaders('apiShort')
+}
+
 
 
 async function fetchAll<T>(
@@ -43,7 +49,6 @@ async function fetchById<T>(
   return data as T;
 }
 
-
 export async function getArticles(): Promise<DBArticle[]> {
   return fetchAll<DBArticle>("articles");
 }
@@ -76,7 +81,7 @@ async function fetchPaginated<T>(
 
   return {
     data: data as T[],
-    hasMore: count !== null ? to + 1 < count : false, // If total > fetched items
+    hasMore: count !== null ? to + 1 < count : false, 
   };
 }
 

@@ -3,32 +3,17 @@ import { ArrowLeftCircleIcon, CalendarDateRangeIcon, ClockIcon } from "@heroicon
 import SharePost from "./share";
 import { insertImagesIntoSections, parseContent, renderSection } from "@/app/utils/common/blogModification";
 import { formatDate } from "@seye-bamidele/utils";
+import { BlogArticle } from "@/types/article";
 
-
-interface Blog {
-  id: string;
-  title: string;
-  content: string | null;
-  image: string | null;
-  images: {
-    image_1: string;
-    image_2: string;
-    image_3: string;
-  } | null;
-  created_at: string;
-  excerpt: string;
-  read?: number;
-  author?: string;
-}
 
 interface BlogDetailPageProps {
-  blog: Blog;
+  blog: BlogArticle;
 }
 
 export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
   const imageArray = blog.images 
-  ? Object.values(blog.images).filter(img => img && img.trim() !== '')
-  : [];
+    ? Object.values(blog.images).filter(img => img && img.trim() !== '')
+    : [];
   
   const sections = parseContent(blog.content || '');
   const contentWithImages = insertImagesIntoSections(sections, imageArray);

@@ -1,27 +1,54 @@
-import { getPaginatedArticles } from "@/app/utils/database/getTasks";
+"use client";
+
 import { transformArticles } from "@/app/utils/common/transformArticle";
-import PageSectionPaginated from "../sections/PageSectionWithPagination";
 
-export default async function ArticleDynamic() {
-  const page = 1;
-  const limit = 10;
+import { useState, useEffect } from "react";
+import PageSection from "../sections/PageSection";
+import { Article } from "@/types/article";
+import { useArticles } from "@seye-bamidele/ui";
 
-  const { data, hasMore } = await getPaginatedArticles(page, limit);
-  const transformed = transformArticles(data);
+
+export default function ArticlesPage() {
+  const { data: dbArticles, pagination, getAll, loading } = useArticles(); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  const itemsPerPage = 10;
+
+
+  useEffect(() => {
+    getAll({ page: '1', limit: String(itemsPerPage) });
+  }, []);
+
+
+  useEffect(() => {
+    if (dbArticles) {
+      const transformed = transformArticles(dbArticles);
+      
+      if (currentPage === 1) {
+        setAllArticles(transformed);
+      } else {
+        setAllArticles(prev => [...prev, ...transformed]);
+      }
+    }
+  }, [dbArticles]);
+
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    getAll({ page: String(nextPage), limit: String(itemsPerPage) });
+  };
+
+  const hasMore = pagination ? currentPage < pagination.totalPages : false;
 
   return (
-    <PageSectionPaginated
-      initialItems={transformed}
-      initialHasMore={hasMore}
-      variant="articles"
-      fetchMore={async (page) => {
-        "use server";
-        const result = await getPaginatedArticles(page, limit);
-        return {
-          data: transformArticles(result.data),
-          hasMore: result.hasMore
-        };
-      }}
-    />
+    <div>
+      <PageSection
+        items={allArticles}
+        variant="articles"
+        hasMore={hasMore}
+        isLoading={loading}
+        onLoadMore={handleLoadMore}
+      />
+    </div>
   );
 }

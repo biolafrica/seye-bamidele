@@ -6,8 +6,7 @@ import PageHeader from "@/components/common/PageHeader";
 import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/articles";
 import ArticleForm from "./ArticleForm";
-import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
-import { useArticles } from "../../../../../packages/ui/src/hooks/useApi";
+import { Alert, ConfirmBanner, useArticles } from "@seye-bamidele/ui";
 import { useSidePanel } from "@/hooks/useSidePanel";
 
 

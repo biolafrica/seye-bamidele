@@ -5,12 +5,14 @@ import { socialLinks } from "../../data/socialLinks";
 import { createMetadata } from "@seye-bamidele/ui";
 import seyeOfficeImg from '@/public/photo/seye-office.jpg';
 
+
 export const metadata = createMetadata({
   title: "About ",
   description: "Learn more about Seye Bandele, and his passion for building and scaling businesses in Africa.",
 });
 
 export default function About() {
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">

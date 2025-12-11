@@ -14,6 +14,7 @@
     "@sendgrid/mail": "^8.1.6",
     "@seye-bamidele/shared-types": "workspace:*",
     "@seye-bamidele/ui": "workspace:*",
+    "@seye-bamidele/config": "workspace:*",
     "@seye-bamidele/utils": "workspace:*",
     "@tailwindcss/typography": "^0.5.19",
     "@tiptap/extension-image": "^3.13.0",

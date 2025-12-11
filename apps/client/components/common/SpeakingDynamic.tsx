@@ -1,28 +1,56 @@
-import {getPaginatedEvents } from "@/app/utils/database/getTasks";
+'use client';
+
+import { useEffect, useState } from "react";
 import { transformEvents } from "@/app/utils/common/transformEvent";
+import { SpeakingEvent } from "@/types/event";
+import PageSection from "../sections/PageSection";
+import { useEvents } from "@seye-bamidele/ui";
 
-import PageSectionPaginated from "../sections/PageSectionWithPagination";
+export default function SpeakingDynamic() {
 
-export default async function SpeakingDynamic() {
-  const page = 1;
-  const limit = 10;
+  const { data: dbEvent, pagination, getAll, loading } = useEvents(); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allEvents, setAllEvents] = useState<SpeakingEvent[]>([]);
+  const itemsPerPage = 10;
 
-  const { data, hasMore } = await getPaginatedEvents(page, limit);
-  const transformed = transformEvents(data);
+
+  useEffect(() => {
+    getAll({ page: '1', limit: String(itemsPerPage) });
+  }, []);
+
+
+  useEffect(() => {
+    if (dbEvent) {
+      const transformed = transformEvents(dbEvent);
+      
+      if (currentPage === 1) {
+        setAllEvents(transformed);
+      } else {
+        setAllEvents(prev => [...prev, ...transformed]);
+      }
+    }
+  }, [dbEvent]);
+
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    getAll({ page: String(nextPage), limit: String(itemsPerPage) });
+  };
+
+  const hasMore = pagination ? currentPage < pagination.totalPages : false;
+
 
   return (
-    <PageSectionPaginated
-      initialItems={transformed}
-      initialHasMore={hasMore}
-      variant="speaking"
-      fetchMore={async (page) => {
-        "use server";
-        const result = await getPaginatedEvents(page, limit);
-        return {
-          data: transformEvents(result.data),
-          hasMore: result.hasMore
-        };
-      }}
-    />
+    <div>
+      <PageSection
+        items={allEvents}
+        variant="speaking"
+        hasMore={hasMore}
+        isLoading={loading}
+        onLoadMore={handleLoadMore}
+      />
+    </div>
   );
+
 }
+

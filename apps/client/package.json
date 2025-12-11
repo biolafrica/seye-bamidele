@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.2.0",
     "@seye-bamidele/shared-types": "workspace:*",
     "@seye-bamidele/ui": "workspace:*",
+    "@seye-bamidele/config": "workspace:*",
     "@seye-bamidele/utils": "workspace:*",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.81.1",

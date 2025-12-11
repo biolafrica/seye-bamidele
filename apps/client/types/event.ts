@@ -1,23 +1,23 @@
-type EventType = 'video' | 'audio' | 'article';
-
 export interface DbEvent {
-  id: string;
-  created_at: string;
-  category: string;
+  id?: string;
+  created_at?: string;
+  category: string ;
   event: string;
   title: string;
-  description: string;
+  description?: string;
   link: string;
-  type: EventType;
+  type: string;
+
 }
 
 export interface SpeakingEvent {
-  category: string;
+  category: string ;
   event: string;
   title: string;
-  description: string;
+  description?: string;
   link: {
     text: string;
     url: string;
   };
 }
+

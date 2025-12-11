@@ -3,8 +3,7 @@
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { Newsletter } from "@/types/newsletter";
 import { useEffect, useState } from "react";
-import { useNewsletter } from "../../../../../packages/ui/src/hooks/useApi";
-import { Alert } from "@seye-bamidele/ui";
+import { Alert, useNewsletter } from "@seye-bamidele/ui";
 import SidePanel from "@/components/common/SidePanel";
 import NewsletterDetails from "./NewsletterDetails";
 import NewsletterForm from "./NewsletterForm";

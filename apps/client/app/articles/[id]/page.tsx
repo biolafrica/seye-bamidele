@@ -1,24 +1,28 @@
+import { transformToBlogArticle } from "@/app/utils/common/transformArticle";
 import { getArticleById } from "@/app/utils/database/getTasks";
 import BlogDetailPage from "@/components/common/BlogDetails";
-import { createMetadata } from "@seye-bamidele/ui";
+import { PageSkeleton, createMetadata } from "@seye-bamidele/ui";
 import { Suspense } from "react";
 
-export async function generateMetadata({params}:any){
-  const {id} = await params;
-  const article = await getArticleById(id)
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps) {
+  const { id } = await params;
+  const article = await getArticleById(id);
 
   return createMetadata({
     title: article?.title,
     description: article?.excerpt,
   });
-
 }
 
-export default async function SelectedBlog({params}: any) {
-  const {id} = await params;
-  const article = await getArticleById(id);
+export default async function SelectedBlog({ params }: PageProps) {
+  const { id } = await params;
+  const dbArticle = await getArticleById(id); 
   
-  if (!article) {
+  if (!dbArticle) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-xl text-gray-600">Article not found</p>
@@ -26,9 +30,11 @@ export default async function SelectedBlog({params}: any) {
     );
   }
   
-  return(
+  const article = transformToBlogArticle(dbArticle);
+  
+  return (
     <div>
-      <Suspense fallback={<p>loading article...</p>}>
+      <Suspense fallback={<PageSkeleton/>}>
         <BlogDetailPage blog={article} />
       </Suspense>
     </div>

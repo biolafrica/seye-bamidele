@@ -28,9 +28,18 @@ export const handleError = (err: any) => {
 };
 
 
-export const successResponse = (data: any, status = 200) => {
-  return NextResponse.json(data, { status })
-}
+export const successResponse = (
+  data: any,
+  status: number = 200,
+  options?: { headers?: Record<string, string> }
+) => {
+  return NextResponse.json(data, {
+    status,
+    headers: options?.headers,
+  });
+};
+
+
 
 
 export const validateRequired = (data: any, requiredFields: string[]) => {

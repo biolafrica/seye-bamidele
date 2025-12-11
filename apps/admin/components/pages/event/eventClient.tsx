@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
+import { Alert, ConfirmBanner, useEvents } from "@seye-bamidele/ui";
 import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/event";
 import PageHeader from "@/components/common/PageHeader";
@@ -9,7 +9,7 @@ import EventForm from "./EventForm";
 import SidePanel from "@/components/common/SidePanel";
 import { Event } from "@/types/events";
 import { useSidePanel } from "@/hooks/useSidePanel";
-import { useEvents } from "../../../../../packages/ui/src/hooks/useApi";
+
 
 export default function EventClient() {
   const [showSuccess, setShowSuccess] = useState("")
