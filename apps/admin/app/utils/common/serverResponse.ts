@@ -27,7 +27,6 @@ export const handleError = (err: any) => {
   return NextResponse.json({ error: message }, { status: 500 });
 };
 
-
 export const successResponse = (
   data: any,
   status: number = 200,
@@ -38,8 +37,6 @@ export const successResponse = (
     headers: options?.headers,
   });
 };
-
-
 
 
 export const validateRequired = (data: any, requiredFields: string[]) => {

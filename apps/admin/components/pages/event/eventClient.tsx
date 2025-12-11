@@ -7,20 +7,20 @@ import { columns } from "@/data/event";
 import PageHeader from "@/components/common/PageHeader";
 import EventForm from "./EventForm";
 import SidePanel from "@/components/common/SidePanel";
-import { Event } from "@/types/events";
 import { useSidePanel } from "@/hooks/useSidePanel";
+import { EventData, EventSidePanel } from "@seye-bamidele/shared-types";
 
 
 export default function EventClient() {
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<EventData | null>(null);
   
   const [sortBy, setSortBy] = useState<string>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const sidePanel = useSidePanel<Event>();
+  const sidePanel = useSidePanel<EventSidePanel>();
   const { data, pagination, loading, getAll, remove } = useEvents();
 
   useEffect(() => {

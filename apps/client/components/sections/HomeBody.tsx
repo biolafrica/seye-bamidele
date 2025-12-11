@@ -13,14 +13,12 @@ export default function HomeBody() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-5">
-
+          
           <Suspense fallback={<PageSectionSkeleton variant="articles" />}>
             <HomeBlog/>
           </Suspense>
 
           <aside className="lg:col-span-2 space-y-10">
-
-            {/* Newsletter Signup */}
             <section className="bg-card border border-border rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-accent/10 rounded-lg">
@@ -40,7 +38,6 @@ export default function HomeBody() {
               
             </section>
 
-            {/* Work History */}
             <section className="bg-card border border-border rounded-2xl p-6">
 
               <div className="flex items-center gap-3 mb-6">
@@ -92,6 +89,7 @@ export default function HomeBody() {
 
             </section>
           </aside>
+
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
-import { DbEvent, SpeakingEvent } from "@/types/event";
+import { EventClientData, EventTransformedData } from "@seye-bamidele/shared-types";
 
-export function transformEvents(eventsFromDb: DbEvent[]): SpeakingEvent[] {
+export function transformEvents(eventsFromDb: EventClientData[]): EventTransformedData[] {
   return eventsFromDb.map((event) => {
+    
     let action = '';
 
     switch (event.type) {

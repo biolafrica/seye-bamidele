@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDownIcon, SunIcon, MoonIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { navLinks } from "./links";
+import seyeLogo from "@/public/logos/seye-logo.svg";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,7 +22,6 @@ export default function Header() {
 
   useEffect(() => {
     setMounted(true);
-    // Check initial theme state
     const isDark = document.documentElement.classList.contains("dark");
     setIsDarkMode(isDark);
   }, []);
@@ -40,16 +40,16 @@ export default function Header() {
     }
   };
 
-  // Prevent hydration mismatch - don't render icon until mounted
+
   if (!mounted) {
     return (
       <header className="mb-20">
         <div className="flex items-center justify-between py-4">
-          {/* Logo/Avatar */}
+
           <div className="flex items-center">
             <Link href="/" className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-border">
               <Image
-                src="/logos/seye-logo.svg"
+                src={seyeLogo}
                 alt="Profile"
                 fill
                 className="object-cover"
@@ -57,7 +57,6 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:block">
             <ul className="flex items-center gap-1 bg-card rounded-full shadow-md px-3 py-2 border border-border">
               {navLinks.map((link) => (
@@ -77,9 +76,9 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Right Side */}
+
           <div className="flex items-center gap-3">
-            {/* Mobile Menu Button */}
+
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden flex items-center gap-2 bg-card rounded-full shadow-md px-4 py-2 border border-border text-sm font-medium text-text hover:bg-hover transition-colors"
@@ -92,13 +91,13 @@ export default function Header() {
               />
             </button>
 
-            {/* Theme Toggle Button - Placeholder during SSR */}
+
             <button
               onClick={handleThemeToggle}
               className="bg-card rounded-full shadow-md p-3 border border-border hover:bg-hover transition-colors"
               aria-label="Toggle theme"
             >
-              <div className="w-5 h-5" /> {/* Placeholder to prevent layout shift */}
+              <div className="w-5 h-5" /> 
             </button>
           </div>
         </div>

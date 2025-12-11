@@ -20,13 +20,11 @@ export default function SharePost({ blog }: SharePostProps) {
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Get current URL (works in all scenarios)
   const postUrl = typeof window !== "undefined" ? window.location.href : "";
   
   const title = blog?.title || "Check this out!";
   const excerpt = blog?.excerpt || "";
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -43,7 +41,7 @@ export default function SharePost({ blog }: SharePostProps) {
     };
   }, [showMenu]);
 
-  // Copy link to clipboard
+
   const copyToClipboard = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(postUrl);
@@ -57,7 +55,7 @@ export default function SharePost({ blog }: SharePostProps) {
     }
   };
 
-  // Social Media Share Handlers
+
   const shareOnTwitter = (): void => {
     const text = `${title}${excerpt ? '\n\n' + excerpt.substring(0, 100) + '...' : ''}`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(postUrl)}`;
@@ -77,7 +75,6 @@ export default function SharePost({ blog }: SharePostProps) {
     setShowMenu(false);
   };
 
-  // Native Web Share API (mobile-friendly)
   const handleNativeShare = async (): Promise<void> => {
     if (navigator.share) {
       try {
@@ -98,7 +95,6 @@ export default function SharePost({ blog }: SharePostProps) {
 
   return (
     <div className="relative inline-block" ref={menuRef}>
-      {/* Main Share Button */}
       <button 
         onClick={handleNativeShare}
         className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
@@ -108,11 +104,9 @@ export default function SharePost({ blog }: SharePostProps) {
         <span>Share</span>
       </button>
 
-      {/* Share Menu (shows when native share not available) */}
       {showMenu && (
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-slideDown">
           <div className="py-1">
-            {/* Twitter Option */}
             <button 
               onClick={shareOnTwitter} 
               className="flex items-center w-full gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
@@ -121,7 +115,6 @@ export default function SharePost({ blog }: SharePostProps) {
               <span>Twitter</span>
             </button>
 
-            {/* LinkedIn Option */}
             <button 
               onClick={shareOnLinkedIn} 
               className="flex items-center w-full gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
@@ -130,7 +123,6 @@ export default function SharePost({ blog }: SharePostProps) {
               <span>LinkedIn</span>
             </button>
 
-            {/* Facebook Option */}
             <button 
               onClick={shareOnFacebook} 
               className="flex items-center w-full gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
@@ -139,10 +131,8 @@ export default function SharePost({ blog }: SharePostProps) {
               <span>Facebook</span>
             </button>
 
-            {/* Divider */}
             <div className="border-t border-gray-100 my-1"></div>
 
-            {/* Copy Link Option */}
             <button 
               onClick={copyToClipboard} 
               className="flex items-center w-full gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"

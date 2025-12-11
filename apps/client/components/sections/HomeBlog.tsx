@@ -1,15 +1,22 @@
-import { transformArticles } from "@/app/utils/common/transformArticle";
-import { getArticles } from "@/app/utils/database/getTasks";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+"use client";
 
-export default async function HomeBlog() {
-  const dbArticles = await getArticles();
-  const allArticles = transformArticles(dbArticles);
-  const articles = allArticles.slice(0, 3);
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { PageSkeleton, useArticles } from "@seye-bamidele/ui";
+import Link from "next/link";
+import { useEffect } from "react";
+
+export default function HomeBlog() {
+  const { data: articles, getAll, loading } = useArticles()
+
+  useEffect(() => {
+    getAll({ page: '1', limit: '3' });
+  }, []);
+
 
   return(
     <div className="lg:col-span-3 space-y-5 lg:mr-24 mb-20">
+
+      {loading && <PageSkeleton/>}
       {articles.map((item, idx) => (
 
         <div key={idx} className="rounded-xl mt-3 w-full mb-9 md:hover:bg-hover md:cursor-pointer md:p-6 md:3/4 md:mt-0">
@@ -27,7 +34,7 @@ export default async function HomeBlog() {
           </p>
 
           <Link
-            href={item.link.url}
+            href={`/articles/${item.id}`}
             className="mt-3 inline-flex items-center text-accent hover:text-accent-hover font-medium transition-colors group text-sm"
           >
             Read article

@@ -46,8 +46,6 @@ export interface PaginationMeta {
   limit: number;
   total: number;
   totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
 }
 
 export interface ApiResponse<T = any> {

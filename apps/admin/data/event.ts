@@ -1,5 +1,5 @@
 import { TableColumn } from "@/components/common/DataTable";
-import { Event } from "@/types/events";
+import { EventTableData } from "@seye-bamidele/shared-types";
 import { FormField, formatDate } from "@seye-bamidele/ui";
 
 export const eventFields:FormField[] = [
@@ -25,7 +25,7 @@ export const eventFields:FormField[] = [
   },
 ];
 
-export const columns: TableColumn<Event>[] = [
+export const columns: TableColumn<EventTableData>[] = [
   { key: 'created_at', header: 'Date', sortable: true, accessor:(row)=>formatDate(row.created_at ) },
   { key: 'event', header: 'Event Name', sortable: true},
   { key: 'title', header: 'Title', sortable: true},

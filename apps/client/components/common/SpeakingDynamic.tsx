@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { transformEvents } from "@/app/utils/common/transformEvent";
-import { SpeakingEvent } from "@/types/event";
 import PageSection from "../sections/PageSection";
-import { useEvents } from "@seye-bamidele/ui";
+import { useClientEvents} from "@seye-bamidele/ui";
+import { EventTransformedData } from "@seye-bamidele/shared-types";
 
 export default function SpeakingDynamic() {
 
-  const { data: dbEvent, pagination, getAll, loading } = useEvents(); 
+  const { data: dbEvent, pagination, getAll, loading } = useClientEvents(); 
   const [currentPage, setCurrentPage] = useState(1);
-  const [allEvents, setAllEvents] = useState<SpeakingEvent[]>([]);
+  const [allEvents, setAllEvents] = useState<EventTransformedData[]>([]);
   const itemsPerPage = 10;
 
 

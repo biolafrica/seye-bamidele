@@ -17,9 +17,13 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@seye-bamidele/shared-types": ["../shared-types/src"] 
     }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "../shared-types" } 
+  ]
  
 }

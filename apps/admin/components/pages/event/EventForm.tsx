@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { EventFormData } from "@/types/events";
 import { eventFields } from "@/data/event";
 import { useEvents } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
+import { EventFormData } from "@seye-bamidele/shared-types";
 
 
 export default function EventForm({initialValues, edit, id = "", onSuccess }: {

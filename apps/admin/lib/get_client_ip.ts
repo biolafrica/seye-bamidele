@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
 export function getClientIP(request: NextRequest): string {
-  // Try different headers in order of preference
+  // Try different headers 
   const forwardedFor = request.headers.get('x-forwarded-for');
   const realIP = request.headers.get('x-real-ip');
   const cfConnectingIP = request.headers.get('cf-connecting-ip');

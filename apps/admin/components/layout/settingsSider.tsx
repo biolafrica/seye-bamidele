@@ -13,7 +13,6 @@ export default function SettingsNav({
 }: SettingsNavProps) {
   const pathname = usePathname();
 
-  // Check if any route matches current path
   const isAnyMatched = items.some((item) => item.href === pathname);
 
   return (
