@@ -38,3 +38,4 @@ export type NewsletterSidePanel = Pick<NewsletterBase, "id" | "content" >
 export type NewsletterFormData = Pick<NewsletterBase, "content" | "subject" >
 export type NewsletterData = Omit<NewsletterBase, 'created_by'>
 export type NewsletterTableData = Pick<NewsletterBase, 'created_at'| 'subject'>
+export type NewsletterRouteData = Pick<NewsletterBase, 'id' | 'subject' | 'sent_at' | 'total_sent' | 'total_opened' | 'total_clicked' | 'total_unsubscribed'>

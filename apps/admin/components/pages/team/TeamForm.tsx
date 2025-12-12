@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react";
-import { TeamFormData } from "@/types/team";
 import { teamFields } from "@/data/team";
 import { canUserPerform } from "@/app/utils/supabase/auth-utils";
 import { useTeam } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
+import { TeamFormData } from "@seye-bamidele/shared-types";
 
 export default function TeamForm({edit, initialValues, id = "", onSuccess}:{
   edit: boolean;
@@ -14,7 +14,6 @@ export default function TeamForm({edit, initialValues, id = "", onSuccess}:{
   onSuccess?: (action: "created" | "updated") => void;
 }) {
   const [errorMsg,   setErrorMsg]   = useState("");
-
   const {create, update} = useTeam();
 
   const validateProfile = (values: TeamFormData) => {

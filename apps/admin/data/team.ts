@@ -1,9 +1,9 @@
 import { TableColumn } from "@/components/common/DataTable";
-import { Team } from "@/types/team";
+import { TeamTable } from "@seye-bamidele/shared-types";
 import { FormField, formatDate } from "@seye-bamidele/ui";
 
 
-export const columns: TableColumn<Team>[] = [
+export const columns: TableColumn<TeamTable>[] = [
   { key: 'first_name', header: 'First Name', sortable: true },
   { key: 'last_name', header: 'Last Name', sortable: true },
   { key: 'email', header: 'Email', sortable: false },

@@ -1,17 +1,17 @@
 'use client';
 
 import { loginFields } from "@/data/user";
-import { User } from "@/types/user";
 import { createClient } from "@/app/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { Form } from "@seye-bamidele/ui";
+import { TeamUser } from "@seye-bamidele/shared-types";
 
 
 export default function LoginForm() {
   const router = useRouter();
 
-  const validateEvent = (values: User) => {
-    const errors: Partial<Record<keyof User, string>> = {};
+  const validateEvent = (values: TeamUser) => {
+    const errors: Partial<Record<keyof TeamUser, string>> = {};
 
     if (!values.password) {
       errors.password = 'Password is required';
@@ -24,7 +24,7 @@ export default function LoginForm() {
     return errors;
   };
 
-  const handleEventSubmit = async (values: User) => {
+  const handleEventSubmit = async (values: TeamUser) => {
     const supabase = createClient();
 
     try {
@@ -48,12 +48,11 @@ export default function LoginForm() {
   return(
     <>
       <Form
-      fields={loginFields}
-      initialValues={{ email: '', password: '' }}
-      validate={validateEvent}
-      onSubmit={handleEventSubmit}
-      submitLabel={"Login"}
-
+        fields={loginFields}
+        initialValues={{ email: '', password: '' }}
+        validate={validateEvent}
+        onSubmit={handleEventSubmit}
+        submitLabel={"Login"}
       />
     </>
     

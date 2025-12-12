@@ -2,16 +2,8 @@ import { NextRequest, } from 'next/server';
 import { handleError, successResponse } from '@/app/utils/common/serverResponse';
 import { SupabaseQueryBuilder } from '@/app/utils/supabase/queryBuilder';
 import { analyticsService } from '@/app/utils/services/analyticServices';
+import { NewsletterRouteData } from '@seye-bamidele/shared-types';
 
-interface Newsletter {
-  id: string;
-  subject: string;
-  sent_at: string;
-  total_sent: number;
-  total_opened: number;
-  total_clicked: number;
-  total_unsubscribed: number;
-}
 
 export async function GET(
   request: NextRequest,
@@ -19,12 +11,10 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const newsletterQuery = new SupabaseQueryBuilder<Newsletter>('newsletters');
+    const newsletterQuery = new SupabaseQueryBuilder<NewsletterRouteData>('newsletters');
 
-    // Get newsletter details
     const newsletter = await newsletterQuery.findById(id);
 
-    // Calculate stats
     const stats = {
       sent: newsletter.total_sent || 0,
       opened: newsletter.total_opened || 0,
@@ -38,7 +28,6 @@ export async function GET(
         : '0.00',
     };
 
-    // Get unique counts and click breakdown
     const [uniqueOpens, uniqueClicks, clicksByUrl] = await Promise.all([
       analyticsService.getUniqueCount(id, 'opened'),
       analyticsService.getUniqueCount(id, 'clicked'),

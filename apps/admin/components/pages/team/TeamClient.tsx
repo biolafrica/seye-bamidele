@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useTeam } from "../../../../../packages/ui/src/hooks/useApi";
-import { Team } from "@/types/team";
 import { canUserPerform } from "@/app/utils/supabase/auth-utils";
 import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
 import SidePanel from "@/components/common/SidePanel";
@@ -11,18 +10,19 @@ import PageHeader from "@/components/common/PageHeader";
 import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/team";
 import { useSidePanel } from "@/hooks/useSidePanel";
+import { TeamData, TeamSidePanelData } from "@seye-bamidele/shared-types";
 
 export default function TeamClient() {  
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<TeamData | null>(null);
   
 
   const [sortBy, setSortBy] = useState<string>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const sidePanel = useSidePanel<Team>();
+  const sidePanel = useSidePanel<TeamSidePanelData>();
   const { data, pagination, loading, getAll, remove } = useTeam();
 
 
