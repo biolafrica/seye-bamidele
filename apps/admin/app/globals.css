@@ -1,8 +1,9 @@
+@import "@seye-bamidele/ui/styles";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "@seye-bamidele/ui/styles";
 
 /* Sider Navigation Styles */
 .sider-item {

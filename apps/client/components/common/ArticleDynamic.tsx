@@ -1,24 +1,22 @@
 "use client";
 
 import { transformArticles } from "@/app/utils/common/transformArticle";
-
 import { useState, useEffect } from "react";
 import PageSection from "../sections/PageSection";
-import { Article } from "@/types/article";
 import { useArticles } from "@seye-bamidele/ui";
+import {ArticlesTranformClientData } from "@seye-bamidele/shared-types";
 
 
 export default function ArticlesPage() {
   const { data: dbArticles, pagination, getAll, loading } = useArticles(); 
   const [currentPage, setCurrentPage] = useState(1);
-  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  const [allArticles, setAllArticles] = useState<ArticlesTranformClientData[]>([]);
   const itemsPerPage = 10;
 
 
   useEffect(() => {
     getAll({ page: '1', limit: String(itemsPerPage) });
   }, []);
-
 
   useEffect(() => {
     if (dbArticles) {

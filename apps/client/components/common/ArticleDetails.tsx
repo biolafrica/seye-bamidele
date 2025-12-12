@@ -1,26 +1,25 @@
 "use client"
-import { ArrowLeftCircleIcon, CalendarDateRangeIcon, ClockIcon } from "@heroicons/react/24/outline";
+
+import { ArrowLeftCircleIcon, CalendarDateRangeIcon} from "@heroicons/react/24/outline";
 import SharePost from "./share";
-import { insertImagesIntoSections, parseContent, renderSection } from "@/app/utils/common/blogModification";
+import { insertImagesIntoSections, parseContent, renderSection } from "@/app/utils/common/articleModification";
 import { formatDate } from "@seye-bamidele/utils";
-import { BlogArticle } from "@/types/article";
+import { ArticleTransformClientData } from "@seye-bamidele/shared-types";
 
 
-interface BlogDetailPageProps {
-  blog: BlogArticle;
-}
 
-export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
+export default function BlogDetailPage({ blog }: { 
+  blog:ArticleTransformClientData
+}) {
+ 
   const imageArray = blog.images 
-    ? Object.values(blog.images).filter(img => img && img.trim() !== '')
-    : [];
-  
+  ? Object.values(blog.images).filter(img => img && img.trim() !== '')
+  : [];
   const sections = parseContent(blog.content || '');
   const contentWithImages = insertImagesIntoSections(sections, imageArray);
 
   return (
     <div className="min-h-screen">
-
       <nav className=" sticky top-0 z-50 backdrop-blur-sm bg-card/90">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button 
@@ -41,15 +40,6 @@ export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
               <CalendarDateRangeIcon className="w-4 h-4 mr-1.5" />
               <time dateTime={blog.created_at}>{formatDate(blog.created_at)}</time>
             </div>
-            {blog.read && (
-              <>
-                <span>•</span>
-                <div className="flex items-center">
-                  <ClockIcon className="w-4 h-4 mr-1.5" />
-                  <span>{blog.read} minute read</span>
-                </div>
-              </>
-            )}
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6 leading-tight">
@@ -58,11 +48,8 @@ export default function BlogDetailPage({ blog }: BlogDetailPageProps) {
 
           <div className="flex items-center justify-between flex-wrap gap-4 pt-6 border-t border-separator">
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center text-white font-semibold text-lg mr-3">
-                {blog.author ? blog.author.charAt(0).toUpperCase() : 'A'}
-              </div>
               <div>
-                <p className="font-medium text-heading">{blog.author || 'Seye Bamdele'}</p>
+                <p className="font-medium text-heading">Seye Bamdele</p>
                 <p className="text-sm text-secondary">Author</p>
               </div>
             </div>

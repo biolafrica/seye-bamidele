@@ -2,9 +2,8 @@ import { nextJsCacheHeaders } from "@seye-bamidele/config";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    reactCompiler: true
-  },
+  reactCompiler: true,
+  experimental: {},
   images: {
     remotePatterns: [
       {

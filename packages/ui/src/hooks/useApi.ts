@@ -1,22 +1,10 @@
 "use client"
 
 import { useState } from 'react'
-import { EventClientData, EventData} from '@seye-bamidele/shared-types';
+import { ArticleData, EventClientData, EventData} from '@seye-bamidele/shared-types';
 
 export interface Subscribers {
   email: string;
-}
-
-export interface Article {
-  id?: string;
-  date: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  image1: string;
-  image2: string;
-  created_at: string;
-  content: string;
 }
 
 export interface TeamFormData {
@@ -191,7 +179,7 @@ export function useSubscribers() {
 }
 
 export function useArticles() {
-  return useCrud<Article>('article')
+  return useCrud<ArticleData>('article')
 }
 
 export function useEvents() {

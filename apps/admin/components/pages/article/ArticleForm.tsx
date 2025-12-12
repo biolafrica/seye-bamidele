@@ -1,16 +1,16 @@
 "use  client";
 
-import { ArticleFormData, BackendArticle, MainArticle } from "@/types/articles";
 import { articleFields } from "@/data/articles";
 import { handleMultipleImagesUpload } from "@/app/utils/common/imageUpload";
 import { useState } from "react";
 import { useArticles } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
+import { ArticleFormData, ArticleSidePanel, ArticleTransformedFormData } from "@seye-bamidele/shared-types";
 
 export default function ArticleForm({initialValues, edit, article , onSuccess }: {
   initialValues: ArticleFormData;
   edit: boolean;
-  article: BackendArticle | null;
+  article: ArticleSidePanel | null;
   onSuccess?: (action: "created" | "updated") => void;
 }) {
   const [errorMsg,  setErrorMsg]   = useState("");
@@ -35,35 +35,37 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
     return errors;
   }
 
+  function isFile(value: unknown): value is File {
+    return value instanceof File;
+  }
+
   const handleArticleSubmit = async (values: ArticleFormData) => {
-    console.log("Submitting article with values:", values);
-    
-    let formData: Partial<MainArticle> = {
+    let formData: Partial<ArticleTransformedFormData> = {
       title: values.title,
       content: values.content,
       excerpt: values.excerpt,
     };
 
     try {
-      const hasNewImages = 
-        (values.image instanceof File) || 
-        (values.image1 instanceof File) || 
-        (values.image2 instanceof File);
+      const hasNewImages =
+        isFile(values.image) ||
+        isFile(values.image1) ||
+        isFile(values.image2);
 
       if (hasNewImages) {
         const uploadedImageUrls = await handleMultipleImagesUpload(
-          values.image instanceof File ? values.image : null, 
-          values.image1 instanceof File ? values.image1 : null, 
-          values.image2 instanceof File ? values.image2 : null
+          isFile(values.image) ? values.image : null,
+          isFile(values.image1) ? values.image1 : null,
+          isFile(values.image2) ? values.image2 : null,
         );
 
         if (uploadedImageUrls.length > 0) {
           const paddedImages: [string, string, string] = [
-            uploadedImageUrls[0] || '',
-            uploadedImageUrls[1] || '',
-            uploadedImageUrls[2] || ''
+            uploadedImageUrls[0] || "",
+            uploadedImageUrls[1] || "",
+            uploadedImageUrls[2] || "",
           ];
-          
+
           formData.images = paddedImages;
           formData.image = uploadedImageUrls[0];
         }
@@ -73,16 +75,18 @@ export default function ArticleForm({initialValues, edit, article , onSuccess }:
       }
 
       if (edit) {
-        const id = article?.id || '';
-        await update(id, formData);
+        await update(article?.id || "", formData);
       } else {
         await create(formData);
       }
-      const action = edit ? "updated" : "created";
-      onSuccess?.(action);
 
+      onSuccess?.(edit ? "updated" : "created");
     } catch (error) {
-      setErrorMsg(error instanceof Error ? error.message : "Error submitting, please try again.");
+      setErrorMsg(
+        error instanceof Error
+          ? error.message
+          : "Error submitting, please try again."
+      );
       console.error("Error submitting articles form:", error);
     }
   };

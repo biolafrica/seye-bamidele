@@ -8,18 +8,19 @@ import { columns } from "@/data/articles";
 import ArticleForm from "./ArticleForm";
 import { Alert, ConfirmBanner, useArticles } from "@seye-bamidele/ui";
 import { useSidePanel } from "@/hooks/useSidePanel";
+import { ArticleData, ArticleSidePanel } from "@seye-bamidele/shared-types";
 
 
 export default function ArticleClient() {
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<ArticleData | null>(null);
   
   const [sortBy, setSortBy] = useState<string>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const sidePanel = useSidePanel<any>();
+  const sidePanel = useSidePanel<ArticleSidePanel>();
   const { data, pagination, loading, getAll, remove } = useArticles();
 
   useEffect(() => {
@@ -146,8 +147,8 @@ export default function ArticleClient() {
               excerpt: sidePanel.selectedItem.excerpt, 
               content: sidePanel.selectedItem.content, 
               image: sidePanel.selectedItem.image, 
-              image1: sidePanel.selectedItem.image?.[1] ?? null,
-              image2: sidePanel.selectedItem.image?.[2] ?? null
+              image1: sidePanel.selectedItem.images?.[1] ?? null,
+              image2: sidePanel.selectedItem.images?.[2] ?? null
             }} 
             edit={true} 
             article={sidePanel.selectedItem} 

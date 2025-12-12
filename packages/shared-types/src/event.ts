@@ -1,7 +1,7 @@
 export interface EventBase{
   id: string;
   created_at: string;
-  updated_at?: string;
+  updated_at: string | null;
   event: string;
   description: string;
   type: string;

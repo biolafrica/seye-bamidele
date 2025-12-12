@@ -1,14 +1,11 @@
-import { DBArticle, Article, BlogArticle } from '@/types/article';
+import { ArticleData, ArticleTransformClientData, ArticlesTranformClientData, } from '@seye-bamidele/shared-types';
+import { formatDateWord } from '@seye-bamidele/ui';
 
 
-export function transformArticles(dbArticles: DBArticle[]): Article[] {
+export function transformArticles(dbArticles: ArticleData[]): ArticlesTranformClientData[] {
   return dbArticles
     .map((item) => ({
-      date: new Date(item.created_at).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
+      date: formatDateWord(item.created_at),
       title: item.title,
       excerpt: item.excerpt,
       link: {
@@ -22,14 +19,14 @@ export function transformArticles(dbArticles: DBArticle[]): Article[] {
     );
 }
 
-export function transformToBlogArticle(dbArticle: DBArticle): BlogArticle {
+export function transformToBlogArticle(dbArticle: ArticleData): ArticleTransformClientData {
   const imagesObj = dbArticle.images && dbArticle.images.length > 0
-    ? {
-        image_1: dbArticle.images[0] || '',
-        image_2: dbArticle.images[1] || '',
-        image_3: dbArticle.images[2] || '',
-      }
-    : null;
+  ? {
+      image_1: dbArticle.images[0] || '',
+      image_2: dbArticle.images[1] || '',
+      image_3: dbArticle.images[2] || '',
+    }
+  : null;
 
   return {
     id: dbArticle.id,
@@ -39,8 +36,6 @@ export function transformToBlogArticle(dbArticle: DBArticle): BlogArticle {
     images: imagesObj,
     created_at: dbArticle.created_at,
     excerpt: dbArticle.excerpt,
-    read: undefined,
-    author: undefined,
   };
 }
 
