@@ -9,6 +9,7 @@ import EventForm from "./EventForm";
 import SidePanel from "@/components/common/SidePanel";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { EventData, EventSidePanel } from "@seye-bamidele/shared-types";
+import { eventEmptymessage } from "@/app/utils/common/emptyTableObjects";
 
 
 export default function EventClient() {
@@ -191,6 +192,8 @@ export default function EventClient() {
           onDelete={handleDeleteClick}
           sortBy={sortBy}
           sortOrder={sortOrder}
+          emptyMessage={eventEmptymessage}
+
         />
       </div>
 

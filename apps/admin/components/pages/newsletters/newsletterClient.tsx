@@ -10,6 +10,7 @@ import PageHeader from "@/components/common/PageHeader";
 import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/newsletter";
 import { NewsletterSidePanel } from "@seye-bamidele/shared-types";
+import { newsletterEmptymessage } from "@/app/utils/common/emptyTableObjects";
 
 export default function NewsletterClient() {  
   const [showSuccess, setShowSuccess] = useState("")
@@ -136,6 +137,7 @@ export default function NewsletterClient() {
           onMore={sidePanel.openEdit}
           sortBy={sortBy}
           sortOrder={sortOrder}
+          emptyMessage={newsletterEmptymessage}
         />
       </div>
     </>

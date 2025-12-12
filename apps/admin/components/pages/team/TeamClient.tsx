@@ -11,6 +11,7 @@ import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/team";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { TeamData, TeamSidePanelData } from "@seye-bamidele/shared-types";
+import { teamEmptymessage } from "@/app/utils/common/emptyTableObjects";
 
 export default function TeamClient() {  
   const [showSuccess, setShowSuccess] = useState("")
@@ -194,6 +195,7 @@ export default function TeamClient() {
           onDelete={handleDeleteClick}
           sortBy={sortBy}
           sortOrder={sortOrder}
+          emptyMessage={teamEmptymessage}
         />
       </div>
     </>

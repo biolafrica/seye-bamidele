@@ -1,6 +1,6 @@
 import { TableColumn } from "@/components/common/DataTable";
-import { TeamTable } from "@seye-bamidele/shared-types";
-import { FormField, formatDate } from "@seye-bamidele/ui";
+import { FormField, TeamTable } from "@seye-bamidele/shared-types";
+import { formatDate } from "@seye-bamidele/ui";
 
 
 export const columns: TableColumn<TeamTable>[] = [

@@ -1,5 +1,4 @@
-import { FormField } from "@seye-bamidele/ui";
-
+import { FormField } from "@seye-bamidele/shared-types";
 
 export const loginFields:FormField[] = [
   { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter your email', required: true },

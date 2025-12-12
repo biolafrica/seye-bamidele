@@ -2,16 +2,15 @@ import { createCRUDHandlers } from "@/app/utils/common/crudFactory";
 import generateTempPassword from "@/app/utils/common/generateTempPassword";
 import { sendEmail } from "@/app/utils/common/sendEmail";
 import { supabaseAdmin } from "@/app/utils/supabase/supabaseAdmin";
-import { BackendUserData} from "@/types/team";
+import { TeamData} from "@seye-bamidele/shared-types";
 
 export const { GET, POST, PUT, DELETE } = createCRUDHandlers({
   table: "users",
   requiredFields: ["email", "first_name", "last_name"],
 
   hooks: {
-    beforeCreate: async (body:BackendUserData) => {
+    beforeCreate: async (body:TeamData) => {
       const tempPassword = generateTempPassword();
-      console.log("temporary paswword", tempPassword)
 
       const { data, error } = await supabaseAdmin.auth.admin.createUser({
         email: body.email,
@@ -31,7 +30,7 @@ export const { GET, POST, PUT, DELETE } = createCRUDHandlers({
       return { tempPassword, email: body.email };
     },
 
-    afterCreate: async (createdUser, body, ctx:any) => {
+    afterCreate: async (createdUser, _, ctx:any) => {
       console.log("ctx", ctx)
       await sendEmail({
         to: createdUser.email,

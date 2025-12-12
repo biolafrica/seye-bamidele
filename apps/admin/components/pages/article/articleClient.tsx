@@ -9,6 +9,7 @@ import ArticleForm from "./ArticleForm";
 import { Alert, ConfirmBanner, useArticles } from "@seye-bamidele/ui";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { ArticleData, ArticleSidePanel } from "@seye-bamidele/shared-types";
+import { articleEmptymessage } from "@/app/utils/common/emptyTableObjects";
 
 
 export default function ArticleClient() {
@@ -22,11 +23,6 @@ export default function ArticleClient() {
 
   const sidePanel = useSidePanel<ArticleSidePanel>();
   const { data, pagination, loading, getAll, remove } = useArticles();
-
-  const articleEmptymessage = {
-    title : "No Article",
-    message: "Get Started by creating a new Article"
-  }
 
   useEffect(() => {
     fetchData();

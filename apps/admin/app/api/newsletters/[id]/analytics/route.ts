@@ -6,11 +6,11 @@ import { NewsletterRouteData } from '@seye-bamidele/shared-types';
 
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  _: NextRequest,
+   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const newsletterQuery = new SupabaseQueryBuilder<NewsletterRouteData>('newsletters');
 
     const newsletter = await newsletterQuery.findById(id);

@@ -43,7 +43,7 @@ export default function Sider({ onModuleChange }: SiderProps) {
     }
   }, [pathname]); 
 
-  const handleItemClick = (e: React.MouseEvent, key: string, label: string, href: string) => {
+  const handleItemClick = (e: React.MouseEvent, key: string, label: string,) => {
     if (key === "logout") {
       e.preventDefault();
       setShowLogoutDialog(true);
@@ -105,7 +105,7 @@ export default function Sider({ onModuleChange }: SiderProps) {
                     key={key}
                     href={href}
                     className={`sider-item ${isActive ? "sider-item--active" : ""}`}
-                    onClick={(e) => handleItemClick(e, key, label, href)}
+                    onClick={(e) => handleItemClick(e, key, label)}
                   >
                     <Icon className="w-5 h-5" />
                     <h2 className="text-text">{label}</h2>

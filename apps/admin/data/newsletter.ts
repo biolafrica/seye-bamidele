@@ -1,6 +1,6 @@
 import { TableColumn } from "@/components/common/DataTable";
-import { NewsletterTableData } from "@seye-bamidele/shared-types";
-import { FormField, formatDate } from "@seye-bamidele/ui";
+import { FormField, NewsletterTableData } from "@seye-bamidele/shared-types";
+import {formatDate } from "@seye-bamidele/ui";
 
 
 export const columns: TableColumn<NewsletterTableData>[] = [

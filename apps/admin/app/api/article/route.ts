@@ -1,7 +1,7 @@
 import { createCRUDHandlers } from "@/app/utils/common/crudFactory";
-import { Article } from "@/types/articles";
+import { ArticleBase } from "@seye-bamidele/shared-types";
 
-const { GET, POST, PUT, DELETE } = createCRUDHandlers<Article>({
+const { GET, POST, PUT, DELETE } = createCRUDHandlers<ArticleBase>({
   table: "articles",
   requiredFields: ["title", "content", "excerpt", "image", "images"],
 });

@@ -1,7 +1,8 @@
 'use client'
 
 import { createClient } from "@/app/utils/supabase/client";
-import { Alert, Form, FormField } from "@seye-bamidele/ui";
+import { FormField } from "@seye-bamidele/shared-types";
+import { Alert, Form} from "@seye-bamidele/ui";
 import { useState } from "react";
 
 

@@ -1,6 +1,6 @@
 import { TableColumn } from "@/components/common/DataTable";
-import { EventTableData } from "@seye-bamidele/shared-types";
-import { FormField, formatDate } from "@seye-bamidele/ui";
+import { EventTableData, FormField } from "@seye-bamidele/shared-types";
+import { formatDate } from "@seye-bamidele/ui";
 
 export const eventFields:FormField[] = [
   { name: 'event', label: 'Event Name', type: 'text', placeholder: 'Enter event name', required: true },

@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react";
-import { Twitter, Linkedin, Facebook } from 'lucide-react';
 import { ShareIcon, LinkIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { Facebook, Linkedin, Twitter } from "@/data/icons";
 
 interface Article {
   id?: string;
@@ -107,6 +107,7 @@ export default function SharePost({ article }: SharePostProps) {
       {showMenu && (
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-slideDown">
           <div className="py-1">
+
             <button 
               onClick={shareOnTwitter} 
               className="flex items-center w-full gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
@@ -149,9 +150,11 @@ export default function SharePost({ article }: SharePostProps) {
                 </>
               )}
             </button>
+
           </div>
         </div>
       )}
+
     </div>
   );
 }

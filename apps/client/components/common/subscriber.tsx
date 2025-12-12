@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Subscribers } from "@seye-bamidele/shared-types";
-import { Alert, Form, FormField, useSubscribers } from "@seye-bamidele/ui";
+import { FormField, Subscribers } from "@seye-bamidele/shared-types";
+import { Alert, Form,useSubscribers } from "@seye-bamidele/ui";
 
 
 export default function Subscriber() {
