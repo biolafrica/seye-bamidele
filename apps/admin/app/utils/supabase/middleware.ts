@@ -7,7 +7,7 @@ export async function updateSession(request: NextRequest) {
   
   const allowedOrigins = [
     process.env.NEXT_PUBLIC_CLIENT_URL || 'http://localhost:3000',
-    process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3001',  
+    process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001',  
   ]
 
   const isPreflight = request.method === 'OPTIONS'

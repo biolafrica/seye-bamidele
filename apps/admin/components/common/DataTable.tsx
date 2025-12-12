@@ -197,7 +197,7 @@ function DataTable<T extends { id?: string | number }>({
                   rows={skeletonRows}
                   showActions={showActions}
                 />
-              ) : data.length === 0 ? (
+              ) : data?.length === 0 ? (
                 <tr>
                   <td
                     colSpan={columns.length + (showActions ? 1 : 0)}

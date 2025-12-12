@@ -47,7 +47,7 @@ export function useCrud<T>(endpoint: string) {
       const queryString = params 
         ? '?' + new URLSearchParams(params).toString()
         : ''
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}${queryString}`)
+      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}${queryString}`)
       
       if (result.data && result.pagination) {
         setData(result.data)
@@ -69,7 +69,7 @@ export function useCrud<T>(endpoint: string) {
     setLoading(true)
     setError(null)
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}?id=${id}`)
+      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}?id=${id}`)
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch')
@@ -83,7 +83,7 @@ export function useCrud<T>(endpoint: string) {
     setLoading(true)
     setError(null)
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}`, {
+      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify(data),
       })
@@ -104,7 +104,7 @@ export function useCrud<T>(endpoint: string) {
     setLoading(true)
     setError(null)
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}?id=${id}`, {
+      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}?id=${id}`, {
         method: 'PUT',
         body: JSON.stringify(data),
       })
@@ -126,7 +126,7 @@ export function useCrud<T>(endpoint: string) {
     setError(null)
     try {
       const permanentParam = permanent ? '&permanent=true' : ''
-      await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}?id=${id}${permanentParam}`, {
+      await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}?id=${id}${permanentParam}`, {
         method: 'DELETE',
       })
       await getAll({ 
