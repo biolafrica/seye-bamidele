@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { transformEvents } from "@/app/utils/common/transformEvent";
-import PageSection from "../sections/PageSection";
+import PageSection from "../../sections/PageSection";
 import { useClientEvents} from "@seye-bamidele/ui";
 import { EventTransformedData } from "@seye-bamidele/shared-types";
 
-export default function SpeakingDynamic() {
+export default function EventClientView() {
 
   const { data: dbEvent, pagination, getAll, loading } = useClientEvents(); 
   const [currentPage, setCurrentPage] = useState(1);

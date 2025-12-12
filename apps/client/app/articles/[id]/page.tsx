@@ -1,5 +1,5 @@
 import { getArticleById } from "@/app/utils/database/getTasks";
-import SelectedArticle from "@/components/common/selectedArticle";
+import SelectedArticle from "@/components/pages/articles/ArticleViewClient";
 import {createMetadata } from "@seye-bamidele/ui";
 
 interface PageProps {
@@ -17,7 +17,6 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function SelectedBlog({ params }: PageProps) {
-  const { id } =  params;
-  console.log("id", id)
+  const { id } =  await params;
   return (<SelectedArticle id={id}/>);
 }

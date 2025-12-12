@@ -19,7 +19,7 @@ export function transformArticles(dbArticles: ArticleData[]): ArticlesTranformCl
     );
 }
 
-export function transformToBlogArticle(dbArticle: ArticleData): ArticleTransformClientData {
+export function transformArticle(dbArticle: ArticleData): ArticleTransformClientData {
   const imagesObj = dbArticle.images && dbArticle.images.length > 0
   ? {
       image_1: dbArticle.images[0] || '',

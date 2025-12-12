@@ -77,7 +77,7 @@ export function useCrud<T>(endpoint: string) {
     setLoading(true)
     setError(null)
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}?id=${id}`)
+      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}/${id}`)
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch')

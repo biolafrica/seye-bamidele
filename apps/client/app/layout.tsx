@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "@/components/common/clientLayout";
+import ClientLayout from "@/components/nav/clientLayout";
 import { createMetadata } from "@seye-bamidele/ui";
 
 const geistSans = Geist({

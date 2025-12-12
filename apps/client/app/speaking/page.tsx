@@ -1,8 +1,8 @@
 import PageHeader from "@/components/common/PageHeader";
 import { Suspense } from "react";
 import PageSectionSkeleton from "@/components/common/pageSkeleton";
-import SpeakingDynamic from "@/components/common/SpeakingDynamic";
 import { createMetadata } from "@seye-bamidele/ui";
+import EventClientView from "@/components/pages/events/EventClientView";
 
 export const metadata = createMetadata({
   title: "Speaking",
@@ -19,7 +19,7 @@ export default async function Speaking() {
         />
 
         <Suspense fallback={<PageSectionSkeleton variant="speaking" />}>
-          <SpeakingDynamic />
+          <EventClientView />
         </Suspense>
       </div>
     </main>

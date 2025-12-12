@@ -4,26 +4,26 @@ import { useState, useEffect, useRef } from "react";
 import { Twitter, Linkedin, Facebook } from 'lucide-react';
 import { ShareIcon, LinkIcon, CheckIcon } from "@heroicons/react/24/outline";
 
-interface Blog {
+interface Article {
   id?: string;
   title?: string;
   excerpt?: string;
-  [key: string]: any; // Allow for additional properties
+  [key: string]: any; 
 }
 
 interface SharePostProps {
-  blog: Blog;
+  article: Article;
 }
 
-export default function SharePost({ blog }: SharePostProps) {
+export default function SharePost({ article }: SharePostProps) {
   const [copied, setCopied] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const postUrl = typeof window !== "undefined" ? window.location.href : "";
   
-  const title = blog?.title || "Check this out!";
-  const excerpt = blog?.excerpt || "";
+  const title = article?.title || "Check this out!";
+  const excerpt = article?.excerpt || "";
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

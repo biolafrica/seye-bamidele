@@ -1,21 +1,21 @@
 "use client"
 
 import { ArrowLeftCircleIcon, CalendarDateRangeIcon} from "@heroicons/react/24/outline";
-import SharePost from "./share";
+import SharePost from "../../common/share";
 import { insertImagesIntoSections, parseContent, renderSection } from "@/app/utils/common/articleModification";
 import { formatDate } from "@seye-bamidele/utils";
 import { ArticleTransformClientData } from "@seye-bamidele/shared-types";
 
 
 
-export default function BlogDetailPage({ blog }: { 
-  blog:ArticleTransformClientData
+export default function ArticleView({ article }: { 
+  article:ArticleTransformClientData
 }) {
  
-  const imageArray = blog.images 
-  ? Object.values(blog.images).filter(img => img && img.trim() !== '')
+  const imageArray = article.images 
+  ? Object.values(article.images).filter(img => img && img.trim() !== '')
   : [];
-  const sections = parseContent(blog.content || '');
+  const sections = parseContent(article.content || '');
   const contentWithImages = insertImagesIntoSections(sections, imageArray);
 
   return (
@@ -27,7 +27,7 @@ export default function BlogDetailPage({ blog }: {
             className="flex items-center text-secondary hover:text-heading transition-colors group"
           >
             <ArrowLeftCircleIcon className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Blog</span>
+            <span className="font-medium">Back to article</span>
           </button>
         </div>
       </nav>
@@ -38,12 +38,12 @@ export default function BlogDetailPage({ blog }: {
           <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-secondary mb-4">
             <div className="flex items-center">
               <CalendarDateRangeIcon className="w-4 h-4 mr-1.5" />
-              <time dateTime={blog.created_at}>{formatDate(blog.created_at)}</time>
+              <time dateTime={article.created_at}>{formatDate(article.created_at)}</time>
             </div>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6 leading-tight">
-            {blog.title || 'Untitled Post'}
+            {article.title || 'Untitled Post'}
           </h1>
 
           <div className="flex items-center justify-between flex-wrap gap-4 pt-6 border-t border-separator">
@@ -54,7 +54,7 @@ export default function BlogDetailPage({ blog }: {
               </div>
             </div>
           
-            <SharePost blog={blog} />
+            <SharePost article={article} />
             
           </div>
         </header>
@@ -78,7 +78,7 @@ export default function BlogDetailPage({ blog }: {
               Thanks for reading! Share this article if you found it helpful.
             </p>
 
-            <SharePost blog={blog} />
+            <SharePost article={article} />
 
           </div>
         </footer>

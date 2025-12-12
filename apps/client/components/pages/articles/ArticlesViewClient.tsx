@@ -2,12 +2,12 @@
 
 import { transformArticles } from "@/app/utils/common/transformArticle";
 import { useState, useEffect } from "react";
-import PageSection from "../sections/PageSection";
+import PageSection from "../../sections/PageSection";
 import { useArticles } from "@seye-bamidele/ui";
 import {ArticlesTranformClientData } from "@seye-bamidele/shared-types";
 
 
-export default function ArticlesPage() {
+export default function ArticlesViewClient() {
   const { data: dbArticles, pagination, getAll, loading } = useArticles(); 
   const [currentPage, setCurrentPage] = useState(1);
   const [allArticles, setAllArticles] = useState<ArticlesTranformClientData[]>([]);

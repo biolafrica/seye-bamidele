@@ -1,8 +1,8 @@
 import PageHeader from "@/components/common/PageHeader";
 import { Suspense } from "react";
 import PageSectionSkeleton from "@/components/common/pageSkeleton";
-import ArticleDynamic from "@/components/common/ArticleDynamic";
 import { createMetadata } from "@seye-bamidele/ui";
+import ArticlesViewClient from "@/components/pages/articles/ArticlesViewClient";
 
 export const metadata = createMetadata({
   title: "Articles",
@@ -19,7 +19,7 @@ export default function Articles() {
         />
 
         <Suspense fallback={<PageSectionSkeleton variant="articles" />}>
-          <ArticleDynamic />
+          <ArticlesViewClient />
         </Suspense>
       </div>
     </main>
