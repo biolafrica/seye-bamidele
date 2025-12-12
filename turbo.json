@@ -6,12 +6,26 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["NODE_ENV", "NEXT_PUBLIC_*"]
+      "env": [
+        "NODE_ENV", 
+        "NEXT_PUBLIC_*",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SMTP_HOST",
+        "SMTP_PORT", 
+        "SMTP_SECURE",
+        "SMTP_USER",
+        "SMTP_PASS",
+        "SMTP_FROM",
+        "SENDGRID_API_KEY",
+        "SENDGRID_FROM_EMAIL",
+        "ADMIN_SECRET_KEY"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^dev"]
+      "dependsOn": ["^dev"],
+      "env": ["NODE_ENV", "NEXT_PUBLIC_*"]
     },
     "lint": {
       "dependsOn": ["^lint"],
