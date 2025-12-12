@@ -23,6 +23,11 @@ export default function ArticleClient() {
   const sidePanel = useSidePanel<ArticleSidePanel>();
   const { data, pagination, loading, getAll, remove } = useArticles();
 
+  const articleEmptymessage = {
+    title : "No Article",
+    message: "Get Started by creating a new Article"
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -191,6 +196,7 @@ export default function ArticleClient() {
           onDelete={handleDeleteClick}
           sortBy={sortBy}
           sortOrder={sortOrder}
+          emptyMessage={articleEmptymessage}
         />
       </div>
 

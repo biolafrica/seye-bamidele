@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import PageSectionSkeleton from "../common/pageSkeleton";
-import { PageSkeleton } from "@seye-bamidele/ui";
 
 interface PageSectionItem {
   category?: string;

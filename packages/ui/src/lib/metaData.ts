@@ -1,12 +1,6 @@
+import { MetaOptions } from "@seye-bamidele/shared-types";
 import type { Metadata } from "next";
 
-interface MetaOptions {
-  title?: string;
-  description?: string;
-  keywords?: string[];
-  image?: string;
-  url?: string;
-}
 
 const APP_NAME = "Seye Bandele";
 const APP_DEFAULT_DESCRIPTION = "Seye Bandele personal website.";

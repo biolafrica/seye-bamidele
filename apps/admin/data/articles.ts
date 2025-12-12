@@ -5,7 +5,7 @@ import { FormField, formatDate } from "@seye-bamidele/ui";
 
 export const columns: TableColumn<ArticleTableData>[] = [
   { key: "created_at", header: "Date", sortable: true, accessor:(row)=>formatDate(row.created_at )},
-  { key: "title", header: "Title", sortable: true},
+  { key: "title", header: "Title", sortable: true, className:"max-w-2 border-x text-red"},
 ];
 
 

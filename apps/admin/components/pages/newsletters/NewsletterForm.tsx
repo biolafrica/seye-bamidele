@@ -15,8 +15,8 @@ export default function NewsletterForm({initialValues, onSuccess }: {
   const validateEvent = (values: NewsletterFormData ) => {
     const errors: Partial<Record<keyof NewsletterFormData, string>> = {};
     
-    if (values.subject && values.subject.length > 200) {
-      errors.subject = 'description must be less than 200 characters';
+    if (values.subject && values.subject.length > 100) {
+      errors.subject = 'description must be less than 100 characters';
     }
 
     return errors;

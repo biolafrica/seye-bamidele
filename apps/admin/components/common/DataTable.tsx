@@ -10,6 +10,9 @@ import {
   DocumentArrowUpIcon,
 } from '@heroicons/react/24/outline';
 import TableSkeleton from '../skeleton/tableSkeleton';
+import { PaginationData } from '@seye-bamidele/shared-types';
+import EmptyState from './Empty';
+
 
 export interface TableColumn<T> {
   key: keyof T | string;
@@ -18,13 +21,6 @@ export interface TableColumn<T> {
   sortable?: boolean;
   className?: string;
   headerClassName?: string;
-}
-
-export interface PaginationData {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
 }
 
 export interface DataTableProps<T> {
@@ -46,13 +42,17 @@ export interface DataTableProps<T> {
   stickyFirstColumn?: boolean;
   itemsPerPageOptions?: number[];
   className?: string;
-  emptyMessage?: string;
+  emptyMessage: {
+    title: string;
+    message: string
+  };
   skeletonRows?: number;
   
 
   sortBy?: string;
   sortOrder?: 'asc' | 'desc' | null;
 }
+
 
 function DataTable<T extends { id?: string | number }>({
   columns,
@@ -69,11 +69,17 @@ function DataTable<T extends { id?: string | number }>({
   stickyFirstColumn = true,
   itemsPerPageOptions = [10, 20, 50, 100],
   className = '',
-  emptyMessage = 'No data available',
+  emptyMessage,
   skeletonRows = 3,
   sortBy,
   sortOrder,
 }: DataTableProps<T>) {
+
+  const finalEmptyMessage = emptyMessage || {
+    title: "No data available",
+    message: "Get started by creating a new item"
+  };
+
   
   const { page, limit, total, totalPages } = pagination;
   const startIndex = (page - 1) * limit;
@@ -184,6 +190,7 @@ function DataTable<T extends { id?: string | number }>({
             </thead>
 
             <tbody className="divide-y divide-separator">
+              
               {loading ? (
                 <TableSkeleton
                   columns={columns.length} 
@@ -196,7 +203,11 @@ function DataTable<T extends { id?: string | number }>({
                     colSpan={columns.length + (showActions ? 1 : 0)}
                     className="px-6 py-12 text-center text-secondary"
                   >
-                    {emptyMessage}
+                    <EmptyState
+                      title={finalEmptyMessage.title}
+                      message={finalEmptyMessage.message}
+                    />
+
                   </td>
                 </tr>
               ) : (

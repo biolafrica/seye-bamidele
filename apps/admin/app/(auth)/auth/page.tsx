@@ -7,6 +7,7 @@ export default function AuthPage() {
     <>
       <h4>Hello</h4>
       <CardSkeleton />
+      <div className="max-w-2"></div>
 
     </>
   )

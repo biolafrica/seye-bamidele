@@ -35,7 +35,6 @@ export function useForm<T extends Record<string, any>>({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [globalError, setGlobalError] = useState('');
 
-  // Reset values when initialValues change
   useEffect(() => {
     setValues(initialValues);
     setErrors({});
@@ -43,7 +42,6 @@ export function useForm<T extends Record<string, any>>({
     setGlobalError('');
   }, [initialValues]);
 
-  // Validate on values change
   useEffect(() => {
     const validationErrors = validate(values);
     setErrors(validationErrors);
@@ -54,14 +52,13 @@ export function useForm<T extends Record<string, any>>({
   ) => {
     const { name, value, type } = e.target;
     
-    // Handle checkbox inputs
     const fieldValue = type === 'checkbox' 
       ? (e.target as HTMLInputElement).checked 
       : value;
 
     setValues(prev => ({ ...prev, [name]: fieldValue } as T));
     setTouched(prev => ({ ...prev, [name]: true }));
-    setGlobalError(''); // Clear global error on input change
+    setGlobalError(''); 
   }, []);
 
   const setFieldValue = useCallback((name: keyof T, value: any) => {
@@ -83,14 +80,12 @@ export function useForm<T extends Record<string, any>>({
   const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Touch all fields
     const allTouched = Object.keys(values).reduce(
       (acc, key) => ({ ...acc, [key]: true }),
       {}
     ) as Partial<Record<keyof T, boolean>>;
     setTouched(allTouched);
     
-    // Validate
     const validationErrors = validate(values);
     setErrors(validationErrors);
     

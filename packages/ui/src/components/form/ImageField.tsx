@@ -2,24 +2,7 @@
 
 import { useState, useRef, useCallback, DragEvent, ChangeEvent, useEffect } from 'react';
 import { PhotoIcon, XMarkIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline';
-
-export interface ImageFieldProps {
-  name: string;
-  label?: string;
-  value?: File | string | null;
-  onChange: (file: File | null) => void;
-  onBlur?: () => void;
-  accept?: string;
-  maxSize?: number; // in MB
-  required?: boolean;
-  disabled?: boolean;
-  error?: string;
-  helperText?: string;
-  preview?: boolean;
-  multiple?: boolean;
-  aspectRatio?: '1:1' | '16:9' | '4:3' | '3:2' | 'free';
-  className?: string;
-}
+import { ImageFieldProps } from '@seye-bamidele/shared-types';
 
 const ImageField: React.FC<ImageFieldProps> = ({
   name,

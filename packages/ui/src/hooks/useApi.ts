@@ -1,24 +1,16 @@
 "use client"
 
 import { useState } from 'react'
-import { ArticleData, EventClientData, EventData, NewsletterData, TeamData} from '@seye-bamidele/shared-types';
+import { 
+  ArticleData, 
+  EventClientData, 
+  EventData, 
+  NewsletterData, 
+  PaginationData, 
+  Subscribers, 
+  TeamData
+} from '@seye-bamidele/shared-types';
 
-export interface Subscribers {
-  email: string;
-}
-
-
-export interface PaginationData {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: PaginationData;
-}
 
 async function apiFetch(url: string, options?: RequestInit) {
   const response = await fetch(url, {
@@ -77,7 +69,7 @@ export function useCrud<T>(endpoint: string) {
     setLoading(true)
     setError(null)
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}/${id}`)
+      const result = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}?id=${id}`)
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch')
