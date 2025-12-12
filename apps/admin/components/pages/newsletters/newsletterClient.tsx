@@ -1,7 +1,6 @@
 "use client";
 
 import { useSidePanel } from "@/hooks/useSidePanel";
-import { Newsletter } from "@/types/newsletter";
 import { useEffect, useState } from "react";
 import { Alert, useNewsletter } from "@seye-bamidele/ui";
 import SidePanel from "@/components/common/SidePanel";
@@ -10,6 +9,7 @@ import NewsletterForm from "./NewsletterForm";
 import PageHeader from "@/components/common/PageHeader";
 import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/newsletter";
+import { NewsletterSidePanel } from "@seye-bamidele/shared-types";
 
 export default function NewsletterClient() {  
   const [showSuccess, setShowSuccess] = useState("")
@@ -18,7 +18,7 @@ export default function NewsletterClient() {
   const [sortBy, setSortBy] = useState<string>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const sidePanel = useSidePanel<Newsletter>();
+  const sidePanel = useSidePanel<NewsletterSidePanel>();
   const { data, pagination, loading, getAll} = useNewsletter();
 
 

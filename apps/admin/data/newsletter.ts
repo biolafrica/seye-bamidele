@@ -1,9 +1,9 @@
 import { TableColumn } from "@/components/common/DataTable";
-import { Newsletter } from "@/types/newsletter";
+import { NewsletterTableData } from "@seye-bamidele/shared-types";
 import { FormField, formatDate } from "@seye-bamidele/ui";
 
 
-export const columns: TableColumn<Newsletter>[] = [
+export const columns: TableColumn<NewsletterTableData>[] = [
   { key: 'created_at', header: 'Date', sortable: true, accessor:(row)=>formatDate(row.created_at ) },
   { key: 'subject', header: 'Subject', sortable: true }
 ];

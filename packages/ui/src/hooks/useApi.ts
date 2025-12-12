@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { ArticleData, EventClientData, EventData} from '@seye-bamidele/shared-types';
+import { ArticleData, EventClientData, EventData, NewsletterData} from '@seye-bamidele/shared-types';
 
 export interface Subscribers {
   email: string;
@@ -195,5 +195,5 @@ export function useTeam() {
 }
 
 export function useNewsletter() {
-  return useCrud<NewsletterFormData>('newsletters')
+  return useCrud<NewsletterData>('newsletters')
 }

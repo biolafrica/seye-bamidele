@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { AnalyticsLoadingSkeleton } from '../../skeleton/AnalyticLoading';
 import { DetailedStat, StatCard } from '../../card/newsletter';
-import { AnalyticsData, NewsletterAnalyticsPageProps } from '@/types/newsletter';
 import { ErrorState } from '../../Error/dashboard';
 import { formatDate, formatTime } from '@seye-bamidele/ui';
+import { NewsletterAnalytics, NewsletterSidePanel } from '@seye-bamidele/shared-types';
 
-export default function NewsletterDetails({ id, content }: NewsletterAnalyticsPageProps) {
-  const [data, setData] = useState<AnalyticsData | null>(null);
+export default function NewsletterDetails({ id, content }: NewsletterSidePanel) {
+  const [data, setData] = useState<NewsletterAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

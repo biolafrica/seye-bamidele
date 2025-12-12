@@ -1,8 +1,8 @@
-import { NewsletterFormData } from "@/types/newsletter";
 import { useState } from "react";
 import { newsletterFields } from "@/data/newsletter";
 import { useNewsletter } from "../../../../../packages/ui/src/hooks/useApi";
 import { Alert, Form } from "@seye-bamidele/ui";
+import { NewsletterFormData } from "@seye-bamidele/shared-types";
 
 export default function NewsletterForm({initialValues, onSuccess }: {
   initialValues: NewsletterFormData;
