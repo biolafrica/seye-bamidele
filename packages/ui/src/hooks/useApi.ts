@@ -12,11 +12,12 @@ import {
 } from '@seye-bamidele/shared-types';
 
 function getBaseUrl(): string {
-
-  if (typeof window !== 'undefined') {
-    return 'http://localhost:3001'; 
+  const isAdminApp = process.env.NEXT_PUBLIC_IS_ADMIN_APP === 'true';
+  if (isAdminApp) {
+    return '';
+  } else {
+    return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001';
   }
-  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001';
 }
 
 async function apiFetch(url: string, options?: RequestInit) {
@@ -48,18 +49,16 @@ export function useCrud<T>(endpoint: string) {
   const [error, setError] = useState<string | null>(null)
 
   const getAll = async (params?: Record<string, string>) => {
-    console.log("taye")
     setLoading(true)
     setError(null)
   
     try {
-      const queryString = params 
-      ? '?' + new URLSearchParams(params).toString()
-      : ''
+      const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
       const baseUrl = getBaseUrl()
-      console.log("baseUrl", baseUrl)
-      const result = await apiFetch(`${baseUrl}/api/${endpoint}${queryString}`)
-      
+
+      const url = baseUrl ? `${baseUrl}/api/${endpoint}${queryString}` : `/api/${endpoint}${queryString}`
+      const result = await apiFetch(url)
+
       if (result.data && result.pagination) {
         setData(result.data)
         setPagination(result.pagination)
@@ -79,10 +78,13 @@ export function useCrud<T>(endpoint: string) {
   const getOne = async (id: string) => {
     setLoading(true)
     setError(null)
-    const baseUrl = getBaseUrl()
     try {
-      const result = await apiFetch(`${baseUrl}/api/${endpoint}?id=${id}`)
+      const baseUrl = getBaseUrl()
+      const url = baseUrl ? `${baseUrl}/api/${endpoint}?id=${id}` : `/api/${endpoint}?id=${id}`
+
+      const result = await apiFetch(url)
       return result
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch')
       throw err
@@ -94,12 +96,15 @@ export function useCrud<T>(endpoint: string) {
   const create = async (data: Partial<T>) => {
     setLoading(true)
     setError(null)
-    const baseUrl = getBaseUrl()
     try {
-      const result = await apiFetch(`${baseUrl}/api/${endpoint}`, {
+      const baseUrl = getBaseUrl()
+      const url = baseUrl ? `${baseUrl}/api/${endpoint}` : `/api/${endpoint}`
+
+      const result = await apiFetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
       })
+
       await getAll({ 
         page: pagination.page.toString(), 
         limit: pagination.limit.toString() 
@@ -116,9 +121,11 @@ export function useCrud<T>(endpoint: string) {
   const update = async (id: string, data: Partial<T>) => {
     setLoading(true)
     setError(null)
-    const baseUrl = getBaseUrl()
     try {
-      const result = await apiFetch(`${baseUrl}/api/${endpoint}?id=${id}`, {
+      const baseUrl = getBaseUrl()
+      const url = baseUrl ? `${baseUrl}/api/${endpoint}?id=${id}` : `/api/${endpoint}?id=${id}`
+
+      const result = await apiFetch(url, {
         method: 'PUT',
         body: JSON.stringify(data),
       })
@@ -141,7 +148,8 @@ export function useCrud<T>(endpoint: string) {
     try {
       const permanentParam = permanent ? '&permanent=true' : ''
       const baseUrl = getBaseUrl()
-      await apiFetch(`${baseUrl}/api/${endpoint}?id=${id}${permanentParam}`, {
+      const url = baseUrl ? `${baseUrl}/api/${endpoint}?id=${id}${permanentParam}` : `/api/${endpoint}?id=${id}${permanentParam}`
+      await apiFetch(url, {
         method: 'DELETE',
       })
       await getAll({ 
