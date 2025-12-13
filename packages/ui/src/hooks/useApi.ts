@@ -12,8 +12,9 @@ import {
 } from '@seye-bamidele/shared-types';
 
 function getBaseUrl(): string {
+
   if (typeof window !== 'undefined') {
-    return ''; 
+    return 'http://localhost:3001'; 
   }
   return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001';
 }
@@ -47,6 +48,7 @@ export function useCrud<T>(endpoint: string) {
   const [error, setError] = useState<string | null>(null)
 
   const getAll = async (params?: Record<string, string>) => {
+    console.log("taye")
     setLoading(true)
     setError(null)
   
@@ -55,6 +57,7 @@ export function useCrud<T>(endpoint: string) {
       ? '?' + new URLSearchParams(params).toString()
       : ''
       const baseUrl = getBaseUrl()
+      console.log("baseUrl", baseUrl)
       const result = await apiFetch(`${baseUrl}/api/${endpoint}${queryString}`)
       
       if (result.data && result.pagination) {
@@ -171,6 +174,7 @@ export function useSubscribers() {
 }
 
 export function useArticles() {
+  console.log('taye first call')
   return useCrud<ArticleData>('article')
 }
 

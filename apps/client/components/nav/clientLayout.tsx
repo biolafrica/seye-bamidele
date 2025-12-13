@@ -1,8 +1,8 @@
 "use client";
 
-import Header from "@/components/nav/Header";
-import Footer from "@/components/nav/Footer";
-import { ThemeProvider } from "@/components/common/ThemeProvider";
+import { ThemeProvider } from "../common/ThemeProvider";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function ClientLayout({
   children,
