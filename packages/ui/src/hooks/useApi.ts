@@ -11,6 +11,12 @@ import {
   TeamData
 } from '@seye-bamidele/shared-types';
 
+function getBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    return ''; 
+  }
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001';
+}
 
 async function apiFetch(url: string, options?: RequestInit) {
   const response = await fetch(url, {
@@ -43,11 +49,13 @@ export function useCrud<T>(endpoint: string) {
   const getAll = async (params?: Record<string, string>) => {
     setLoading(true)
     setError(null)
+  
     try {
       const queryString = params 
-        ? '?' + new URLSearchParams(params).toString()
-        : ''
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}${queryString}`)
+      ? '?' + new URLSearchParams(params).toString()
+      : ''
+      const baseUrl = getBaseUrl()
+      const result = await apiFetch(`${baseUrl}/api/${endpoint}${queryString}`)
       
       if (result.data && result.pagination) {
         setData(result.data)
@@ -68,8 +76,9 @@ export function useCrud<T>(endpoint: string) {
   const getOne = async (id: string) => {
     setLoading(true)
     setError(null)
+    const baseUrl = getBaseUrl()
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}?id=${id}`)
+      const result = await apiFetch(`${baseUrl}/api/${endpoint}?id=${id}`)
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch')
@@ -82,8 +91,9 @@ export function useCrud<T>(endpoint: string) {
   const create = async (data: Partial<T>) => {
     setLoading(true)
     setError(null)
+    const baseUrl = getBaseUrl()
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}`, {
+      const result = await apiFetch(`${baseUrl}/api/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify(data),
       })
@@ -103,8 +113,9 @@ export function useCrud<T>(endpoint: string) {
   const update = async (id: string, data: Partial<T>) => {
     setLoading(true)
     setError(null)
+    const baseUrl = getBaseUrl()
     try {
-      const result = await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}?id=${id}`, {
+      const result = await apiFetch(`${baseUrl}/api/${endpoint}?id=${id}`, {
         method: 'PUT',
         body: JSON.stringify(data),
       })
@@ -126,7 +137,8 @@ export function useCrud<T>(endpoint: string) {
     setError(null)
     try {
       const permanentParam = permanent ? '&permanent=true' : ''
-      await apiFetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${endpoint}?id=${id}${permanentParam}`, {
+      const baseUrl = getBaseUrl()
+      await apiFetch(`${baseUrl}/api/${endpoint}?id=${id}${permanentParam}`, {
         method: 'DELETE',
       })
       await getAll({ 

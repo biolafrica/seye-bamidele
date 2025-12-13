@@ -3,12 +3,16 @@
 import { loginFields } from "@/data/user";
 import { createClient } from "@/app/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { Form } from "@seye-bamidele/ui";
+import { Alert, Form } from "@seye-bamidele/ui";
 import { TeamUser } from "@seye-bamidele/shared-types";
+import { useState } from "react";
 
 
 export default function LoginForm() {
+  const [showSuccess, setShowSuccess] = useState("")
+  const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
+
 
   const validateEvent = (values: TeamUser) => {
     const errors: Partial<Record<keyof TeamUser, string>> = {};
@@ -36,10 +40,14 @@ export default function LoginForm() {
       if (error) {
         throw error;
       }
-
+      setShowSuccess("Logged In Successfully");
+      setTimeout(() => {
+        setShowSuccess("")
+      }, 1500)
       router.push('/')
       
     } catch (error) {
+      setErrorMsg(error instanceof Error ? error.message : "Error logging in, please try again.");
       console.error("Error submitting login form:", error);
       
     }   
@@ -47,6 +55,26 @@ export default function LoginForm() {
 
   return(
     <>
+      {showSuccess && (
+        <Alert
+          type="success"
+          heading="successfully"
+          subheading={showSuccess}
+          duration={2000}
+          onClose={() => setShowSuccess("")}
+        />
+      )}
+
+      {errorMsg && (
+        <Alert
+          type="error"
+          heading='Error'
+          subheading={errorMsg}
+          duration={5000}
+          onClose={() => setErrorMsg("")}
+        />
+      )}
+
       <Form
         fields={loginFields}
         initialValues={{ email: '', password: '' }}

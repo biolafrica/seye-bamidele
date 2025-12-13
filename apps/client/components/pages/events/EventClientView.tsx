@@ -7,7 +7,6 @@ import { useClientEvents} from "@seye-bamidele/ui";
 import { EventTransformedData } from "@seye-bamidele/shared-types";
 
 export default function EventClientView() {
-
   const { data: dbEvent, pagination, getAll, loading } = useClientEvents(); 
   const [currentPage, setCurrentPage] = useState(1);
   const [allEvents, setAllEvents] = useState<EventTransformedData[]>([]);
