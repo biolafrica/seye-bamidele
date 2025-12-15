@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import SidePanel from "@/components/common/SidePanel";
 import PageHeader from "@/components/common/PageHeader";
 import DataTable from "@/components/common/DataTable";
@@ -10,94 +10,33 @@ import { Alert, ConfirmBanner, useArticles } from "@seye-bamidele/ui";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { ArticleData, ArticleSidePanel } from "@seye-bamidele/shared-types";
 import { articleEmptymessage } from "@/app/utils/common/emptyTableObjects";
+import { useAdminTablePage } from "@/hooks/useAdminTablePage";
+import { useDeleteAction } from "@/hooks/useDeleteAction";
 
 
 export default function ArticleClient() {
-  const [showSuccess, setShowSuccess] = useState("")
+  const [showSuccess, setShowSuccess] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [showDialog, setShowDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<ArticleData | null>(null);
-  
-  const [sortBy, setSortBy] = useState<string>('created_at');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const sidePanel = useSidePanel<ArticleSidePanel>();
-  const { data, pagination, loading, getAll, remove } = useArticles();
+  
+  const table = useAdminTablePage({ useSource: useArticles });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async (page?: number, limit?: number) => {
-    const params: Record<string, string> = {
-      page: (page || pagination.page).toString(),
-      limit: (limit || pagination.limit).toString(),
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-    };
-    
-    await getAll(params);
-  };
-
-  const handlePageChange = (page: number) => {
-    fetchData(page, pagination.limit);
-  };
-
-  const handleItemsPerPageChange = (limit: number) => {
-    fetchData(1, limit); 
-  };
-
-  const handleSort = (key: string, direction: 'asc' | 'desc' | null) => {
-    if (direction === null) {
-      setSortBy('created_at');
-      setSortOrder('desc');
-    } else {
-      setSortBy(key);
-      setSortOrder(direction);
-    }
-    
-    
-    const params: Record<string, string> = {
-      page: '1',
-      limit: pagination.limit.toString(),
-      sortBy: direction ? key : 'created_at',
-      sortOrder: direction || 'desc',
-    };
-    
-    getAll(params);
-  };
-
-  const handleDeleteClick = (row: any) => {
-    setItemToDelete(row);
-    setShowDialog(true);
-  }
-
-  const handleConfirmDelete = async () => {
-    if (!itemToDelete) return;
-    
-    try {
-      await remove(itemToDelete.id);
-      setShowSuccess("The event has been deleted.")
-      setShowDialog(false);
-      setItemToDelete(null);
-      setTimeout(() => {
-        setShowSuccess("")
-      }, 1500)
-    } catch (error) {
+  const deleteAction = useDeleteAction<ArticleData>({
+    onDelete: async (item) => {
+      await table.remove?.(item.id);
+    },
+    onSuccess: async () => {
+      setShowSuccess("The event has been deleted.");
+      await table.fetchData();
+    },
+    onError: () => {
       setErrorMsg("Failed to delete event.");
-      console.error("Error deleting event:", error);
-      setShowDialog(false);
-      setItemToDelete(null);
-    }
-  }
-
-  const handleCancelDelete = () => {
-    setShowDialog(false);
-    setItemToDelete(null);
-  }
+    },
+  });
 
   const handleSuccess = async (action: "created" | "updated") => {
-    await fetchData(); 
+    await table.fetchData(); 
     sidePanel.close();
     setShowSuccess(`The event has been ${action}.`);
     setTimeout(() => {
@@ -128,12 +67,12 @@ export default function ArticleClient() {
       )}
 
       <ConfirmBanner
-        open={showDialog}
+        open={deleteAction.showDialog}
         title="Delete Article"
-        message={`Are you sure you want to delete "${itemToDelete?.title || 'this article'}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${deleteAction.itemToDelete?.title || 'this article'}"? This action cannot be undone.`}
         variant="danger"
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
+        onConfirm={deleteAction.confirmDelete}
+        onCancel={deleteAction.cancelDelete}
       />
 
       <SidePanel
@@ -182,16 +121,16 @@ export default function ArticleClient() {
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
-          data={data || []}
-          pagination={pagination}
-          loading={loading}
-          onPageChange={handlePageChange}
-          onItemsPerPageChange={handleItemsPerPageChange}
-          onSort={handleSort}
+          data={table.data || []}
+          pagination={table.pagination}
+          loading={table.loading}
+          onPageChange={table.handlePageChange}
+          onItemsPerPageChange={table.handleItemsPerPageChange}
+          onSort={table.handleSort}
           onEdit={sidePanel.openEdit}
-          onDelete={handleDeleteClick}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
+          onDelete={deleteAction.requestDelete}
+          sortBy={table.sortBy}
+          sortOrder={table.sortOrder}
           emptyMessage={articleEmptymessage}
         />
       </div>

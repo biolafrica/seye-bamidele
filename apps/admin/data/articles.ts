@@ -5,7 +5,7 @@ import { formatDate } from "@seye-bamidele/ui";
 
 export const columns: TableColumn<ArticleTableData>[] = [
   { key: "created_at", header: "Date", sortable: true, accessor:(row)=>formatDate(row.created_at )},
-  { key: "title", header: "Title", sortable: true, className:"max-w-2 border-x text-red"},
+  { key: "title", header: "Title", sortable: true,}
 ];
 
 
@@ -13,33 +13,33 @@ export const articleFields:FormField[] = [
   { name: 'title', label: 'Title', type: 'text', placeholder: 'Enter article title', required: true },
   { name: 'content', label: 'Content', type: 'textarea', placeholder:  `Start writing your newsletter content here...
 
-Use "##" for headings:
-## My Heading
+  Use "##" for headings:
+  ## My Heading
 
-Use "###" for subheadings:
-## My Sub heading
+  Use "###" for subheadings:
+  ## My Sub heading
 
-Use "**" for bold text:
-**My Sub heading**
+  Use "**" for bold text:
+  **My Sub heading**
 
-use "*" for italic text:
-*My Sub heading*
+  use "*" for italic text:
+  *My Sub heading*
 
-use [title](url) for links:
-[paidHr](https://www.paidHr.com)
+  use [title](url) for links:
+  [paidHr](https://www.paidHr.com)
 
-Use triple backticks for code blocks:
-\`\`\`javascript
-const hello = "world";
-\`\`\`
+  Use triple backticks for code blocks:
+  \`\`\`javascript
+  const hello = "world";
+  \`\`\`
 
-Use "1." for numbered lists:
-1. First item
-2. Second item
+  Use "1." for numbered lists:
+  1. First item
+  2. Second item
 
-Use "-" for bullet lists:
-- First point
-- Second point`, required: true },
+  Use "-" for bullet lists:
+  - First point
+  - Second point`, required: true },
 
 
   { name: 'excerpt', label: 'Excerpt', type: 'textarea', placeholder: 'Enter article excerpt', required: false },
