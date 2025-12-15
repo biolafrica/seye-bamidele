@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, ConfirmBanner, useEvents } from "@seye-bamidele/ui";
 import DataTable from "@/components/common/DataTable";
 import { columns } from "@/data/event";
