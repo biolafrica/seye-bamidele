@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTeam } from "../../../../../packages/ui/src/hooks/useApi";
 import { canUserPerform } from "@/app/utils/supabase/auth-utils";
 import { Alert, ConfirmBanner } from "@seye-bamidele/ui";
@@ -12,100 +12,43 @@ import { columns } from "@/data/team";
 import { useSidePanel } from "@/hooks/useSidePanel";
 import { TeamData, TeamSidePanelData } from "@seye-bamidele/shared-types";
 import { teamEmptymessage } from "@/app/utils/common/emptyTableObjects";
+import { useAdminTablePage } from "@/hooks/useAdminTablePage";
+import { useDeleteAction } from "@/hooks/useDeleteAction";
 
 export default function TeamClient() {  
   const [showSuccess, setShowSuccess] = useState("")
   const [errorMsg, setErrorMsg] = useState("");
-  const [showDialog, setShowDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<TeamData | null>(null);
-  
-
-  const [sortBy, setSortBy] = useState<string>('created_at');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const sidePanel = useSidePanel<TeamSidePanelData>();
-  const { data, pagination, loading, getAll, remove } = useTeam();
 
+  const table = useAdminTablePage({ useSource: useTeam });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const deleteAction = useDeleteAction<TeamSidePanelData>({
+    onDelete: async (item) => {
+      await table.remove?.(item.id);
+    },
+    onSuccess: async () => {
+      setShowSuccess("The user has been deleted.");
+      await table.fetchData();
+    },
+    onError: () => {
+      setErrorMsg("Failed to delete team member.");
+    },
+  });
 
-  const fetchData = async (page?: number, limit?: number) => {
-    const params: Record<string, string> = {
-      page: (page || pagination.page).toString(),
-      limit: (limit || pagination.limit).toString(),
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-    };
-    
-    await getAll(params);
-  };
-
-  const handlePageChange = (page: number) => {
-    fetchData(page, pagination.limit);
-  };
-
-  const handleItemsPerPageChange = (limit: number) => {
-    fetchData(1, limit); 
-  };
-
-  const handleSort = (key: string, direction: 'asc' | 'desc' | null) => {
-    if (direction === null) {
-      setSortBy('created_at');
-      setSortOrder('desc');
-    } else {
-      setSortBy(key);
-      setSortOrder(direction);
-    }
-    
-  
-    const params: Record<string, string> = {
-      page: '1', 
-      limit: pagination.limit.toString(),
-      sortBy: direction ? key : 'created_at',
-      sortOrder: direction || 'desc',
-    };
-    
-    getAll(params);
-  };
-
-  const handleDeleteClick = async (row: any) => {
+  const handleDeleteRequest = async (row: TeamData) => {
     const canDelete = await canUserPerform('delete_user');
+
     if (!canDelete) {
-      setErrorMsg('You do not have permission to delete users')
-      return
+      setErrorMsg('You do not have permission to delete users.');
+      return;
     }
-    setItemToDelete(row);
-    setShowDialog(true);
-  }
 
-  const handleConfirmDelete = async () => {
-    if (!itemToDelete) return;
-    
-    try {
-      await remove(itemToDelete.id);
-      setShowSuccess("The user has been deleted.")
-      setShowDialog(false);
-      setItemToDelete(null);
-      setTimeout(() => {
-        setShowSuccess("")
-      }, 1500)
-    } catch (error) {
-      setErrorMsg("Failed to delete user.");
-      console.error("Error deleting user:", error);
-      setShowDialog(false);
-      setItemToDelete(null);
-    }
-  }
-
-  const handleCancelDelete = () => {
-    setShowDialog(false);
-    setItemToDelete(null);
-  }
+    deleteAction.requestDelete(row);
+  };
 
   const handleSuccess = async (action: "created" | "updated") => {
-    await fetchData(); 
+    await table.fetchData(); 
     sidePanel.close();
     setShowSuccess(`User has been ${action}.`);
     setTimeout(() => {
@@ -136,12 +79,12 @@ export default function TeamClient() {
       )}
 
       <ConfirmBanner
-        open={showDialog}
+        open={deleteAction.showDialog}
         title="Delete Team Member"
-        message={`Are you sure you want to delete "${itemToDelete?.first_name} ${itemToDelete?.last_name || 'this team member'}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${deleteAction.itemToDelete?.first_name} ${deleteAction.itemToDelete?.last_name || 'this team member'}"? This action cannot be undone.`}
         variant="danger"
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
+        onConfirm={deleteAction.confirmDelete}
+        onCancel={deleteAction.cancelDelete}
       />
 
       <SidePanel
@@ -185,16 +128,16 @@ export default function TeamClient() {
       <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <DataTable
           columns={columns}
-          data={data || []}
-          pagination={pagination}
-          loading={loading}
-          onPageChange={handlePageChange}
-          onItemsPerPageChange={handleItemsPerPageChange}
-          onSort={handleSort}
+          data={table.data || []}
+          pagination={table.pagination}
+          loading={table.loading}
+          onPageChange={table.handlePageChange}
+          onItemsPerPageChange={table.handleItemsPerPageChange}
+          onSort={table.handleSort}
           onEdit={sidePanel.openEdit}
-          onDelete={handleDeleteClick}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
+          onDelete={handleDeleteRequest}
+          sortBy={table.sortBy}
+          sortOrder={table.sortOrder}
           emptyMessage={teamEmptymessage}
         />
       </div>

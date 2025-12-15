@@ -27,11 +27,11 @@ export default function ArticleClient() {
       await table.remove?.(item.id);
     },
     onSuccess: async () => {
-      setShowSuccess("The event has been deleted.");
+      setShowSuccess("The article has been deleted.");
       await table.fetchData();
     },
     onError: () => {
-      setErrorMsg("Failed to delete event.");
+      setErrorMsg("Failed to delete article.");
     },
   });
 
