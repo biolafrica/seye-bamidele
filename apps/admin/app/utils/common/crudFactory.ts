@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleError, successResponse, validateRequired } from "@/app/utils/common/serverResponse";
 import { SupabaseQueryBuilder } from "../supabase/queryBuilder";
-import { getCacheHeaders } from "@seye-bamidele/config";
 
 export function createCRUDHandlers<T>({
   table,
@@ -42,9 +41,7 @@ export function createCRUDHandlers<T>({
 
         if (id) {
           const data = await queryBuilder.findById(id);
-          return successResponse(data, 200, {
-            headers: getCacheHeaders('apiMedium'),
-          });
+          return successResponse(data, 200);
         }
 
         const result = await queryBuilder.findPaginated({
@@ -56,9 +53,7 @@ export function createCRUDHandlers<T>({
           sortOrder: (searchParams.get("sortOrder") as 'asc' | 'desc') || "desc",
         });
 
-        return successResponse(result, 200, {
-          headers: getCacheHeaders('apiMedium'),
-        });
+        return successResponse(result, 200);
     
       } catch (error) {
         return handleError(error);

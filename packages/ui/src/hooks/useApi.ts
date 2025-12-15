@@ -57,6 +57,7 @@ export function useCrud<T>(endpoint: string) {
       const baseUrl = getBaseUrl()
 
       const url = baseUrl ? `${baseUrl}/api/${endpoint}${queryString}` : `/api/${endpoint}${queryString}`
+      console.log(url)
       const result = await apiFetch(url)
 
       if (result.data && result.pagination) {

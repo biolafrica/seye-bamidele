@@ -11,14 +11,13 @@ export async function GET(request: NextRequest) {
 
   if (newsletterId && subscriberId && url) {
     try {
-      // Check if this is the first click
       const isFirstClick = !(await analyticsService.hasEventOccurred(
         newsletterId,
         subscriberId,
         'clicked'
       ));
 
-      // Record the click event
+
       await analyticsService.recordEvent({
         newsletter_id: newsletterId,
         subscriber_id: subscriberId,
@@ -28,10 +27,8 @@ export async function GET(request: NextRequest) {
         user_agent: request.headers.get('user-agent') || 'unknown',
       });
 
-      // Increment total clicks
       await analyticsService.incrementNewsletterCounter(newsletterId, 'clicks');
 
-      // Increment unique clicks if first time
       if (isFirstClick) {
         await analyticsService.incrementNewsletterCounter(newsletterId, 'unique_clicks');
       }
@@ -40,7 +37,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Redirect to the actual URL
   if (url) {
     return NextResponse.redirect(decodeURIComponent(url));
   }

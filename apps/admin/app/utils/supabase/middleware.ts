@@ -4,7 +4,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
   const origin = request.headers.get('origin')
-  
   const allowedOrigins = [
     process.env.NEXT_PUBLIC_CLIENT_URL || 'http://localhost:3000',
     process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001',  
@@ -13,7 +12,6 @@ export async function updateSession(request: NextRequest) {
   const isPreflight = request.method === 'OPTIONS'
   const isApiRoute = request.nextUrl.pathname.startsWith("/api")
   const url = request.nextUrl.clone()
-  const isPublic = request.method === "GET" && (url.pathname.startsWith("/api/articles") || url.pathname.startsWith("/api/events"));
 
 
   if (isPreflight) {
@@ -83,12 +81,13 @@ export async function updateSession(request: NextRequest) {
     supabaseResponse.headers.set('Access-Control-Allow-Credentials', 'true')
   }
 
-  if (isPublic) {
-    Object.entries(cacheHeaders.apiMedium).forEach(([k, v]) =>
+
+  if(process.env.NEXT_PUBLIC_IS_ADMIN_APP === 'true'){
+    Object.entries(cacheHeaders.noStore).forEach(([k, v]) =>
       supabaseResponse.headers.set(k, v)
     );
-  } else {
-    Object.entries(cacheHeaders.noStore).forEach(([k, v]) =>
+  }else{
+    Object.entries(cacheHeaders.apiMedium).forEach(([k, v]) =>
       supabaseResponse.headers.set(k, v)
     );
   }

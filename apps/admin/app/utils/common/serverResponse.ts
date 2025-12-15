@@ -7,7 +7,6 @@ export function normalizeError(err: any) {
     details: err.details,
   };
 }
-
 export const handleError = (err: any) => {
   console.error('API Error:', err)
 
@@ -30,11 +29,9 @@ export const handleError = (err: any) => {
 export const successResponse = (
   data: any,
   status: number = 200,
-  options?: { headers?: Record<string, string> }
 ) => {
   return NextResponse.json(data, {
     status,
-    headers: options?.headers,
   });
 };
 
