@@ -1,4 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
+import PageHeadText from "@/components/common/pageHeading";
 import { projects } from "@/data/projects";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import { createMetadata } from "@seye-bamidele/ui";
@@ -11,6 +12,7 @@ export const metadata = createMetadata({
 export default function ProjectsPage() {
   return (
     <main className="min-h-screen">
+      <PageHeadText pageText="PROJECTS"/>
       <div className="max-w-6xl space-y-14">
 
         <div className="max-w-2xl">

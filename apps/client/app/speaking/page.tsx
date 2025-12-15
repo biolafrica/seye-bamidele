@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import PageSectionSkeleton from "@/components/common/pageSkeleton";
 import { createMetadata } from "@seye-bamidele/ui";
 import EventClientView from "@/components/pages/events/EventClientView";
+import PageHeadText from "@/components/common/pageHeading";
 
 export const metadata = createMetadata({
   title: "Speaking",
@@ -12,6 +13,7 @@ export const metadata = createMetadata({
 export default async function Speaking() {
   return (
     <main className="min-h-screen">
+       <PageHeadText pageText="SPEAKING"/>
       <div className="max-w-3xl space-y-14">
         <PageHeader
           title="Insights from stages and conversations."

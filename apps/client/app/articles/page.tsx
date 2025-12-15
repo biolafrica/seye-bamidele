@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import PageSectionSkeleton from "@/components/common/pageSkeleton";
 import { createMetadata } from "@seye-bamidele/ui";
 import ArticlesViewClient from "@/components/pages/articles/ArticlesViewClient";
+import PageHeadText from "@/components/common/pageHeading";
 
 export const metadata = createMetadata({
   title: "Articles",
@@ -12,6 +13,7 @@ export const metadata = createMetadata({
 export default function Articles() {
   return (
     <main className="min-h-screen">
+      <PageHeadText pageText="ARTICLES"/>
       <div className="max-w-3xl space-y-14">
         <PageHeader
           title="Thoughts on marketing, leadership, and building impactful products."

@@ -1,4 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
+import PageHeadText from "@/components/common/pageHeading";
 import PageSection from "@/components/sections/PageSection";
 import { contacts } from "@/data/contact";
 import { createMetadata } from "@seye-bamidele/ui";
@@ -11,6 +12,7 @@ export const metadata = createMetadata({
 export default function Contact() {
   return (
     <main className="min-h-screen">
+      <PageHeadText pageText="CONTACT"/>
       <div className="max-w-3xl space-y-14">
         <PageHeader
           title="Let's work together"

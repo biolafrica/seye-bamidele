@@ -4,6 +4,7 @@ import Link from "next/link";
 import { socialLinks } from "../../data/socialLinks";
 import { createMetadata } from "@seye-bamidele/ui";
 import seyeOfficeImg from '@/public/photo/seye-office.jpg';
+import PageHeadText from "@/components/common/pageHeading";
 
 
 export const metadata = createMetadata({
@@ -15,6 +16,8 @@ export default function About() {
 
   return (
     <div className="max-w-7xl mx-auto">
+      <PageHeadText pageText="ABOUT"/>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
   
         <div className="space-y-6">
@@ -88,6 +91,7 @@ export default function About() {
 
         </div>
       </div>
+
     </div>
   );
 }
