@@ -9,7 +9,6 @@ export default function NewsletterForm({initialValues, onSuccess }: {
   onSuccess?: (action: "created" | "updated") => void;
 }) {
   const [errorMsg,   setErrorMsg]  = useState("");
-
   const {create} = useNewsletter();
 
   const validateEvent = (values: NewsletterFormData ) => {

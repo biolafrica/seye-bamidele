@@ -12,7 +12,7 @@ interface Newsletter {
 }
 
 interface Subscriber {
-  id: string;
+  id: string; // Required now
   email: string;
   name?: string;
   unsubscribe_token: string;
@@ -32,7 +32,21 @@ class NewsletterService {
   private subscriberQuery = new SupabaseQueryBuilder<Subscriber>('subscribers');
 
   async getActiveSubscribers(): Promise<Subscriber[]> {
-    return this.subscriberQuery.findByCondition('is_active', true);
+    // CRITICAL FIX: Explicitly select all needed fields including ID
+    const subscribers = await this.subscriberQuery.findByCondition('is_active', true);
+    
+    // Validate that all subscribers have required fields
+    const validSubscribers = subscribers.filter(sub => {
+      const isValid = sub.id && sub.email && sub.unsubscribe_token;
+      if (!isValid) {
+        console.warn('Invalid subscriber found:', sub);
+      }
+      return isValid;
+    });
+
+    console.log(`Found ${subscribers.length} active subscribers, ${validSubscribers.length} valid`);
+    
+    return validSubscribers;
   }
 
   async createNewsletter(subject: string, content: string, totalSent: number): Promise<Newsletter> {
@@ -45,6 +59,8 @@ class NewsletterService {
   }
 
   async recordSentEvents(newsletterId: string, subscriberIds: string[]): Promise<void> {
+    console.log(`Recording sent events for ${subscriberIds.length} subscribers`);
+    
     const analyticsRecords = subscriberIds.map(subscriberId => ({
       newsletter_id: newsletterId,
       subscriber_id: subscriberId,
@@ -52,12 +68,16 @@ class NewsletterService {
     }));
 
     await analyticsService.bulkRecordEvents(analyticsRecords);
+    console.log('✅ Sent events recorded');
   }
 
   async sendNewsletter(
     subject: string,
     content: string
   ): Promise<SendNewsletterResult> {
+    console.log('=== Newsletter Service: Starting Send ===');
+    console.log('Subject:', subject);
+    
     if (!subject || !content) {
       return {
         success: false,
@@ -68,8 +88,9 @@ class NewsletterService {
       };
     }
 
+    // Get active subscribers
     const subscribers = await this.getActiveSubscribers();
-
+    
     if (!subscribers || subscribers.length === 0) {
       return {
         success: false,
@@ -80,12 +101,18 @@ class NewsletterService {
       };
     }
 
+    console.log(`Found ${subscribers.length} active subscribers`);
+
+    // Create newsletter record
     const newsletter = await this.createNewsletter(
       subject,
       content,
       subscribers.length
     );
 
+    console.log('Newsletter record created with ID:', newsletter.id);
+
+    // Send via SendGrid with tracking
     const sendResult = await sendTrackedNewsletter(
       subscribers,
       subject,
@@ -94,6 +121,7 @@ class NewsletterService {
     );
 
     if (!sendResult.success) {
+      console.error('❌ Failed to send newsletter:', sendResult.error);
       return {
         success: false,
         message: 'Failed to send newsletter',
@@ -103,6 +131,9 @@ class NewsletterService {
       };
     }
 
+    console.log(`✅ Newsletter sent to ${sendResult.sent} subscribers`);
+
+    // Record sent events in analytics
     await this.recordSentEvents(
       newsletter.id,
       subscribers.map(sub => sub.id)
