@@ -98,7 +98,6 @@ export class SupabaseQueryBuilder<T> {
     .from(this.table)
     .select('*', { count: 'exact' });
 
-    // Apply search
     if (search) {
       const searchQuery = searchFields
       .map(field => `${field}.ilike.%${search}%`)
@@ -106,15 +105,12 @@ export class SupabaseQueryBuilder<T> {
       query = query.or(searchQuery);
     }
 
-    // Apply filters
     Object.entries(filters).forEach(([key, value]) => {
       query = query.eq(key, value);
     });
 
-    // Apply sorting
     query = query.order(sortBy, { ascending: sortOrder === 'asc' });
 
-    // Apply pagination
     const from = (page - 1) * limit;
     const to = from + limit - 1;
     query = query.range(from, to);
