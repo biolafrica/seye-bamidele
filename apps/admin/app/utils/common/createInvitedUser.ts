@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "../supabase/supabaseAdmin";
-import { generateTempPassword } from "./generateTempPassword";
+import generateTempPassword from "./generateTempPassword";
+
 import { sendEmail } from "./sendEmail";
 
 export interface CreateInvitedUserParams { 

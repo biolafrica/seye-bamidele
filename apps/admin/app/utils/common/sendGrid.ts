@@ -41,13 +41,15 @@ function addTrackingPixel(
   subscriberId: string
 ): string {
   const trackingPixel = `<img src="${baseUrl}/api/track/open?nid=${newsletterId}&sid=${subscriberId}" width="1" height="1" alt="" style="display:block;border:0;" />`;
-  
-  let finalHtml = htmlContent;
+    
   if (htmlContent.includes('</body>')) {
-    return finalHtml = htmlContent.replace('</body>', `${trackingPixel}</body>`);
-  } else {
-    return finalHtml = htmlContent + trackingPixel;
+    return htmlContent.replace(
+      '</body>',
+      `${trackingPixel}</body>`
+    );
   }
+
+  return `${htmlContent}${trackingPixel}`;
 }
 
 export async function sendTrackedNewsletter(

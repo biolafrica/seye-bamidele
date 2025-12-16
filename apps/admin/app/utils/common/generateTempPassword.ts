@@ -1,4 +1,4 @@
-export function generateTempPassword(length = 12) {
+export default function generateTempPassword(length = 12) {
   if (length < 8) {
     throw new Error('Password length must be at least 8 characters');
   }

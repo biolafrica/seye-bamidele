@@ -1,5 +1,6 @@
 import { createCRUDHandlers } from "@/app/utils/common/crudFactory";
-import { generateTempPassword } from "@/app/utils/common/generateTempPassword";
+import generateTempPassword from "@/app/utils/common/generateTempPassword";
+
 import { sendEmail } from "@/app/utils/common/sendEmail";
 import { supabaseAdmin } from "@/app/utils/supabase/supabaseAdmin";
 import { TeamData} from "@seye-bamidele/shared-types";
