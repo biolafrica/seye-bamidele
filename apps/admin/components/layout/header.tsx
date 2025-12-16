@@ -27,7 +27,7 @@ export default function Header({ onMenuClick, currentModule = "Dashboard" }: Hea
 
 
   return (
-    <header className="border-b border-separator fixed top-0 inset-x-0 z-60 bg-background">
+    <header className="border-b border-separator fixed top-0 inset-x-0 z-50 bg-background">
       <div className="flex items-center py-6">
         <Link
           href="/"

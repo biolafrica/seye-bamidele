@@ -15,13 +15,11 @@ interface Newsletter {
   sent_at?: string;
 }
 
-
 const handlers = createCRUDHandlers<Newsletter>({
   table: 'newsletters',
   requiredFields: ['subject', 'content'],
   searchFields: ['subject'],
 });
-
 
 export async function POST(request: NextRequest) {
   try {
