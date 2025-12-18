@@ -21,7 +21,14 @@ export type ArticleFormData = Omit<ArticleBase, 'id' | 'created_at' | 'updated_a
 };
 export type ArticleTransformedFormData = Omit<ArticleBase, 'id' | 'created_at' | 'updated_at' | 'status' >
 export type ArticleTableData = Pick<ArticleBase, 'created_at' | 'title' >; 
-export type ArticlesTranformClientData = Pick<ArticleBase, 'title' | 'excerpt'> & {
+export type ArticlesTranformClientData = Pick<ArticleBase, 'title' | 'excerpt' | 'id'> & {
+  link:{
+    text: string;
+    url: string
+  };
+  date:string
+}
+export type ArticlesTransformNoCacheData = Pick<ArticleBase, 'title' | 'excerpt'> & {
   link:{
     text: string;
     url: string

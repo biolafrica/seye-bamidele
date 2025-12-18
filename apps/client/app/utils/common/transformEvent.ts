@@ -1,4 +1,4 @@
-import { EventClientData, EventTransformedData } from "@seye-bamidele/shared-types";
+import { EventClientData, EventTransformedData,  } from "@seye-bamidele/shared-types";
 
 export function transformEvents(eventsFromDb: EventClientData[]): EventTransformedData[] {
   return eventsFromDb.map((event) => {
@@ -28,6 +28,8 @@ export function transformEvents(eventsFromDb: EventClientData[]): EventTransform
         text: `${action} ${event.category}`,
         url: event.link,
       },
+      id: event.id
+  
     };
   });
 }

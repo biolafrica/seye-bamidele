@@ -12,6 +12,7 @@ export function transformArticles(dbArticles: ArticleData[]): ArticlesTranformCl
         text: "Read article",
         url: `/articles/${item.id}`,
       },
+      id:item.id
     }))
     .sort(
       (a, b) =>

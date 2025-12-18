@@ -5,15 +5,19 @@ import { useArticles } from '@seye-bamidele/ui';
 import { transformArticles } from '@/app/utils/common/transformArticle';
 import { ArticlesTranformClientData } from '@seye-bamidele/shared-types';
 import { usePaginatedClientList } from '@/hook/usePaginatedClientList';
+import { useArticleCache } from '@/lib/stores/article-cache';
 
+export default function ArticlesViewClient() { 
+  const { cacheArticleSummaries } = useArticleCache();
 
-export default function ArticlesViewClient() {
-  const { items, loading, hasMore, loadMore } =
-    usePaginatedClientList<any, ArticlesTranformClientData>({
-      useSource: useArticles,
-      transform: transformArticles,
-      itemsPerPage: 10,
-    });
+  const { items, loading, hasMore, loadMore } = usePaginatedClientList({
+    useSource: useArticles,
+    transform: transformArticles,
+    itemsPerPage: 10,
+    onItemsTransformed: (transformedArticles: ArticlesTranformClientData[]) => {
+      cacheArticleSummaries(transformedArticles);
+    },
+  });
 
   return (
     <PageSection

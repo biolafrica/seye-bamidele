@@ -3,7 +3,6 @@
 import { PaginationData } from '@seye-bamidele/shared-types';
 import { useEffect, useState } from 'react';
 
-
 interface UsePaginatedClientListParams<TDb, TClient> {
   useSource: () => {
     data: TDb[];
@@ -11,21 +10,20 @@ interface UsePaginatedClientListParams<TDb, TClient> {
     getAll: (params: Record<string, string>) => Promise<void>;
     loading: boolean;
   };
-
   transform: (data: TDb[]) => TClient[];
   itemsPerPage?: number;
+  onItemsTransformed?: (items: TClient[]) => void; 
 }
 
 export function usePaginatedClientList<TDb, TClient>({
   useSource,
   transform,
   itemsPerPage = 10,
+  onItemsTransformed,
 }: UsePaginatedClientListParams<TDb, TClient>) {
   const { data, pagination, getAll, loading } = useSource();
-
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState<TClient[]>([]);
-
 
   useEffect(() => {
     getAll({ page: '1', limit: String(itemsPerPage) });
@@ -35,6 +33,7 @@ export function usePaginatedClientList<TDb, TClient>({
     if (!data) return;
 
     const transformed = transform(data);
+    onItemsTransformed?.(transformed);
 
     if (currentPage === 1) {
       setItems(transformed);
