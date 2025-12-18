@@ -12,7 +12,8 @@ interface UsePaginatedClientListParams<TDb, TClient> {
   };
   transform: (data: TDb[]) => TClient[];
   itemsPerPage?: number;
-  onItemsTransformed?: (items: TClient[]) => void; 
+  onItemsTransformed?: (items: TClient[]) => void;
+  cachedItems?: TClient[]; // NEW: Pass cached items
 }
 
 export function usePaginatedClientList<TDb, TClient>({
@@ -20,10 +21,11 @@ export function usePaginatedClientList<TDb, TClient>({
   transform,
   itemsPerPage = 10,
   onItemsTransformed,
+  cachedItems = [], // NEW
 }: UsePaginatedClientListParams<TDb, TClient>) {
   const { data, pagination, getAll, loading } = useSource();
   const [currentPage, setCurrentPage] = useState(1);
-  const [items, setItems] = useState<TClient[]>([]);
+  const [items, setItems] = useState<TClient[]>(cachedItems); // Initialize with cache
 
   useEffect(() => {
     getAll({ page: '1', limit: String(itemsPerPage) });
@@ -33,6 +35,8 @@ export function usePaginatedClientList<TDb, TClient>({
     if (!data) return;
 
     const transformed = transform(data);
+
+    // Notify parent component of transformed items
     onItemsTransformed?.(transformed);
 
     if (currentPage === 1) {
@@ -63,3 +67,4 @@ export function usePaginatedClientList<TDb, TClient>({
     loadMore,
   };
 }
+
